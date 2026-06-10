@@ -1,0 +1,18 @@
+[X] 2026-06-10 22:23:43 Log fail
+[X] 2026-06-10 22:24:03 Log fail
+[V] 2026-06-10 23:16:12 Successfully unmounted overlay for test
+[V] 2026-06-10 23:16:12 Cleaned up sandbox directories for test
+[!] 2026-06-10 23:20:52 Unmount failed (it might already be unmounted): umount: sandboxes/test/merged: no mount point specified.
+
+[V] 2026-06-10 23:20:52 Cleaned up sandbox directories for test
+[i] 2026-06-10 23:21:23 Trying to create a directory on path: sandboxes/test
+[V] 2026-06-10 23:21:23 Found desired directory on path: sandboxes/test
+[i] 2026-06-10 23:21:23 Trying to create directories on path: sandboxes/test/upper, sandboxes/test/merged, sandboxes/test/work
+[V] 2026-06-10 23:21:23 Successfully created directories on path: sandboxes/test/upper, sandboxes/test/merged, sandboxes/test/work
+[i] 2026-06-10 23:21:23 Mounting overlay filesystem on path: sandboxes/test/merged
+[V] 2026-06-10 23:21:23 Successfully mounted overlay filesystem on path: sandboxes/test/merged
+[i] 2026-06-10 23:24:41 Unmounting overlay for sandboxes/test/merged
+[!] 2026-06-10 23:24:41 Unmount failed (it might already be unmounted): umount: /home/yosatsu/Code/Kubos/sandboxes/test/merged: target is busy.
+
+[i] 2026-06-10 23:24:41 Removing sandbox directories: sandboxes/test
+[X] 2026-06-10 23:24:41 Failed to remove sandbox directory: unlinkat sandboxes/test: directory not empty
