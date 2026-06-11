@@ -10,9 +10,6 @@ import (
 )
 
 // Sandbox represents an active container environment, storing its unique identifier and root filesystem path.
-type Sandbox struct {
-	Name, Path string
-}
 
 // IsValidSandbox verifies if the specified directory follows the required OverlayFS structure
 // (upper, merged, and work directories) and confirms the merged path is an active mount.

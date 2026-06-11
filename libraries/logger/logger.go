@@ -10,69 +10,81 @@ import (
 	"github.com/fatih/color"
 )
 
-// Set logger constants and some stuffs
-const LOG_SUCCESS = 1
-const LOG_WARNING = 2
-const LOG_ERROR = 3
-const LOG_INFO = 4
-
 var green = color.New(color.FgGreen).SprintFunc()
 var yellow = color.New(color.FgYellow).SprintFunc()
 var red = color.New(color.FgRed).SprintFunc()
 var blue = color.New(color.FgBlue).SprintFunc()
 
-type LogStatus int8
+// init is called automatically when the package is initialized.
+// It records the start of the logging session.
+func init() {
+	writeToLogFile("-------------------------------------------\nLOGGING START ON " + time.Now().Format("2006-01-02 15:04:05"))
+}
 
-// Define the methods.
-/**
-
-Print is used to print log to the stdout, or to a file, or even both.
-Print needs 4 arguments,
-- status LogStatus: An alias of int8
-- messages string: Message to show/log
-- silent boolean: indicating if the log should be printed on screen or not
-- writetofile boolean: indicating if the log should be printed on file or not.
-
-*/
-func Print(status LogStatus, messages string, silent bool, writetofile bool) {
+// Print outputs a formatted log message.
+//
+// Parameters:
+//   - status: The severity level (e.g., LOG_SUCCESS, LOG_ERROR).
+//   - messages: The content of the log message.
+//   - silent: If true, suppresses output to the standard output (console).
+//   - writetofile: If true, appends the log entry to a daily file in the 'logs' directory.
+func Print(status essentials.LogStatus, messages string, silent bool, writetofile bool) {
 	defer color.Unset()
 	decorator := ""
 	switch status {
-	case LOG_SUCCESS:
+	case essentials.LOG_SUCCESS:
 		decorator = green("[V] ")
-	case LOG_WARNING:
+	case essentials.LOG_WARNING:
 		decorator = yellow("[!] ")
-	case LOG_ERROR:
+	case essentials.LOG_ERROR:
 		decorator = red("[X] ")
-	case LOG_INFO:
+	case essentials.LOG_INFO:
 		decorator = blue("[i] ")
 	}
 
+	// Format the log line: [Level] YYYY-MM-DD HH:MM:SS Message
 	text := fmt.Sprint(decorator, time.Now().Format("2006-01-02 15:04:05"), " ", messages)
+
 	if !silent {
 		fmt.Println(text)
 	}
+
 	if writetofile {
-		logDir := "logs"                 // This assumes 'logs' is relative to the directory where the program is executed
-		err := os.MkdirAll(logDir, 0755) // Create directory with rwx for owner, rx for others
-		if err != nil {
-			Print(LOG_ERROR, "(This message won't be written to file) Error creating log directory: "+err.Error(), true, false)
-			return
-		}
+		writeToLogFile(text)
+	}
+}
 
-		logFilename := filepath.Join(logDir, time.Now().Format("2006-01-02")+".txt")
-		file, err := os.OpenFile(logFilename, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
-		if err != nil {
-			Print(LOG_ERROR, "(This message won't be written to file) Error opening file "+err.Error(), true, false)
-			return
-		}
-		defer file.Close()
-
-		_, err = file.WriteString(essentials.ClearColor(text) + "\n")
-		if err != nil {
-			Print(LOG_ERROR, "(This message won't be written to file) Error writing file"+err.Error(), true, false)
-
-		}
+// writeToLogFile handles the persistence of logs to the local filesystem.
+func writeToLogFile(text string) {
+	logDir := "logs"
+	// Ensure the log directory exists (drwxr-xr-x).
+	if err := os.MkdirAll(logDir, 0755); err != nil {
+		fmt.Fprintf(os.Stderr, "Critical Logger Error: Could not create log directory: %v\n", err)
+		return
 	}
 
+	logFilename := filepath.Join(logDir, time.Now().Format("2006-01-02")+".txt")
+
+	// Check if the file exists before opening to determine if we should write the header.
+	_, statErr := os.Stat(logFilename)
+	isNewFile := os.IsNotExist(statErr)
+
+	// Open file with Read/Write, Create if missing, and Append mode (-rw-r--r--).
+	file, err := os.OpenFile(logFilename, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Critical Logger Error: Could not open log file: %v\n", err)
+		return
+	}
+	defer file.Close()
+
+	if isNewFile {
+		initialHeader := fmt.Sprintf("LOG FILE CREATED ON %s\n=============================\n", time.Now().Format("2006-01-02 15:04:05"))
+		_, _ = file.WriteString(initialHeader)
+	}
+
+	// Strip ANSI color codes before writing to file to ensure log readability in standard text editors.
+	_, err = file.WriteString(essentials.ClearColor(text) + "\n")
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Critical Logger Error: Could not write to log file: %v\n", err)
+	}
 }
