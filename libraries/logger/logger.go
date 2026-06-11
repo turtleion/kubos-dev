@@ -2,7 +2,7 @@ package logger
 
 import (
 	"fmt"
-	"kubos/libraries"
+	"kubos/libraries/essentials"
 	"os"
 	"path/filepath"
 	"time"
@@ -68,7 +68,7 @@ func Print(status LogStatus, messages string, silent bool, writetofile bool) {
 		}
 		defer file.Close()
 
-		_, err = file.WriteString(libraries.ClearColor(text) + "\n")
+		_, err = file.WriteString(essentials.ClearColor(text) + "\n")
 		if err != nil {
 			Print(LOG_ERROR, "(This message won't be written to file) Error writing file"+err.Error(), true, false)
 

@@ -1,0 +1,93 @@
+[i] 2026-06-11 12:05:25 Trying to create a directory on path: sandboxes/test
+[V] 2026-06-11 12:05:25 Found desired directory on path: sandboxes/test
+[i] 2026-06-11 12:05:25 Trying to create directories on path: sandboxes/test/upper, sandboxes/test/merged, sandboxes/test/work
+[V] 2026-06-11 12:05:25 Successfully created directories on path: sandboxes/test/upper, sandboxes/test/merged, sandboxes/test/work
+[i] 2026-06-11 12:05:25 Mounting overlay filesystem on path: sandboxes/test/merged
+[V] 2026-06-11 12:05:40 Successfully mounted overlay filesystem on path: sandboxes/test/merged
+[i] 2026-06-11 12:07:18 Unmounting overlay for sandboxes/test/merged
+[!] 2026-06-11 12:07:19 Unmount failed (it might already be unmounted): umount: /home/yosatsu/Code/Kubos/sandboxes/test/merged: target is busy.
+
+[i] 2026-06-11 12:07:19 Removing sandbox directories: sandboxes/test
+[i] 2026-06-11 12:21:20 Trying to create a directory on path: sandboxes/test
+[V] 2026-06-11 12:21:20 Found desired directory on path: sandboxes/test
+[i] 2026-06-11 12:21:20 Trying to create directories on path: sandboxes/test/upper, sandboxes/test/merged, sandboxes/test/work
+[V] 2026-06-11 12:21:20 Successfully created directories on path: sandboxes/test/upper, sandboxes/test/merged, sandboxes/test/work
+[i] 2026-06-11 12:21:20 Mounting overlay filesystem on path: sandboxes/test/merged
+[V] 2026-06-11 12:21:23 Successfully mounted overlay filesystem on path: sandboxes/test/merged
+[i] 2026-06-11 12:22:18 Unmounting overlay for sandboxes/test/merged
+[V] 2026-06-11 12:22:19 Successfully unmounted overlay for test
+[i] 2026-06-11 12:22:19 Removing sandbox directories: sandboxes/test
+[V] 2026-06-11 12:22:19 Cleaned up sandbox directories for test
+[i] 2026-06-11 12:31:58 Trying to create a directory on path: sandboxes/test
+[V] 2026-06-11 12:31:58 Found desired directory on path: sandboxes/test
+[i] 2026-06-11 12:31:58 Trying to create directories on path: sandboxes/test/upper, sandboxes/test/merged, sandboxes/test/work
+[V] 2026-06-11 12:31:58 Successfully created directories on path: sandboxes/test/upper, sandboxes/test/merged, sandboxes/test/work
+[i] 2026-06-11 12:31:58 Mounting overlay filesystem on path: sandboxes/test/merged
+[V] 2026-06-11 12:32:01 Successfully mounted overlay filesystem on path: sandboxes/test/merged
+[i] 2026-06-11 12:45:02 Trying to create a directory on path: sandboxes/peler
+[V] 2026-06-11 12:45:02 Found desired directory on path: sandboxes/peler
+[i] 2026-06-11 12:45:02 Trying to create directories on path: sandboxes/peler/upper, sandboxes/peler/merged, sandboxes/peler/work
+[V] 2026-06-11 12:45:02 Successfully created directories on path: sandboxes/peler/upper, sandboxes/peler/merged, sandboxes/peler/work
+[i] 2026-06-11 12:45:02 Mounting overlay filesystem on path: sandboxes/peler/merged
+[V] 2026-06-11 12:45:06 Successfully mounted overlay filesystem on path: sandboxes/peler/merged
+[i] 2026-06-11 16:12:45 Trying to create a directory on path: sandboxes/test
+[i] 2026-06-11 16:13:43 Trying to create a directory on path: sandboxes/test
+[i] 2026-06-11 16:20:56 Trying to create a directory on path: sandboxes/test
+[i] 2026-06-11 16:25:32 Trying to create a directory on path: sandboxes/test
+[V] 2026-06-11 16:25:32 Found desired directory on path: sandboxes/test
+[i] 2026-06-11 16:25:32 Trying to create directories on path: sandboxes/test/upper, sandboxes/test/merged, sandboxes/test/work
+[V] 2026-06-11 16:25:32 Successfully created directories on path: sandboxes/test/upper, sandboxes/test/merged, sandboxes/test/work
+[i] 2026-06-11 16:25:32 Mounting overlay filesystem on path: sandboxes/test/merged
+[V] 2026-06-11 16:25:36 Successfully mounted overlay filesystem on path: sandboxes/test/merged
+[!] 2026-06-11 16:25:50 Sandbox already exists: test
+[i] 2026-06-11 16:26:15 Unmounting overlay for sandboxes/test/merged
+[!] 2026-06-11 16:26:16 Unmount failed (it might already be unmounted): umount: /home/yosatsu/Code/Kubos/sandboxes/test/merged: target is busy.
+
+[i] 2026-06-11 16:26:16 Removing sandbox directories: sandboxes/test
+[i] 2026-06-11 16:30:52 Trying to create a directory on path: sandboxes/test
+[!] 2026-06-11 16:30:52 Sandbox is not exists: test
+[i] 2026-06-11 17:12:10 Trying to create a directory on path: sandboxes/test
+[V] 2026-06-11 17:12:10 Found desired directory on path: sandboxes/test
+[i] 2026-06-11 17:12:10 Trying to create directories on path: sandboxes/test/upper, sandboxes/test/merged, sandboxes/test/work
+[V] 2026-06-11 17:12:10 Successfully created directories on path: sandboxes/test/upper, sandboxes/test/merged, sandboxes/test/work
+[i] 2026-06-11 17:12:10 Mounting overlay filesystem on path: sandboxes/test/merged
+[V] 2026-06-11 17:12:13 Successfully mounted overlay filesystem on path: sandboxes/test/merged
+[i] 2026-06-11 17:12:28 Unmounting overlay for sandboxes/test/merged
+[!] 2026-06-11 17:12:28 Unmount failed (it might already be unmounted): umount: /home/yosatsu/Code/Kubos/sandboxes/test/merged: target is busy.
+
+[i] 2026-06-11 17:12:28 Removing sandbox directories: sandboxes/test
+[i] 2026-06-11 17:21:55 Trying to create a directory on path: sandboxes/test
+[V] 2026-06-11 17:21:55 Found desired directory on path: sandboxes/test
+[i] 2026-06-11 17:21:55 Trying to create directories on path: sandboxes/test/upper, sandboxes/test/merged, sandboxes/test/work
+[V] 2026-06-11 17:21:55 Successfully created directories on path: sandboxes/test/upper, sandboxes/test/merged, sandboxes/test/work
+[i] 2026-06-11 17:21:55 Mounting overlay filesystem on path: sandboxes/test/merged
+[V] 2026-06-11 17:21:58 Successfully mounted overlay filesystem on path: sandboxes/test/merged
+[i] 2026-06-11 17:22:11 Unmounting overlay for sandboxes/test/merged
+[i] 2026-06-11 17:22:11 Checking for busy processes on: sandboxes/test/merged
+[V] 2026-06-11 17:22:12 Successfully unmounted overlay for test
+[i] 2026-06-11 17:22:12 Removing sandbox directories: sandboxes/test
+[V] 2026-06-11 17:22:12 Cleaned up sandbox directories for test
+[!] 2026-06-11 17:22:28 Sandbox does not exist: test
+[i] 2026-06-11 17:22:40 Trying to create a directory on path: sandboxes/test
+[V] 2026-06-11 17:22:40 Found desired directory on path: sandboxes/test
+[i] 2026-06-11 17:22:40 Trying to create directories on path: sandboxes/test/upper, sandboxes/test/merged, sandboxes/test/work
+[V] 2026-06-11 17:22:40 Successfully created directories on path: sandboxes/test/upper, sandboxes/test/merged, sandboxes/test/work
+[i] 2026-06-11 17:22:40 Mounting overlay filesystem on path: sandboxes/test/merged
+[V] 2026-06-11 17:22:40 Successfully mounted overlay filesystem on path: sandboxes/test/merged
+[!] 2026-06-11 17:22:41 Sandbox already exists: test
+[i] 2026-06-11 17:22:53 Unmounting overlay for sandboxes/test/merged
+[i] 2026-06-11 17:22:53 Checking for busy processes on: sandboxes/test/merged
+[V] 2026-06-11 17:22:54 Successfully unmounted overlay for test
+[i] 2026-06-11 17:22:54 Removing sandbox directories: sandboxes/test
+[V] 2026-06-11 17:22:54 Cleaned up sandbox directories for test
+[i] 2026-06-11 17:23:06 Trying to create a directory on path: sandboxes/test
+[V] 2026-06-11 17:23:06 Found desired directory on path: sandboxes/test
+[i] 2026-06-11 17:23:06 Trying to create directories on path: sandboxes/test/upper, sandboxes/test/merged, sandboxes/test/work
+[V] 2026-06-11 17:23:06 Successfully created directories on path: sandboxes/test/upper, sandboxes/test/merged, sandboxes/test/work
+[i] 2026-06-11 17:23:06 Mounting overlay filesystem on path: sandboxes/test/merged
+[V] 2026-06-11 17:23:06 Successfully mounted overlay filesystem on path: sandboxes/test/merged
+[i] 2026-06-11 17:23:06 Unmounting overlay for sandboxes/test/merged
+[i] 2026-06-11 17:23:06 Checking for busy processes on: sandboxes/test/merged
+[V] 2026-06-11 17:23:06 Successfully unmounted overlay for test
+[i] 2026-06-11 17:23:06 Removing sandbox directories: sandboxes/test
+[V] 2026-06-11 17:23:06 Cleaned up sandbox directories for test
