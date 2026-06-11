@@ -13,6 +13,32 @@ type ExecutionResult struct {
 	Message string
 }
 
+// Result holds the classified meaning of the parsed pacman command.
+type PacmanParserResult struct {
+	IsValid   bool
+	Action    string   // e.g., "system upgrade", "install", "search", "download only", "remove"
+	Scope     string   // "remote" or "local"
+	Summary   string   // Plain text description
+	Targets   []string // Target packages or files
+	Modifiers []string // Individual modifier flags found
+}
+
+// Package represents a single AUR package result.
+type AURPackage struct {
+	Name        string  `json:"Name"`
+	Version     string  `json:"Version"`
+	Description string  `json:"Description"`
+	URL         string  `json:"URL"`
+	NumVotes    int     `json:"NumVotes"`
+	Popularity  float64 `json:"Popularity"`
+}
+
+type RPCResponse struct {
+	ResultCount int          `json:"resultcount"`
+	Results     []AURPackage `json:"results"`
+	Error       string       `json:"error"`
+}
+
 // Log severity levels used to categorize and color-code output.
 const LOG_SUCCESS = 1
 const LOG_WARNING = 2

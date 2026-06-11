@@ -51,3 +51,106 @@ LOGGING START ON 2026-06-11 18:25:15
 [V] 2026-06-11 18:25:19 Successfully unmounted overlay for test
 [i] 2026-06-11 18:25:19 Removing sandbox directories: sandboxes/test
 [V] 2026-06-11 18:25:19 Cleaned up sandbox directories for test
+-------------------------------------------
+LOGGING START ON 2026-06-11 20:33:20
+-------------------------------------------
+LOGGING START ON 2026-06-11 20:37:55
+-------------------------------------------
+LOGGING START ON 2026-06-11 20:43:22
+-------------------------------------------
+LOGGING START ON 2026-06-11 21:30:10
+-------------------------------------------
+LOGGING START ON 2026-06-11 21:30:31
+[i] 2026-06-11 21:30:31 ==> Resolving firefox...
+
+[i] 2026-06-11 21:30:33 ==> Found firefox in pacman repos. Installing...
+
+-------------------------------------------
+LOGGING START ON 2026-06-11 21:31:25
+[i] 2026-06-11 21:31:25 ==> Resolving firefox...
+
+[i] 2026-06-11 21:31:26 ==> Found firefox in pacman repos. Installing...
+-------------------------------------------
+LOGGING START ON 2026-06-11 21:31:45
+[i] 2026-06-11 21:31:45 ==> Resolving firefox...
+[i] 2026-06-11 21:31:46 ==> Found firefox in pacman repos. Installing...
+-------------------------------------------
+LOGGING START ON 2026-06-11 21:32:02
+[i] 2026-06-11 21:32:02 ==> Resolving mutar...
+[i] 2026-06-11 21:32:03 ==> Not in pacman repos. searching in AUR...
+[X] 2026-06-11 21:32:04 package 'mutar' not found in pacman repos or AUR
+-------------------------------------------
+LOGGING START ON 2026-06-11 21:33:22
+[i] 2026-06-11 21:33:22 ==> Resolving 1password...
+[i] 2026-06-11 21:33:22 ==> Not in pacman repos. searching in AUR...
+[V] 2026-06-11 21:33:23 ==> Found '1password' on AUR (v8.12.22-17, 143 votes)
+
+-------------------------------------------
+LOGGING START ON 2026-06-11 21:48:53
+[i] 2026-06-11 21:48:53 ==> Resolving mesa-amber...
+[i] 2026-06-11 21:48:53 ==> Found mesa-amber in pacman repos. Installing...
+[i] 2026-06-11 21:48:53 ==> Redirecting to KUBOS pacman..
+[i] 2026-06-11 21:48:53 Setting up closed environment..
+[i] 2026-06-11 21:48:53 Trying to create a directory on path: sandboxes/mesa-amber
+[V] 2026-06-11 21:48:53 Found desired directory on path: sandboxes/mesa-amber
+[i] 2026-06-11 21:48:53 Trying to create directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+[V] 2026-06-11 21:48:53 Successfully created directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+[i] 2026-06-11 21:48:53 Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+[V] 2026-06-11 21:49:28 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+[X] 2026-06-11 21:49:28 Command failed with exit code 1
+-------------------------------------------
+LOGGING START ON 2026-06-11 21:54:02
+[i] 2026-06-11 21:54:02 ==> Resolving mesa-amber...
+[i] 2026-06-11 21:54:02 ==> Found mesa-amber in pacman repos. Installing...
+[i] 2026-06-11 21:54:02 ==> Redirecting to KUBOS pacman..
+[i] 2026-06-11 21:54:02 Setting up closed environment..
+[!] 2026-06-11 21:54:02 Sandbox already exists: mesa-amber
+-------------------------------------------
+LOGGING START ON 2026-06-11 21:54:36
+[i] 2026-06-11 21:54:36 Unmounting overlay for sandboxes/mesa-amber/merged
+[i] 2026-06-11 21:54:36 Checking for busy processes on: sandboxes/mesa-amber/merged
+[V] 2026-06-11 21:54:38 Successfully unmounted overlay for mesa-amber
+[i] 2026-06-11 21:54:38 Removing sandbox directories: sandboxes/mesa-amber
+[X] 2026-06-11 21:54:38 Failed to remove sandbox directory: unlinkat sandboxes/mesa-amber/upper/etc/resolv.conf: permission denied
+-------------------------------------------
+LOGGING START ON 2026-06-11 21:55:00
+[i] 2026-06-11 21:55:00 ==> Resolving mesa-amber...
+[i] 2026-06-11 21:55:01 ==> Found mesa-amber in pacman repos. Installing...
+[i] 2026-06-11 21:55:01 ==> Redirecting to KUBOS pacman..
+[i] 2026-06-11 21:55:01 Setting up closed environment..
+[i] 2026-06-11 21:55:01 Trying to create a directory on path: sandboxes/mesa-amber
+[V] 2026-06-11 21:55:01 Found desired directory on path: sandboxes/mesa-amber
+[i] 2026-06-11 21:55:01 Trying to create directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+[V] 2026-06-11 21:55:01 Successfully created directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+[i] 2026-06-11 21:55:01 Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+[V] 2026-06-11 21:55:01 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+[i] 2026-06-11 21:55:02 [?25lresolving dependencies...
+[X] 2026-06-11 21:55:18 Conflicting package detected: looking for conflicting packages...
+-------------------------------------------
+LOGGING START ON 2026-06-11 22:00:19
+[i] 2026-06-11 22:00:19 ==> Resolving mesa-amber...
+[i] 2026-06-11 22:00:20 ==> Found mesa-amber in pacman repos. Installing...
+[i] 2026-06-11 22:00:20 ==> Redirecting to KUBOS pacman..
+[i] 2026-06-11 22:00:20 Setting up closed environment..
+[!] 2026-06-11 22:00:20 Sandbox already exists: mesa-amber
+-------------------------------------------
+LOGGING START ON 2026-06-11 22:00:31
+[i] 2026-06-11 22:00:31 Unmounting overlay for sandboxes/mesa-amber/merged
+[i] 2026-06-11 22:00:31 Checking for busy processes on: sandboxes/mesa-amber/merged
+[V] 2026-06-11 22:00:34 Successfully unmounted overlay for mesa-amber
+[i] 2026-06-11 22:00:34 Removing sandbox directories: sandboxes/mesa-amber
+[X] 2026-06-11 22:00:34 Failed to remove sandbox directory: unlinkat sandboxes/mesa-amber/upper/etc/resolv.conf: permission denied
+-------------------------------------------
+LOGGING START ON 2026-06-11 22:00:46
+[i] 2026-06-11 22:00:46 ==> Resolving mesa-amber...
+[i] 2026-06-11 22:00:47 ==> Found mesa-amber in pacman repos. Installing...
+[i] 2026-06-11 22:00:47 ==> Redirecting to KUBOS pacman..
+[i] 2026-06-11 22:00:47 Setting up closed environment..
+[i] 2026-06-11 22:00:47 Trying to create a directory on path: sandboxes/mesa-amber
+[V] 2026-06-11 22:00:47 Found desired directory on path: sandboxes/mesa-amber
+[i] 2026-06-11 22:00:47 Trying to create directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+[V] 2026-06-11 22:00:47 Successfully created directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+[i] 2026-06-11 22:00:47 Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+[V] 2026-06-11 22:00:47 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+[i] 2026-06-11 22:00:48 [?25lresolving dependencies...
+[i] 2026-06-11 22:01:09 looking for conflicting packages...

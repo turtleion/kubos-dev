@@ -46,15 +46,15 @@ func CleanUp() {
 
 func main() {
 	fmt.Println("Logger loading")
-	cmd.CleanUp()
-	// CleanUp()
-	sandboxes := essentials.GetSandboxes()
-	for _, sandbox := range sandboxes {
-		fmt.Println(sandbox.Name)
-	}
+	// cmd.CleanUp()
+	// // CleanUp()
+	// sandboxes := essentials.GetSandboxes()
+	// for _, sandbox := range sandboxes {
+	// 	fmt.Println(sandbox.Name)
+	// }
 
-	cmd.Setup("test")
-	cmd.Teardown("test")
+	// cmd.Setup("test")
+	cmd.Teardown("mesa-amber")
 
 	// logger.Print(logger.LOG_ERROR, "Log fail", false, true)
 }
