@@ -89,13 +89,14 @@ func Spawn(container string, command string) essentials.ExecutionResult {
 	args := append([]string{"systemd-nspawn", "-D", filepath.Join(containerPath, "merged")}, cmdParts...)
 	cmd := exec.Command("sudo", args...)
 
-	// Pipe stderr to the host so we see error messages in real-time
-	cmd.Stderr = os.Stderr
-	stdout, err := cmd.StdoutPipe()
+	stdoutPipe, err := cmd.StdoutPipe()
 	if err != nil {
 		logger.Print(essentials.LOG_ERROR, "Failed to create stdout pipe: "+err.Error(), false, true)
-		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: "Failed to create stdout pipe: " + err.Error()}
+
 	}
+	// Pipe the standards
+	cmd.Stdin = os.Stdin
+	cmd.Stderr = os.Stderr
 
 	// Start the command
 	if err := cmd.Start(); err != nil {
@@ -107,17 +108,21 @@ func Spawn(container string, command string) essentials.ExecutionResult {
 	conflictDetected := false
 
 	if parsedPacmanResult.Action == "install" {
-		scanner := bufio.NewScanner(stdout)
+		scanner := bufio.NewScanner(stdoutPipe)
 		for scanner.Scan() {
 			line := scanner.Text()
 			// Check for conflicting packages
-			if strings.Contains(strings.ToLower(line), "are in conflict") {
-				logger.Print(essentials.LOG_ERROR, "Conflicting package detected: "+line, false, true)
-				conflictDetected = true
-			} else {
-				// Log general output as info during installation
-				logger.Print(essentials.LOG_INFO, line, false, true)
-			}
+			// if strings.Contains(strings.ToLower(line), "are in conflict") {
+			// 	logger.Print(essentials.LOG_ERROR, "Conflicting package detected: "+line, false, true)
+			// 	conflictDetected = true
+			// 	logger.Print(essentials.LOG_INFO, line, false, true)
+
+			// } else {
+			// 	// Log general output as info during installation
+			// 	logger.Print(essentials.LOG_INFO, line, false, true)
+			// }
+			logger.Print(essentials.LOG_INFO, line, false, true)
+
 		}
 		// Check for any errors that occurred during scanning
 		if err := scanner.Err(); err != nil {
@@ -126,15 +131,15 @@ func Spawn(container string, command string) essentials.ExecutionResult {
 		}
 	}
 
-	// Wait for the command to finish and catch the exit error
-	if err := cmd.Wait(); err != nil {
-		if exitErr, ok := err.(*exec.ExitError); ok {
-			// This shows the exit code (e.g., 1, 127)
-			logger.Print(essentials.LOG_ERROR, fmt.Sprintf("Command failed with exit code %d", exitErr.ExitCode()), false, true)
-		} else {
-			logger.Print(essentials.LOG_ERROR, "Command execution failed: "+err.Error(), false, true)
-		}
-	}
+	// // Wait for the command to finish and catch the exit error
+	// if err := cmd.Wait(); err != nil {
+	// 	if exitErr, ok := err.(*exec.ExitError); ok {
+	// 		// This shows the exit code (e.g., 1, 127)
+	// 		logger.Print(essentials.LOG_ERROR, fmt.Sprintf("Command failed with exit code %d", exitErr.ExitCode()), false, true)
+	// 	} else {
+	// 		logger.Print(essentials.LOG_ERROR, "Command execution failed: "+err.Error(), false, true)
+	// 	}
+	// }
 
 	if conflictDetected {
 		logger.Print(essentials.LOG_WARNING, "Conflicting package found during sandbox installation. Would you like to commit change to your real system?", false, true)
@@ -146,7 +151,23 @@ func SpawnPacman(args []string, pkgName string) essentials.ExecutionResult {
 	logger.Print(essentials.LOG_INFO, "==> Redirecting to KUBOS pacman..", false, true)
 	args = slices.Insert(args, 0, "pacman")
 	logger.Print(essentials.LOG_INFO, "Setting up closed environment..", false, true)
-	if res := Setup(pkgName); res.Code != essentials.EXECUTION_TASK_SUCCESS { // Ensure sandbox is set up before spawning pacman
+	var ans string
+	res := Setup(pkgName)
+	if res.Code != essentials.EXECUTION_TASK_SUCCESS { // Ensure sandbox is set up before spawning pacman
+		if res.Message == "sandbox exists" {
+			for {
+				fmt.Printf("There is an existing sandbox with name %s. Would you like to use the sandbox? [y/n] ", pkgName)
+				fmt.Scan(&ans)
+				if strings.ToLower(ans) == "y" || strings.ToLower(ans) == "yes" || strings.ToLower(ans) == "n" || strings.ToLower(ans) == "no" {
+					break
+				} else {
+					fmt.Println("\nType y/n.")
+					continue
+				}
+			}
+		}
+	}
+	if ans == "n" || ans == "no" {
 		return res
 	}
 	return Spawn(pkgName, strings.Join(args, " ")) // Correctly return the result of the Spawn call
@@ -176,7 +197,7 @@ func SpawnYAY(args []string) essentials.ExecutionResult {
 func Setup(givenName string) essentials.ExecutionResult {
 	if essentials.IsSandboxExists(givenName) {
 		logger.Print(essentials.LOG_WARNING, "Sandbox already exists: "+givenName, false, true)
-		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: fmt.Sprintf("sandbox %s already exists", givenName)}
+		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: "sandbox exists"}
 
 	}
 	// Check if the needed directory exist
@@ -215,8 +236,8 @@ func Setup(givenName string) essentials.ExecutionResult {
 		// Check if the command succeeded
 		if err != nil {
 			// Command failed (returned non-zero exit code)
-			logger.Print(essentials.LOG_ERROR, string(output), false, true)
-			return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: fmt.Sprintf("Failed with output: %s and error: %s", output, err.Error())}
+			logger.Print(essentials.LOG_ERROR, fmt.Sprintf("Failed with output: %s and error: %s", output, err.Error()), false, true)
+			return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: "failed with error"}
 
 		}
 
