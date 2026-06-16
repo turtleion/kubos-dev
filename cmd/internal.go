@@ -28,7 +28,7 @@ func installpkg(pkgName string, verbose bool) essentials.ExecutionResult {
 	}
 
 	// 2. Fall back to AUR
-	logger.LoggedContextedPrint(essentials.LOG_INFO, "Install-INFO", "Not in pacman repos. searching in AUR...", true)
+	logger.LoggedContextedPrint(essentials.LOG_INFO, "KUBOS", "Not in pacman repos. searching in AUR...", true)
 	found, pkg, err := AURExists(pkgName)
 	if err != nil {
 		logger.ColoredPrint(color.FgRed, "AUR Lookup failed")

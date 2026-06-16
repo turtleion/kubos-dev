@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"kubos/libraries/essentials"
 	"strings"
+	"time"
 
 	"github.com/fatih/color"
 )
@@ -60,10 +61,34 @@ func ShellOutputPrint(Message string) {
 
 	// 4. Cetak dengan posisi indentasi yang dikunci aman
 	if strings.Contains(cleanMessage, "[sudo] password for") || strings.Contains(cleanMessage, "[Y/n]") {
+		if strings.Contains(cleanMessage, "[sudo] password for") {
+			color.New(color.FgYellow).Println("<< [WARNING!] Your sudo password will be echoed, please be careful when you type it! >>")
+		}
 		fmt.Printf("    %s  %s", cyan("│"), cleanMessage)
 
 	} else {
 		fmt.Printf("    %s  %s\n", cyan("│"), cleanMessage)
 
 	}
+}
+
+// ErrorPanelPrint mencetak laporan error dalam bentuk box/panel yang sangat rapi.
+func ErrorPanelPrint(exitCode string, reason string, context string) {
+	red := color.New(color.FgRed, color.Bold).SprintFunc()
+	whiteBold := color.New(color.FgWhite, color.Bold).SprintFunc()
+
+	// Karakter garis horizontal lurus tanpa putus (Unicode U+2514, U+2500, dll)
+	lineLong := strings.Repeat("─", 55)
+
+	// 1. Cetak Header Atas Kotak
+	fmt.Printf("    %s %s\n", red("┌──"), red("🚨 ERROR REPORT "+lineLong[:40]))
+
+	// 2. Cetak Isi Detail di Dalam Kotak (Gunakan indentasi spasi agar sejajar)
+	fmt.Printf("    %s  %-10s : %s\n", red("│"), whiteBold("Exit Code"), fmt.Sprintf("%s", exitCode))
+	fmt.Printf("    %s  %-10s : %s\n", red("│"), whiteBold("Reason"), reason)
+	fmt.Printf("    %s  %-10s : %s\n", red("│"), whiteBold("Context"), context)
+	fmt.Printf("    %s  %-10s : %s\n", red("│"), whiteBold("Time"), time.Now().Format("15:04:05"))
+
+	// 3. Cetak Garis Penutup Bawah Kotak
+	fmt.Printf("    %s%s\n", red("└"), red(lineLong[:58]))
 }

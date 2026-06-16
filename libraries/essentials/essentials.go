@@ -3,6 +3,7 @@ package essentials
 import (
 	"errors"
 	"fmt"
+	"kubos/libraries/logger"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -235,4 +236,9 @@ func IsEOF(err error) bool {
 		return errno == syscall.EIO
 	}
 	return false
+}
+
+func ParseAndPrintError(res ExecutionResult) {
+	code, message := res.Code, res.Message
+	logger.ErrorPanelPrint("")
 }

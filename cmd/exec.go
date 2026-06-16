@@ -77,160 +77,193 @@ func DeBusyPath(path string, verbose bool) essentials.ExecutionResult {
 
 // Spawn executes a command within a systemd-nspawn container.
 // It handles command parsing and ensures interactive I/O is preserved.
+// func Spawn(container string, command string, verbose bool) essentials.ExecutionResult {
+// 	cmdParts := strings.Fields(command)
+// 	if len(cmdParts) == 0 {
+// 		logger.LoggedPrint(essentials.LOG_ERROR, "No command provided to Spawn", true)
+// 		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: "No command provided to Spawn"}
+// 	}
+
+// 	containerPath := essentials.GetSandboxPath(container)
+// 	if containerPath == "" {
+// 		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: fmt.Sprintf("sandbox %s does not exist", container)}
+// 	}
+
+// 	parsedPacmanResult := essentials.ParsePacmanCommand(command)
+// 	if !parsedPacmanResult.IsValid {
+// 		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: "The command is not valid pacman command"}
+// 	}
+
+// 	if verbose {
+// 		logger.VerbosedPrint("Running command: sudo systemd-nspawn -D " + filepath.Join(containerPath, "merged") + strings.Join(cmdParts, " "))
+// 	}
+
+// 	args := append([]string{"systemd-nspawn", "-D", filepath.Join(containerPath, "merged")}, cmdParts...)
+// 	cmd := exec.Command("sudo", args...)
+
+// 	ptmx, err := pty.Start(cmd)
+// 	if err != nil {
+// 		logger.LoggedPrint(essentials.LOG_ERROR, "Failed to start process with PTY: "+err.Error(), true)
+// 		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: "Failed to start PTY: " + err.Error()}
+// 	}
+// 	defer ptmx.Close()
+
+// 	go func() {
+// 		_, _ = io.Copy(ptmx, os.Stdin)
+// 	}()
+
+// 	conflictingPackages := make(essentials.ConflictingPackages)
+
+// 	if parsedPacmanResult.Action == "install" {
+// 		buf := make([]byte, 1024)
+// 		lineEndingRegex := regexp.MustCompile(`\r+\n|\r`)
+
+// 		const (
+// 			PROCESSLINE_GENERIC_ERROR = iota
+// 			PROCESSLINE_MOUNTPOINT_ERROR
+// 			PROCESSLINE_SUCCESS
+// 		)
+
+// 		processLine := func(line string) int8 {
+// 			cleanLine := strings.TrimSpace(essentials.ClearColor(essentials.CleanTerminalEscapeCodes(line)))
+// 			if cleanLine == "" {
+// 				return PROCESSLINE_GENERIC_ERROR
+// 			}
+
+// 			pkgName, conflictedWith, _, status := essentials.ParseConflictingPackages(cleanLine)
+// 			if status || strings.Contains(strings.ToLower(cleanLine), "are in conflict") {
+// 				conflictingPackages[pkgName] = []string{conflictedWith, strconv.FormatBool(status)}
+// 			} else if strings.Contains(cleanLine, "Mount point '/run/systemd/nspawn/unix-export/merged' exists already, refusing.") {
+// 				logger.ColoredPrint(color.FgYellow, "Systemd-nspawn mount point error has just happened. Try running 'kubos cleanup' and run the command again.")
+// 				return PROCESSLINE_MOUNTPOINT_ERROR
+// 			} else {
+// 				logger.ShellOutputPrint(line)
+// 			}
+// 			return PROCESSLINE_SUCCESS
+// 		}
+
+// 	loop:
+// 		for {
+// 			n, err := ptmx.Read(buf)
+// 			if n > 0 {
+// 				chunk := essentials.CleanTerminalEscapeCodes(string(buf[:n]))
+// 				chunk = lineEndingRegex.ReplaceAllString(chunk, "\n")
+
+// 				lines := strings.Split(chunk, "\n")
+// 				for _, line := range lines {
+// 					if line == "" {
+// 						continue
+// 					}
+
+// 					// Cek conflict prompt
+// 					if strings.Contains(strings.ToLower(line), "are in conflict") && strings.Contains(line, "[y/N]") {
+// 						processLine(line)
+// 						if _, werr := ptmx.Write([]byte("y\n")); werr != nil {
+// 							logger.ColoredPrint(color.FgRed, "Could not write answer into stdin. Please input yes.")
+// 							logger.LoggedPrint(essentials.LOG_ERROR, "Could not write answer into stdin. Please input yes.", true)
+// 						}
+// 						continue
+// 					}
+
+// 					switch processLine(line) {
+// 					case PROCESSLINE_MOUNTPOINT_ERROR:
+// 						return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: "Systemd-nspawn mount point error."}
+// 					}
+// 				}
+// 			}
+// 			if err != nil {
+// 				if errors.Is(err, io.EOF) || essentials.IsEOF(err) {
+// 					break loop
+// 				}
+// 				logger.ColoredPrint(color.FgRed, "Error reading PTY: "+err.Error())
+// 				break loop
+// 			}
+// 		}
+// 	}
+
+// 	if len(conflictingPackages) > 0 {
+// 		logger.LoggedPrint(essentials.LOG_WARNING, "Conflicting package found during sandbox installation.", true)
+// 		for pkgName, targets := range conflictingPackages {
+// 			if verbose {
+// 				logger.VerbosedPrint(fmt.Sprintf("%s is conflicting with %s.", pkgName, targets))
+// 			}
+// 		}
+// 		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_SUCCESS, Message: conflictingPackages}
+// 	}
+
+// 	return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_SUCCESS, Message: ""}
+// }
+
 func Spawn(container string, command string, verbose bool) essentials.ExecutionResult {
-	// Split the command string into separate arguments (e.g., ["pacman", "-S", "hello"])
 	cmdParts := strings.Fields(command)
-	// Check if there is command provided to Spawn
 	if len(cmdParts) == 0 {
 		logger.LoggedPrint(essentials.LOG_ERROR, "No command provided to Spawn", true)
 		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: "No command provided to Spawn"}
 	}
-	// Check if the sandbox 'container' really exists
+
 	containerPath := essentials.GetSandboxPath(container)
 	if containerPath == "" {
 		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: fmt.Sprintf("sandbox %s does not exist", container)}
 	}
 
-	// Identify the command
 	parsedPacmanResult := essentials.ParsePacmanCommand(command)
-	if parsedPacmanResult.IsValid == false {
+	if !parsedPacmanResult.IsValid {
 		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: "The command is not valid pacman command"}
 	}
 
-	// Combine nspawn flags with the split command
 	if verbose {
-		logger.VerbosedPrint("Running command: sudo systemd-nspawn -D " + filepath.Join(containerPath, "merged") + strings.Join(cmdParts, " "))
+		logger.VerbosedPrint("Running command: sudo systemd-nspawn -D " + filepath.Join(containerPath, "merged") + " " + strings.Join(cmdParts, " "))
 	}
+
 	args := append([]string{"systemd-nspawn", "-D", filepath.Join(containerPath, "merged")}, cmdParts...)
 	cmd := exec.Command("sudo", args...)
 
-	ptmx, err := pty.Start(cmd)
-	if err != nil {
-		logger.LoggedPrint(essentials.LOG_ERROR, "Failed to start process with PTY: "+err.Error(), true)
-		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: "Failed to start PTY: " + err.Error()}
-	}
-	defer ptmx.Close()
-
-	go func() {
-		_, _ = io.Copy(ptmx, os.Stdin)
-	}()
-	// Get conflicting packages detail
 	conflictingPackages := make(essentials.ConflictingPackages)
+	var mountPointError bool
 
 	if parsedPacmanResult.Action == "install" {
-		// Replace your bufio.NewScanner(ptmx) block with a raw byte buffer read loop
-
-		buf := make([]byte, 1024)
-		var lineBuffer strings.Builder
-		const (
-			PROCESSLINE_GENERIC_ERROR = iota
-			PROCESSLINE_MOUNTPOINT_ERROR
-			PROCESSLINE_SUCCESS
-		)
-		// Helper to process a line for conflicts and logging
-		processLine := func(line string) int8 {
-			// Clear CSI (colors) and OSC escape codes for reliable regex matching
+		err := RunWithPTY(cmd, func(line string, w io.Writer) bool {
 			cleanLine := strings.TrimSpace(essentials.ClearColor(essentials.CleanTerminalEscapeCodes(line)))
 			if cleanLine == "" {
-				return PROCESSLINE_GENERIC_ERROR
+				return true
 			}
 
-			pkgName, conflictedWith, _, status := essentials.ParseConflictingPackages(cleanLine)
-			if status || strings.Contains(strings.ToLower(cleanLine), "are in conflict") {
-				//logger.Print(essentials.LOG_ERROR, "Conflicting package detected: "+cleanLine, false, false)
-				conflictingPackages[pkgName] = []string{conflictedWith, strconv.FormatBool(status)}
-			} else if strings.Contains(strings.ToLower(cleanLine), "Mount point '/run/systemd/nspawn/unix-export/merged' exists already, refusing.") {
+			// Cek mountpoint error
+			if strings.Contains(cleanLine, "Mount point '/run/systemd/nspawn/unix-export/merged' exists already, refusing.") {
 				logger.ColoredPrint(color.FgYellow, "Systemd-nspawn mount point error has just happened. Try running 'kubos cleanup' and run the command again.")
-				return PROCESSLINE_MOUNTPOINT_ERROR
-			} else {
-				// Normal output log
-				logger.Print(essentials.LOG_INFO, line, true, true)
+				mountPointError = true
+				return false // stop loop
 			}
-			return PROCESSLINE_SUCCESS
+
+			// Cek conflict prompt
+			if strings.Contains(strings.ToLower(cleanLine), "are in conflict") && strings.Contains(cleanLine, "[y/N]") {
+				pkgName, conflictedWith, _, status := essentials.ParseConflictingPackages(cleanLine)
+				conflictingPackages[pkgName] = []string{conflictedWith, strconv.FormatBool(status)}
+				if _, werr := w.Write([]byte("y\n")); werr != nil {
+					logger.ColoredPrint(color.FgRed, "Could not write answer into stdin. Please input yes.")
+					logger.LoggedPrint(essentials.LOG_ERROR, "Could not write answer into stdin. Please input yes.", true)
+				}
+				return true
+			}
+
+			// Cek conflict line tanpa prompt (informational)
+			pkgName, conflictedWith, _, status := essentials.ParseConflictingPackages(cleanLine)
+			if status {
+				conflictingPackages[pkgName] = []string{conflictedWith, strconv.FormatBool(status)}
+				return true
+			}
+
+			logger.ShellOutputPrint(line)
+			return true
+		})
+
+		if mountPointError {
+			return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: "Systemd-nspawn mount point error."}
 		}
-
-		for {
-			n, err := ptmx.Read(buf)
-			if n > 0 {
-				chunk := essentials.CleanTerminalEscapeCodes(string(buf[:n]))
-				var lineEndingRegex = regexp.MustCompile(`\r+\n|\r`)
-
-				// logger.ShellOutputPrint(lineEndingRegex.ReplaceAllString(chunk, "\n"))
-				// fmt.Printf("RAW CHUNK: %q\n", lineEndingRegex.ReplaceAllString(chunk, "\n")) // %q supaya \r \n keliatan literal
-				chunk = lineEndingRegex.ReplaceAllString(chunk, "\n")
-				lineBuffer.WriteString(chunk)
-
-				// Cek prompt konflik SEBELUM nunggu newline
-				current := lineBuffer.String()
-				if strings.Contains(strings.ToLower(current), "are in conflict") && strings.Contains(current, "[y/N]") {
-					// Jawab otomatis
-					processLine(current)
-					_, err := ptmx.Write([]byte("y\n"))
-					if err != nil {
-						logger.ColoredPrint(color.FgRed, "Could not write answer into stdin. Please input yes.")
-						logger.Print(essentials.LOG_ERROR, "Could not write answer into stdin. Please input yes.", true, true)
-					}
-					lineBuffer.Reset()
-				}
-
-				if strings.Contains(lineBuffer.String(), "\n") {
-					fullText := lineBuffer.String()
-					lines := strings.Split(fullText, "\n")
-					lineBuffer.Reset()
-
-					// Jika potongan terakhir tidak diakhiri \n, simpan kembali ke buffer
-					if !strings.HasSuffix(fullText, "\n") {
-						lineBuffer.WriteString(lines[len(lines)-1])
-						lines = lines[:len(lines)-1]
-					}
-
-					// Cetak dan proses HANYA baris yang sudah utuh sempurna!
-					for _, line := range lines {
-						if line == "" {
-							continue
-						}
-
-						// Jalankan pengecekan error/konflik
-						statusResult := processLine(line)
-
-						switch statusResult {
-						case PROCESSLINE_MOUNTPOINT_ERROR:
-							return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: "Systemd-nspawn mount point error."}
-						}
-					}
-				}
-			}
-			if err != nil {
-				// EIO = slave side PTY ditutup = proses selesai, bukan error
-				if errors.Is(err, io.EOF) || essentials.IsEOF(err) {
-					break
-				}
-				logger.ColoredPrint(color.FgRed, "Error reading PTY: "+err.Error())
-				break
-			}
+		if err != nil {
+			return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: err.Error()}
 		}
-		// Crucial: Process any remaining text (like the [y/N] prompt) after the loop ends
-		remains := lineBuffer.String()
-		if remains != "" {
-			if status := processLine(remains); status == PROCESSLINE_SUCCESS {
-				switch status {
-				case PROCESSLINE_MOUNTPOINT_ERROR:
-					return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: "Systemd-nspawn mount point error."}
-				}
-			}
-		}
-
 	}
-
-	// // Wait for the command to finish and catch the exit error
-	// if err := cmd.Wait(); err != nil {
-	// 	if exitErr, ok := err.(*exec.ExitError); ok {
-	// 		// This shows the exit code (e.g., 1, 127)
-	// 		logger.Print(essentials.LOG_ERROR, fmt.Sprintf("Command failed with exit code %d", exitErr.ExitCode()), false, true)
-	// 	} else {
-	// 		logger.Print(essentials.LOG_ERROR, "Command execution failed: "+err.Error(), false, true)
-	// 	}
-	// }
 
 	if len(conflictingPackages) > 0 {
 		logger.LoggedPrint(essentials.LOG_WARNING, "Conflicting package found during sandbox installation.", true)
@@ -239,10 +272,10 @@ func Spawn(container string, command string, verbose bool) essentials.ExecutionR
 				logger.VerbosedPrint(fmt.Sprintf("%s is conflicting with %s.", pkgName, targets))
 			}
 		}
-		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_SUCCESS, Message: conflictingPackages} // If command succeeded and conflict detected
+		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_SUCCESS, Message: conflictingPackages}
 	}
 
-	return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_SUCCESS, Message: ""} // If command succeeded and no conflict detected
+	return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_SUCCESS, Message: ""}
 }
 
 func SpawnPacman(args []string, pkgName string, verbose bool) essentials.ExecutionResult {
@@ -402,7 +435,9 @@ func Teardown(givenName string, verbose bool) essentials.ExecutionResult {
 	DeBusyPath(mergedPath, verbose)
 
 	umountCmd := exec.Command("sudo", "umount", mergedPath)
-	output, err := umountCmd.CombinedOutput()
+	err := RunWithPTY(umountCmd, func(line string, w io.Writer) bool {
+
+	})
 	if err != nil {
 		// If it's already unmounted, we might want to continue anyway to clean up files
 		logger.ColoredPrint(color.FgRed, fmt.Sprintf("Unmount failed (it might already be unmounted): %s", string(output)))
@@ -430,4 +465,48 @@ func Teardown(givenName string, verbose bool) essentials.ExecutionResult {
 	logger.Print(essentials.LOG_SUCCESS, "Cleaned up sandbox directories for "+givenName, true, true)
 	return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_SUCCESS, Message: ""}
 
+}
+
+// LineProcessor adalah callback yang dipanggil untuk setiap baris output
+type LineProcessor func(line string, w io.Writer) bool // return false = stop loop
+
+// RunWithPTY menjalankan command dengan PTY dan memanggil processor per baris
+func RunWithPTY(cmd *exec.Cmd, processor LineProcessor) essentials.ExecutionResult {
+	ptmx, err := pty.Start(cmd)
+	if err != nil {
+		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: fmt.Sprintf("failed to start PTY: %w", err)}
+	}
+	defer ptmx.Close()
+
+	go func() {
+		_, _ = io.Copy(ptmx, os.Stdin)
+	}()
+
+	buf := make([]byte, 1024)
+	lineEndingRegex := regexp.MustCompile(`\r+\n|\r`)
+
+loop:
+	for {
+		n, err := ptmx.Read(buf)
+		if n > 0 {
+			chunk := essentials.CleanTerminalEscapeCodes(string(buf[:n]))
+			chunk = lineEndingRegex.ReplaceAllString(chunk, "\n")
+
+			for _, line := range strings.Split(chunk, "\n") {
+				if line == "" {
+					continue
+				}
+				if !processor(line, ptmx) {
+					break loop
+				}
+			}
+		}
+		if err != nil {
+			if errors.Is(err, io.EOF) || essentials.IsEOF(err) {
+				break loop
+			}
+			return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: fmt.Sprintf("failed reading PTY: %w", err)}
+		}
+	}
+	return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_COMPLETED, Message: ""}
 }
