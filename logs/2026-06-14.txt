@@ -1,0 +1,163 @@
+LOG FILE CREATED ON 2026-06-14 05:47:28
+=============================
+-------------------------------------------
+LOGGING START ON 2026-06-14 05:47:28
+[i] 2026-06-14 05:47:28 ==> Resolving mesa-amber...
+[i] 2026-06-14 05:47:30 ==> Found mesa-amber in pacman repos. Installing...
+[i] 2026-06-14 05:47:30 ==> Redirecting to KUBOS pacman..
+[i] 2026-06-14 05:47:30 Setting up closed environment..
+[i] 2026-06-14 05:47:30 Trying to create a directory on path: sandboxes/mesa-amber
+[V] 2026-06-14 05:47:30 Found desired directory on path: sandboxes/mesa-amber
+[i] 2026-06-14 05:47:30 Trying to create directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+[V] 2026-06-14 05:47:30 Successfully created directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+[i] 2026-06-14 05:47:30 Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+[V] 2026-06-14 05:47:31 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+[i] 2026-06-14 05:47:37 [sudo] password for yosatsu: 
+[i] 2026-06-14 05:47:37 ░ [0;38:5:245mSpawning container merged on /home/yosatsu/Kubos/sandboxes/mesa-amber/merged.
+[i] 2026-06-14 05:47:37 ░ [0;38:5:245mPress Ctrl-][0;38:5:245m three times within 1s to kill container; two times followed by r
+[i] 2026-06-14 05:47:37 ░ [0;38:5:245mto reboot container; two times followed by p[0;38:5:245m to poweroff container.
+[i] 2026-06-14 05:47:37 [0;1;38:5:185mHost and machine ids are equal (149f874d59f64157b0acbb6b3ea62fa4): refusing to link journals
+[i] 2026-06-14 05:47:39 [?25lresolving dependencies...
+[i] 2026-06-14 05:47:42 looking for conflicting packages...
+[i] 2026-06-14 05:47:42 y
+[i] 2026-06-14 05:47:42 [?25l
+[i] 2026-06-14 05:47:42 Package (3)       Old Version  New Version  Net Change  Download Size
+[i] 2026-06-14 05:47:42 extra/libxfixes                6.0.2-1        0.04 MiB       0.01 MiB
+[i] 2026-06-14 05:47:42 mesa              1:26.1.2-1                -52.57 MiB               
+[i] 2026-06-14 05:47:42 extra/mesa-amber               21.3.9-6      40.51 MiB       6.75 MiB
+[i] 2026-06-14 05:47:42 Total Download Size:     6.76 MiB
+[i] 2026-06-14 05:47:42 Total Installed Size:   40.55 MiB
+[i] 2026-06-14 05:47:42 Net Upgrade Size:      -12.02 MiB
+[i] 2026-06-14 05:47:44 :: Proceed with installation? [Y/n] [?25hy
+[i] 2026-06-14 05:47:45 [?25l:: Retrieving packages...
+[i] 2026-06-14 05:47:45  mesa-amber-21.3.9-6-x86_64 downloading...
+[i] 2026-06-14 05:47:45  libxfixes-6.0.2-1-x86_64 downloading...
+[i] 2026-06-14 05:47:45 error: failed retrieving file 'mesa-amber-21.3.9-6-x86_64.pkg.tar.zst' from singapore.mirror.pkgbuild.com : Could not resolve host: singapore.mirror.pkgbuild.com
+[i] 2026-06-14 05:47:45 warning: fatal error from singapore.mirror.pkgbuild.com, skipping for the remainder of this transaction
+[i] 2026-06-14 05:47:45 error: failed retrieving file 'libxfixes-6.0.2-1-x86_64.pkg.tar.zst' from singapore.mirror.pkgbuild.com : Could not resolve host: singapore.mirror.pkgbuild.com
+[i] 2026-06-14 05:47:45 error: failed retrieving file 'mesa-amber-21.3.9-6-x86_64.pkg.tar.zst' from sg.arch.niranjan.co : Could not resolve host: sg.arch.niranjan.co
+[i] 2026-06-14 05:47:45 warning: fatal error from sg.arch.niranjan.co, skipping for the remainder of this transaction
+[i] 2026-06-14 05:47:45 error: failed retrieving file 'libxfixes-6.0.2-1-x86_64.pkg.tar.zst' from sg.arch.niranjan.co : Could not resolve host: sg.arch.niranjan.co
+[i] 2026-06-14 05:47:45 error: failed retrieving file 'libxfixes-6.0.2-1-x86_64.pkg.tar.zst' from sg.mirrors.cicku.me : Could not resolve host: sg.mirrors.cicku.me
+[i] 2026-06-14 05:47:45 warning: fatal error from sg.mirrors.cicku.me, skipping for the remainder of this transaction
+[i] 2026-06-14 05:47:45 error: failed retrieving file 'mesa-amber-21.3.9-6-x86_64.pkg.tar.zst' from sg.mirrors.cicku.me : Could not resolve host: sg.mirrors.cicku.me
+[i] 2026-06-14 05:47:45 error: failed retrieving file 'libxfixes-6.0.2-1-x86_64.pkg.tar.zst' from mirror.sg.cdn-perfprod.com : Could not resolve host: mirror.sg.cdn-perfprod.com
+[i] 2026-06-14 05:47:45 warning: fatal error from mirror.sg.cdn-perfprod.com, skipping for the remainder of this transaction
+[i] 2026-06-14 05:47:45 error: failed retrieving file 'mesa-amber-21.3.9-6-x86_64.pkg.tar.zst' from mirror.sg.cdn-perfprod.com : Could not resolve host: mirror.sg.cdn-perfprod.com
+[i] 2026-06-14 05:47:45 error: failed retrieving file 'mesa-amber-21.3.9-6-x86_64.pkg.tar.zst' from download.nus.edu.sg : Could not resolve host: download.nus.edu.sg
+[i] 2026-06-14 05:47:45 warning: fatal error from download.nus.edu.sg, skipping for the remainder of this transaction
+[i] 2026-06-14 05:47:45 error: failed retrieving file 'libxfixes-6.0.2-1-x86_64.pkg.tar.zst' from download.nus.edu.sg : Could not resolve host: download.nus.edu.sg
+[i] 2026-06-14 05:47:45 error: failed retrieving file 'mesa-amber-21.3.9-6-x86_64.pkg.tar.zst' from ossmirror.mycloud.services : Could not resolve host: ossmirror.mycloud.services
+[i] 2026-06-14 05:47:45 warning: fatal error from ossmirror.mycloud.services, skipping for the remainder of this transaction
+[i] 2026-06-14 05:47:45 error: failed retrieving file 'libxfixes-6.0.2-1-x86_64.pkg.tar.zst' from ossmirror.mycloud.services : Could not resolve host: ossmirror.mycloud.services
+[i] 2026-06-14 05:47:45 warning: failed to retrieve some files
+[i] 2026-06-14 05:47:45 error: failed to commit transaction (failed to retrieve some files)
+[i] 2026-06-14 05:47:45 Errors occurred, no packages were upgraded.
+[i] 2026-06-14 05:47:45 [?25h[!p[?7hContainer merged failed with error code 1.
+[X] 2026-06-14 05:47:45 Error reading PTY: read /dev/ptmx: input/output error
+[!] 2026-06-14 05:47:45 Conflicting package found during sandbox installation.
+[i] 2026-06-14 05:47:45 ==> Not in pacman repos. searching in AUR...
+[X] 2026-06-14 05:47:46 AUR Lookup failed
+-------------------------------------------
+LOGGING START ON 2026-06-14 05:49:34
+[i] 2026-06-14 05:49:34 ==> Resolving gvim...
+[i] 2026-06-14 05:49:35 ==> Found gvim in pacman repos. Installing...
+[i] 2026-06-14 05:49:35 ==> Redirecting to KUBOS pacman..
+[i] 2026-06-14 05:49:35 Setting up closed environment..
+[i] 2026-06-14 05:49:35 Trying to create a directory on path: sandboxes/gvim
+[V] 2026-06-14 05:49:35 Found desired directory on path: sandboxes/gvim
+[i] 2026-06-14 05:49:35 Trying to create directories on path: sandboxes/gvim/upper, sandboxes/gvim/merged, sandboxes/gvim/work
+[V] 2026-06-14 05:49:35 Successfully created directories on path: sandboxes/gvim/upper, sandboxes/gvim/merged, sandboxes/gvim/work
+[i] 2026-06-14 05:49:35 Mounting overlay filesystem on path: sandboxes/gvim/merged
+[V] 2026-06-14 05:49:35 Successfully mounted overlay filesystem on path: sandboxes/gvim/merged
+[i] 2026-06-14 05:50:01 [sudo] password for yosatsu: 
+[i] 2026-06-14 05:50:02 ░ [0;38:5:245mSpawning container merged on /home/yosatsu/Kubos/sandboxes/gvim/merged.
+[i] 2026-06-14 05:50:02 ░ [0;38:5:245mPress Ctrl-][0;38:5:245m three times within 1s to kill container; two times followed by r
+[i] 2026-06-14 05:50:02 ░ [0;38:5:245mto reboot container; two times followed by p[0;38:5:245m to poweroff container.
+[i] 2026-06-14 05:50:02 [0;1;38:5:185mHost and machine ids are equal (149f874d59f64157b0acbb6b3ea62fa4): refusing to link journals
+[i] 2026-06-14 05:50:03 [?25lresolving dependencies...
+[i] 2026-06-14 05:50:03 looking for conflicting packages...
+[i] 2026-06-14 05:50:03 y
+[i] 2026-06-14 05:50:03 [?25l
+[i] 2026-06-14 05:50:03 warning: insufficient columns available for table display
+[i] 2026-06-14 05:50:03 Packages (72) adwaita-cursors-50.0-1  adwaita-fonts-50.0-1
+[i] 2026-06-14 05:50:03               adwaita-icon-theme-50.0-1  adwaita-icon-theme-legacy-46.2-3
+[i] 2026-06-14 05:50:03               alsa-lib-1.2.16-1  alsa-topology-conf-1.2.5.1-4
+[i] 2026-06-14 05:50:03               alsa-ucm-conf-1.2.16-2  at-spi2-core-2.60.4-1
+[i] 2026-06-14 05:50:03               bubblewrap-0.11.2-1  cairo-1.18.4-1  dav1d-1.5.3-1
+[i] 2026-06-14 05:50:03               dconf-0.49.0-1  desktop-file-utils-0.28-1  flac-1.5.0-1
+[i] 2026-06-14 05:50:03               fribidi-1.0.16-2  gdk-pixbuf2-2.44.6-2  giflib-6.1.3-1
+[i] 2026-06-14 05:50:03               glib-networking-1:2.80.1-1  glycin-2.1.1-1  gperftools-2.18.1-1
+[i] 2026-06-14 05:50:03               gsettings-desktop-schemas-50.1-1  gsettings-system-schemas-50.1-1
+[i] 2026-06-14 05:50:03               gtest-1.17.0-2  gtk-update-icon-cache-1:4.22.4-1
+[i] 2026-06-14 05:50:03               gtk3-1:3.24.52-1  highway-1.4.0-1  iso-codes-4.20.1-1
+[i] 2026-06-14 05:50:03               jbigkit-2.1-8  json-glib-1.10.8-1  lame-3.101.r6531-1
+[i] 2026-06-14 05:50:03               lcms2-2.19.1-1  libasyncns-1:0.8+r3+g68cd5af-3
+[i] 2026-06-14 05:50:03               libcanberra-1:0.30+r2+gc0620e4-6  libcloudproviders-0.4.0-1
+[i] 2026-06-14 05:50:03               libcolord-1.4.8-1  libdatrie-0.2.14-1  libdeflate-1.25-1
+[i] 2026-06-14 05:50:03               libepoxy-1.5.10-3  libjxl-0.11.2-2  libogg-1.3.6-1
+[i] 2026-06-14 05:50:03               libpulse-17.0+r98+gb096704c0-1  librsvg-2:2.62.3-1
+[i] 2026-06-14 05:50:03               libsndfile-1.2.2-4  libsoup3-3.6.6-2  libstemmer-3.1.1-1
+[i] 2026-06-14 05:50:03               libthai-0.1.30-1  libtiff-4.7.1-2  libtool-2.6.1-1
+[i] 2026-06-14 05:50:03               libvorbis-1.3.7-4  libwebp-1.6.0-2  libxcomposite-0.4.7-1
+[i] 2026-06-14 05:50:03               libxcursor-1.2.3-1  libxdamage-1.1.7-1  libxfixes-6.0.2-1
+[i] 2026-06-14 05:50:03               libxft-2.3.9-1  libxi-1.8.3-1  libxinerama-1.1.6-1
+[i] 2026-06-14 05:50:03               libxrandr-1.5.5-1  libxrender-0.9.12-1  libxt-1.3.1-1
+[i] 2026-06-14 05:50:03               libxtst-1.2.5-1  lzo-2.10-5  mpg123-1.33.5-1  opus-1.6.1-1
+[i] 2026-06-14 05:50:03               pango-1:1.57.1-1  pixman-0.46.4-1  sound-theme-freedesktop-0.8-6
+[i] 2026-06-14 05:50:03               tdb-1.4.15-1  tinysparql-3.11.1-1  vim-9.2.0623-1 [removal]
+[i] 2026-06-14 05:50:03               xorg-xprop-1.2.8-1  gvim-9.2.0623-1
+[i] 2026-06-14 05:50:03 Total Download Size:    46.37 MiB
+[i] 2026-06-14 05:50:03 Total Installed Size:  213.36 MiB
+[i] 2026-06-14 05:50:03 Net Upgrade Size:      208.00 MiB
+[i] 2026-06-14 05:50:23 :: Proceed with installation? [Y/n] [?25hy
+[i] 2026-06-14 05:50:23 [?25l:: Retrieving packages...
+[i] 2026-06-14 05:50:23  gtk3-1:3.24.52-1-x86_64 downloading...
+[i] 2026-06-14 05:50:23  glycin-2.1.1-1-x86_64 downloading...
+[i] 2026-06-14 05:50:23  iso-codes-4.20.1-1-any downloading...
+[i] 2026-06-14 05:50:23  opus-1.6.1-1-x86_64 downloading...
+[i] 2026-06-14 05:50:23  gvim-9.2.0623-1-x86_64 downloading...
+[i] 2026-06-14 05:50:23 error: failed retrieving file 'gtk3-1:3.24.52-1-x86_64.pkg.tar.zst' from singapore.mirror.pkgbuild.com : Could not resolve host: singapore.mirror.pkgbuild.com
+[i] 2026-06-14 05:50:23 warning: fatal error from singapore.mirror.pkgbuild.com, skipping for the remainder of this transaction
+[i] 2026-06-14 05:50:23 error: failed retrieving file 'glycin-2.1.1-1-x86_64.pkg.tar.zst' from singapore.mirror.pkgbuild.com : Could not resolve host: singapore.mirror.pkgbuild.com
+[i] 2026-06-14 05:50:23 error: failed retrieving file 'iso-codes-4.20.1-1-any.pkg.tar.zst' from singapore.mirror.pkgbuild.com : Could not resolve host: singapore.mirror.pkgbuild.com
+[i] 2026-06-14 05:50:23 error: failed retrieving file 'opus-1.6.1-1-x86_64.pkg.tar.zst' from singapore.mirror.pkgbuild.com : Could not resolve host: singapore.mirror.pkgbuild.com
+[i] 2026-06-14 05:50:23 error: failed retrieving file 'gvim-9.2.0623-1-x86_64.pkg.tar.zst' from singapore.mirror.pkgbuild.com : Could not resolve host: singapore.mirror.pkgbuild.com
+[i] 2026-06-14 05:50:23 error: failed retrieving file 'gtk3-1:3.24.52-1-x86_64.pkg.tar.zst' from sg.arch.niranjan.co : Could not resolve host: sg.arch.niranjan.co
+[i] 2026-06-14 05:50:23 warning: fatal error from sg.arch.niranjan.co, skipping for the remainder of this transaction
+[i] 2026-06-14 05:50:23 error: failed retrieving file 'glycin-2.1.1-1-x86_64.pkg.tar.zst' from sg.arch.niranjan.co : Could not resolve host: sg.arch.niranjan.co
+[i] 2026-06-14 05:50:23 error: failed retrieving file 'iso-codes-4.20.1-1-any.pkg.tar.zst' from sg.arch.niranjan.co : Could not resolve host: sg.arch.niranjan.co
+[i] 2026-06-14 05:50:23 error: failed retrieving file 'opus-1.6.1-1-x86_64.pkg.tar.zst' from sg.arch.niranjan.co : Could not resolve host: sg.arch.niranjan.co
+[i] 2026-06-14 05:50:23 error: failed retrieving file 'gvim-9.2.0623-1-x86_64.pkg.tar.zst' from sg.arch.niranjan.co : Could not resolve host: sg.arch.niranjan.co
+[i] 2026-06-14 05:50:23 error: failed retrieving file 'gtk3-1:3.24.52-1-x86_64.pkg.tar.zst' from sg.mirrors.cicku.me : Could not resolve host: sg.mirrors.cicku.me
+[i] 2026-06-14 05:50:23 warning: fatal error from sg.mirrors.cicku.me, skipping for the remainder of this transaction
+[i] 2026-06-14 05:50:23 error: failed retrieving file 'glycin-2.1.1-1-x86_64.pkg.tar.zst' from sg.mirrors.cicku.me : Could not resolve host: sg.mirrors.cicku.me
+[i] 2026-06-14 05:50:23 error: failed retrieving file 'iso-codes-4.20.1-1-any.pkg.tar.zst' from sg.mirrors.cicku.me : Could not resolve host: sg.mirrors.cicku.me
+[i] 2026-06-14 05:50:23 error: failed retrieving file 'opus-1.6.1-1-x86_64.pkg.tar.zst' from sg.mirrors.cicku.me : Could not resolve host: sg.mirrors.cicku.me
+[i] 2026-06-14 05:50:23 error: failed retrieving file 'gvim-9.2.0623-1-x86_64.pkg.tar.zst' from sg.mirrors.cicku.me : Could not resolve host: sg.mirrors.cicku.me
+[i] 2026-06-14 05:50:23 error: failed retrieving file 'gtk3-1:3.24.52-1-x86_64.pkg.tar.zst' from mirror.sg.cdn-perfprod.com : Could not resolve host: mirror.sg.cdn-perfprod.com
+[i] 2026-06-14 05:50:23 warning: fatal error from mirror.sg.cdn-perfprod.com, skipping for the remainder of this transaction
+[i] 2026-06-14 05:50:23 error: failed retrieving file 'glycin-2.1.1-1-x86_64.pkg.tar.zst' from mirror.sg.cdn-perfprod.com : Could not resolve host: mirror.sg.cdn-perfprod.com
+[i] 2026-06-14 05:50:23 error: failed retrieving file 'iso-codes-4.20.1-1-any.pkg.tar.zst' from mirror.sg.cdn-perfprod.com : Could not resolve host: mirror.sg.cdn-perfprod.com
+[i] 2026-06-14 05:50:23 error: failed retrieving file 'opus-1.6.1-1-x86_64.pkg.tar.zst' from mirror.sg.cdn-perfprod.com : Could not resolve host: mirror.sg.cdn-perfprod.com
+[i] 2026-06-14 05:50:23 error: failed retrieving file 'gvim-9.2.0623-1-x86_64.pkg.tar.zst' from mirror.sg.cdn-perfprod.com : Could not resolve host: mirror.sg.cdn-perfprod.com
+[i] 2026-06-14 05:50:23 error: failed retrieving file 'gtk3-1:3.24.52-1-x86_64.pkg.tar.zst' from download.nus.edu.sg : Could not resolve host: download.nus.edu.sg
+[i] 2026-06-14 05:50:23 warning: fatal error from download.nus.edu.sg, skipping for the remainder of this transaction
+[i] 2026-06-14 05:50:23 error: failed retrieving file 'glycin-2.1.1-1-x86_64.pkg.tar.zst' from download.nus.edu.sg : Could not resolve host: download.nus.edu.sg
+[i] 2026-06-14 05:50:23 error: failed retrieving file 'iso-codes-4.20.1-1-any.pkg.tar.zst' from download.nus.edu.sg : Could not resolve host: download.nus.edu.sg
+[i] 2026-06-14 05:50:23 error: failed retrieving file 'opus-1.6.1-1-x86_64.pkg.tar.zst' from download.nus.edu.sg : Could not resolve host: download.nus.edu.sg
+[i] 2026-06-14 05:50:23 error: failed retrieving file 'gvim-9.2.0623-1-x86_64.pkg.tar.zst' from download.nus.edu.sg : Could not resolve host: download.nus.edu.sg
+[i] 2026-06-14 05:50:23 error: failed retrieving file 'gtk3-1:3.24.52-1-x86_64.pkg.tar.zst' from ossmirror.mycloud.services : Could not resolve host: ossmirror.mycloud.services
+[i] 2026-06-14 05:50:23 warning: fatal error from ossmirror.mycloud.services, skipping for the remainder of this transaction
+[i] 2026-06-14 05:50:23 error: failed retrieving file 'glycin-2.1.1-1-x86_64.pkg.tar.zst' from ossmirror.mycloud.services : Could not resolve host: ossmirror.mycloud.services
+[i] 2026-06-14 05:50:23 error: failed retrieving file 'iso-codes-4.20.1-1-any.pkg.tar.zst' from ossmirror.mycloud.services : Could not resolve host: ossmirror.mycloud.services
+[i] 2026-06-14 05:50:23 error: failed retrieving file 'opus-1.6.1-1-x86_64.pkg.tar.zst' from ossmirror.mycloud.services : Could not resolve host: ossmirror.mycloud.services
+[i] 2026-06-14 05:50:23 error: failed retrieving file 'gvim-9.2.0623-1-x86_64.pkg.tar.zst' from ossmirror.mycloud.services : Could not resolve host: ossmirror.mycloud.services
+[i] 2026-06-14 05:50:23 warning: failed to retrieve some files
+[i] 2026-06-14 05:50:23 error: failed to commit transaction (failed to retrieve some files)
+[i] 2026-06-14 05:50:23 Errors occurred, no packages were upgraded.
+[i] 2026-06-14 05:50:23 [?25h[!p[?7hContainer merged failed with error code 1.
+[X] 2026-06-14 05:50:23 Error reading PTY: read /dev/ptmx: input/output error
+[!] 2026-06-14 05:50:23 Conflicting package found during sandbox installation.
+[i] 2026-06-14 05:50:23 ==> Not in pacman repos. searching in AUR...
+[X] 2026-06-14 05:50:24 AUR Lookup failed

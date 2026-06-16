@@ -39,7 +39,7 @@ func AURExists(pkgName string) (bool, *essentials.AURPackage, error) {
 }
 
 // Search does a fuzzy name search on AUR, returns up to 10 results.
-func Search(query string) ([]essentials.AURPackage, error) {
+func AURSearch(query string) ([]essentials.AURPackage, error) {
 	apiURL := fmt.Sprintf("%s/search/%s?by=name", aurRPCBase, url.QueryEscape(query))
 
 	resp, err := http.Get(apiURL)

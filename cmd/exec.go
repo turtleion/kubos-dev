@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"bufio"
 	"fmt"
+	"io"
 	"kubos/libraries/essentials"
 	"kubos/libraries/logger"
 	"os"
@@ -10,8 +10,11 @@ import (
 	"path/filepath"
 	"regexp"
 	"slices"
+	"strconv"
 	"strings"
 	"time"
+
+	"github.com/creack/pty"
 )
 
 func CleanUp() essentials.ExecutionResult {
@@ -69,11 +72,12 @@ func DeBusyPath(path string) essentials.ExecutionResult {
 func Spawn(container string, command string) essentials.ExecutionResult {
 	// Split the command string into separate arguments (e.g., ["pacman", "-S", "hello"])
 	cmdParts := strings.Fields(command)
+	// Check if there is command provided to Spawn
 	if len(cmdParts) == 0 {
 		logger.Print(essentials.LOG_ERROR, "No command provided to Spawn", false, true)
 		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: "No command provided to Spawn"}
 	}
-
+	// Check if the sandbox 'container' really exists
 	containerPath := essentials.GetSandboxPath(container)
 	if containerPath == "" {
 		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: fmt.Sprintf("sandbox %s does not exist", container)}
@@ -89,46 +93,88 @@ func Spawn(container string, command string) essentials.ExecutionResult {
 	args := append([]string{"systemd-nspawn", "-D", filepath.Join(containerPath, "merged")}, cmdParts...)
 	cmd := exec.Command("sudo", args...)
 
-	stdoutPipe, err := cmd.StdoutPipe()
+	ptmx, err := pty.Start(cmd)
 	if err != nil {
-		logger.Print(essentials.LOG_ERROR, "Failed to create stdout pipe: "+err.Error(), false, true)
-
+		logger.Print(essentials.LOG_ERROR, "Failed to start process with PTY: "+err.Error(), false, true)
+		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: "Failed to start PTY: " + err.Error()}
 	}
-	// Pipe the standards
-	cmd.Stdin = os.Stdin
-	cmd.Stderr = os.Stderr
+	defer ptmx.Close()
 
-	// Start the command
-	if err := cmd.Start(); err != nil {
-		logger.Print(essentials.LOG_ERROR, "Failed to start process: "+err.Error(), false, true)
-		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: "Failed to start process: " + err.Error()}
-	}
-
+	go func() {
+		_, _ = io.Copy(ptmx, os.Stdin)
+	}()
 	// Flag to track if a conflicting package message was detected
-	conflictDetected := false
-
+	conflictingPackages := make(essentials.ConflictingPackages)
+	fmt.Println("\nParsed Pacman Result: ")
+	fmt.Println(parsedPacmanResult)
+	fmt.Printf("\n")
 	if parsedPacmanResult.Action == "install" {
-		scanner := bufio.NewScanner(stdoutPipe)
-		for scanner.Scan() {
-			line := scanner.Text()
-			// Check for conflicting packages
-			// if strings.Contains(strings.ToLower(line), "are in conflict") {
-			// 	logger.Print(essentials.LOG_ERROR, "Conflicting package detected: "+line, false, true)
-			// 	conflictDetected = true
-			// 	logger.Print(essentials.LOG_INFO, line, false, true)
+		// Replace your bufio.NewScanner(ptmx) block with a raw byte buffer read loop
 
-			// } else {
-			// 	// Log general output as info during installation
-			// 	logger.Print(essentials.LOG_INFO, line, false, true)
-			// }
-			logger.Print(essentials.LOG_INFO, line, false, true)
+		buf := make([]byte, 1024)
+		var lineBuffer strings.Builder
 
+		// Helper to process a line for conflicts and logging
+		processLine := func(line string) {
+			// Clear CSI (colors) and OSC escape codes for reliable regex matching
+			cleanLine := strings.TrimSpace(essentials.ClearColor(essentials.CleanTerminalEscapeCodes(line)))
+			if cleanLine == "" {
+				return
+			}
+
+			pkgName, conflictedWith, _, status := essentials.ParseConflictingPackages(cleanLine)
+			if status || strings.Contains(strings.ToLower(cleanLine), "are in conflict") {
+				//logger.Print(essentials.LOG_ERROR, "Conflicting package detected: "+cleanLine, false, false)
+				conflictingPackages[pkgName] = []string{conflictedWith, strconv.FormatBool(status)}
+			} else {
+				// Normal output log
+				logger.Print(essentials.LOG_INFO, line, true, true)
+			}
 		}
-		// Check for any errors that occurred during scanning
-		if err := scanner.Err(); err != nil {
-			logger.Print(essentials.LOG_ERROR, "Error reading command output: "+err.Error(), false, true)
-			return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: "Error reading command output: " + err.Error()}
+
+		for {
+			n, err := ptmx.Read(buf)
+			if n > 0 {
+				chunk := essentials.CleanTerminalEscapeCodes(string(buf[:n]))
+				fmt.Print(chunk)
+				lineBuffer.WriteString(chunk)
+
+				// Cek prompt konflik SEBELUM nunggu newline
+				current := lineBuffer.String()
+				if strings.Contains(strings.ToLower(current), "are in conflict") && strings.Contains(current, "[y/N]") {
+					// Jawab otomatis
+					processLine(current)
+					_, err := ptmx.Write([]byte("y\n"))
+					if err != nil {
+						logger.Print(essentials.LOG_ERROR, "Could not write answer into stdin. Please input yes.", false, true)
+					}
+					lineBuffer.Reset()
+				}
+
+				if strings.Contains(lineBuffer.String(), "\n") {
+					fullText := lineBuffer.String()
+					lines := strings.Split(fullText, "\n")
+					lineBuffer.Reset()
+					if !strings.HasSuffix(fullText, "\n") {
+						lineBuffer.WriteString(lines[len(lines)-1])
+						lines = lines[:len(lines)-1]
+					}
+
+					for _, line := range lines {
+						processLine(line)
+					}
+				}
+			}
+			if err != nil {
+				if err != io.EOF {
+					logger.Print(essentials.LOG_ERROR, "Error reading PTY: "+err.Error(), false, true)
+				}
+				break
+			}
 		}
+		// Crucial: Process any remaining text (like the [y/N] prompt) after the loop ends
+		processLine(lineBuffer.String())
+
 	}
 
 	// // Wait for the command to finish and catch the exit error
@@ -141,15 +187,21 @@ func Spawn(container string, command string) essentials.ExecutionResult {
 	// 	}
 	// }
 
-	if conflictDetected {
-		logger.Print(essentials.LOG_WARNING, "Conflicting package found during sandbox installation. Would you like to commit change to your real system?", false, true)
+	if len(conflictingPackages) > 0 {
+		logger.Print(essentials.LOG_WARNING, "Conflicting package found during sandbox installation.", false, true)
+		for pkgName, targets := range conflictingPackages {
+			fmt.Printf("%s is conflicting with %s.", pkgName, targets)
+		}
+		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_SUCCESS, Message: conflictingPackages} // If command succeeded and conflict detected
 	}
+
 	return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_SUCCESS, Message: ""} // If command succeeded and no conflict detected
 }
 
 func SpawnPacman(args []string, pkgName string) essentials.ExecutionResult {
 	logger.Print(essentials.LOG_INFO, "==> Redirecting to KUBOS pacman..", false, true)
 	args = slices.Insert(args, 0, "pacman")
+	fmt.Printf("Command: %v", args)
 	logger.Print(essentials.LOG_INFO, "Setting up closed environment..", false, true)
 	var ans string
 	res := Setup(pkgName)
@@ -157,7 +209,10 @@ func SpawnPacman(args []string, pkgName string) essentials.ExecutionResult {
 		if res.Message == "sandbox exists" {
 			for {
 				fmt.Printf("There is an existing sandbox with name %s. Would you like to use the sandbox? [y/n] ", pkgName)
-				fmt.Scan(&ans)
+				_, err := fmt.Scan(&ans)
+				if err != nil {
+					return essentials.ExecutionResult{essentials.EXECUTION_TASK_FAIL, "Failed to scan stdin"}
+				}
 				if strings.ToLower(ans) == "y" || strings.ToLower(ans) == "yes" || strings.ToLower(ans) == "n" || strings.ToLower(ans) == "no" {
 					break
 				} else {
@@ -181,7 +236,13 @@ func SpawnPassthroughPacman(args []string) essentials.ExecutionResult {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
-	return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_SUCCESS, Message: cmd.Run().Error()}
+	err := cmd.Run()
+	var msg string
+	if err != nil {
+		msg = err.Error()
+	}
+
+	return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_SUCCESS, Message: msg}
 }
 
 func SpawnYAY(args []string) essentials.ExecutionResult {
@@ -191,7 +252,13 @@ func SpawnYAY(args []string) essentials.ExecutionResult {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
-	return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_SUCCESS, Message: cmd.Run().Error()}
+	err := cmd.Run()
+	var msg string
+	if err != nil {
+		msg = err.Error()
+	}
+
+	return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_SUCCESS, Message: msg}
 }
 
 func Setup(givenName string) essentials.ExecutionResult {

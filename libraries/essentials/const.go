@@ -4,13 +4,15 @@ package essentials
 type LogStatus int8
 type ExecutionStatusCode int8
 
+type ConflictingPackages map[string][]string
+
 type Sandbox struct {
 	Name, Path string
 }
 
 type ExecutionResult struct {
 	Code    ExecutionStatusCode
-	Message string
+	Message any
 }
 
 // Result holds the classified meaning of the parsed pacman command.
@@ -40,13 +42,13 @@ type RPCResponse struct {
 }
 
 // Log severity levels used to categorize and color-code output.
-const LOG_SUCCESS = 1
-const LOG_WARNING = 2
-const LOG_ERROR = 3
-const LOG_INFO = 4
-
-// Exec constants
-const EXECUTION_TASK_FAIL ExecutionStatusCode = 5
-const EXECUTION_TASK_SUCCESS ExecutionStatusCode = 6
-const EXECUTION_TASK_COMPLETED ExecutionStatusCode = 7
-const EXECUTION_UNKNOWN ExecutionStatusCode = 99
+const (
+	LOG_SUCCESS = iota
+	LOG_INFO
+	LOG_WARNING
+	LOG_ERROR
+	EXECUTION_TASK_FAIL
+	EXECUTION_TASK_SUCCESS
+	EXECUTION_TASK_COMPLETED
+	EXECUTION_UNKNOWN = 99
+)

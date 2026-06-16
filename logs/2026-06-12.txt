@@ -108,3 +108,129 @@ LOGGING START ON 2026-06-12 18:23:12
 [V] 2026-06-12 18:23:14 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
 [i] 2026-06-12 18:23:16 [?25lresolving dependencies...
 [i] 2026-06-12 18:23:33 looking for conflicting packages...
+-------------------------------------------
+LOGGING START ON 2026-06-12 18:53:11
+[i] 2026-06-12 18:53:11 ==> Resolving mesa-amber...
+[i] 2026-06-12 18:53:12 ==> Found mesa-amber in pacman repos. Installing...
+[i] 2026-06-12 18:53:12 ==> Redirecting to KUBOS pacman..
+[i] 2026-06-12 18:53:12 Setting up closed environment..
+[i] 2026-06-12 18:53:12 Trying to create a directory on path: sandboxes/mesa-amber
+[V] 2026-06-12 18:53:12 Found desired directory on path: sandboxes/mesa-amber
+[i] 2026-06-12 18:53:12 Trying to create directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+[V] 2026-06-12 18:53:12 Successfully created directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+[i] 2026-06-12 18:53:12 Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+[V] 2026-06-12 18:53:13 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+[i] 2026-06-12 18:58:13 [sudo] password for yosatsu: 
+[i] 2026-06-12 18:58:13 sudo: timed out reading password
+[i] 2026-06-12 18:58:15 sudo: a password is required
+[X] 2026-06-12 18:58:15 Error reading command output: read /dev/ptmx: input/output error
+-------------------------------------------
+LOGGING START ON 2026-06-12 18:59:02
+[i] 2026-06-12 18:59:02 ==> Resolving mesa-amber...
+[i] 2026-06-12 18:59:02 ==> Found mesa-amber in pacman repos. Installing...
+[i] 2026-06-12 18:59:02 ==> Redirecting to KUBOS pacman..
+[i] 2026-06-12 18:59:02 Setting up closed environment..
+[i] 2026-06-12 18:59:02 Trying to create a directory on path: sandboxes/mesa-amber
+[V] 2026-06-12 18:59:02 Found desired directory on path: sandboxes/mesa-amber
+[i] 2026-06-12 18:59:02 Trying to create directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+[V] 2026-06-12 18:59:02 Successfully created directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+[i] 2026-06-12 18:59:02 Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+[V] 2026-06-12 18:59:02 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+[i] 2026-06-12 19:04:02 [sudo] password for yosatsu: 
+[i] 2026-06-12 19:04:02 sudo: timed out reading password
+[i] 2026-06-12 19:04:04 sudo: a password is required
+[X] 2026-06-12 19:04:04 Error reading command output: read /dev/ptmx: input/output error
+-------------------------------------------
+LOGGING START ON 2026-06-12 19:22:16
+[i] 2026-06-12 19:22:16 ==> Resolving mesa-amber...
+[i] 2026-06-12 19:22:17 ==> Found mesa-amber in pacman repos. Installing...
+[i] 2026-06-12 19:22:17 ==> Redirecting to KUBOS pacman..
+[i] 2026-06-12 19:22:17 Setting up closed environment..
+[i] 2026-06-12 19:22:17 Trying to create a directory on path: sandboxes/mesa-amber
+[V] 2026-06-12 19:22:17 Found desired directory on path: sandboxes/mesa-amber
+[i] 2026-06-12 19:22:17 Trying to create directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+[V] 2026-06-12 19:22:17 Successfully created directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+[i] 2026-06-12 19:22:17 Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+[V] 2026-06-12 19:22:17 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+[i] 2026-06-12 19:27:17 [sudo] password for yosatsu: 
+[i] 2026-06-12 19:27:17 sudo: timed out reading password
+[i] 2026-06-12 19:27:19 sudo: a password is required
+[X] 2026-06-12 19:27:19 Error reading command output: read /dev/ptmx: input/output error
+-------------------------------------------
+LOGGING START ON 2026-06-12 19:28:59
+[i] 2026-06-12 19:28:59 ==> Resolving mesa-amber...
+[i] 2026-06-12 19:29:00 ==> Found mesa-amber in pacman repos. Installing...
+[i] 2026-06-12 19:29:00 ==> Redirecting to KUBOS pacman..
+[i] 2026-06-12 19:29:00 Setting up closed environment..
+[!] 2026-06-12 19:29:00 Sandbox already exists: mesa-amber
+[i] 2026-06-12 19:35:34 [sudo] password for yosatsu: 
+[i] 2026-06-12 19:35:34 ░ [0;38:5:245mSpawning container merged on ]8;;file://cachyos/home/yosatsu/Code/Kubos/sandboxes/mesa-amber/merged\/home/yosatsu/Code/Kubos/sandboxes/mesa-amber/merged]8;;\.
+[i] 2026-06-12 19:35:34 ░ [0;38:5:245mPress Ctrl-][0;38:5:245m three times within 1s to kill container; two times followed by r
+[i] 2026-06-12 19:35:34 ░ [0;38:5:245mto reboot container; two times followed by p[0;38:5:245m to poweroff container.
+[i] 2026-06-12 19:35:34 [0;1;38:5:185mHost and machine ids are equal (dce42d622e684deba8ca5abebc0e407d): refusing to link journals
+[i] 2026-06-12 19:35:35 ]3008;start=2b1199d7b8854263a73cfb565151ad75;user=root;hostname=cachyos;machineid=dce42d622e684deba8ca5abebc0e407d;bootid=9cf63fca9238447b8012d01d1107c098;pid=21922;pidfdid=21890;comm=systemd-nspawn;container=merged;type=container\]11;?\]2;🔵 Container merged on cachyos\[?25lresolving dependencies...
+[i] 2026-06-12 19:35:48 ^[]11;rgb:1010/0e0e/0808^[\
+[i] 2026-06-12 19:36:02 looking for conflicting packages...
+[i] 2026-06-12 19:42:09 :: mesa-amber-21.3.9-6.1 and mesa-2:26.1.2-1 are in conflict. Remove mesa? [y/N] [?25hy
+[i] 2026-06-12 19:42:09 [?25l
+[i] 2026-06-12 19:42:09 Package (2)                  Old Version  New Version  Net Change  Download Size
+[i] 2026-06-12 19:42:09 
+[i] 2026-06-12 19:42:09 mesa                         2:26.1.2-1                -52.84 MiB               
+[i] 2026-06-12 19:42:09 cachyos-extra-v3/mesa-amber               21.3.9-6.1    49.40 MiB       8.82 MiB
+[i] 2026-06-12 19:42:09 
+[i] 2026-06-12 19:42:09 Total Download Size:    8.82 MiB
+[i] 2026-06-12 19:42:09 Total Installed Size:  49.40 MiB
+[i] 2026-06-12 19:42:09 Net Upgrade Size:      -3.44 MiB
+[i] 2026-06-12 19:42:09 
+-------------------------------------------
+LOGGING START ON 2026-06-12 20:44:53
+[i] 2026-06-12 20:44:53 ==> Resolving mesa-amber...
+[i] 2026-06-12 20:44:55 ==> Found mesa-amber in pacman repos. Installing...
+[i] 2026-06-12 20:44:55 ==> Redirecting to KUBOS pacman..
+[i] 2026-06-12 20:44:55 Setting up closed environment..
+[i] 2026-06-12 20:44:55 Trying to create a directory on path: sandboxes/mesa-amber
+[V] 2026-06-12 20:44:55 Found desired directory on path: sandboxes/mesa-amber
+[i] 2026-06-12 20:44:55 Trying to create directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+[V] 2026-06-12 20:44:55 Successfully created directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+[i] 2026-06-12 20:44:55 Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+[V] 2026-06-12 20:44:55 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+[X] 2026-06-12 20:45:28 Error reading PTY: read /dev/ptmx: input/output error
+-------------------------------------------
+LOGGING START ON 2026-06-12 20:47:10
+[i] 2026-06-12 20:47:10 ==> Resolving mesa-amber...
+[i] 2026-06-12 20:47:11 ==> Found mesa-amber in pacman repos. Installing...
+[i] 2026-06-12 20:47:11 ==> Redirecting to KUBOS pacman..
+[i] 2026-06-12 20:47:11 Setting up closed environment..
+[i] 2026-06-12 20:47:11 Trying to create a directory on path: sandboxes/mesa-amber
+[V] 2026-06-12 20:47:11 Found desired directory on path: sandboxes/mesa-amber
+[i] 2026-06-12 20:47:11 Trying to create directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+[V] 2026-06-12 20:47:11 Successfully created directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+[i] 2026-06-12 20:47:11 Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+[V] 2026-06-12 20:47:11 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+-------------------------------------------
+LOGGING START ON 2026-06-12 20:53:23
+[i] 2026-06-12 20:53:23 ==> Resolving mesa-amber...
+[i] 2026-06-12 20:53:24 ==> Found mesa-amber in pacman repos. Installing...
+[i] 2026-06-12 20:53:24 ==> Redirecting to KUBOS pacman..
+[i] 2026-06-12 20:53:24 Setting up closed environment..
+[i] 2026-06-12 20:53:24 Trying to create a directory on path: sandboxes/mesa-amber
+[V] 2026-06-12 20:53:24 Found desired directory on path: sandboxes/mesa-amber
+[i] 2026-06-12 20:53:24 Trying to create directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+[V] 2026-06-12 20:53:24 Successfully created directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+[i] 2026-06-12 20:53:24 Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+[V] 2026-06-12 20:53:24 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+[X] 2026-06-12 20:53:29 Error reading PTY: read /dev/ptmx: input/output error
+-------------------------------------------
+LOGGING START ON 2026-06-12 20:53:45
+[i] 2026-06-12 20:53:45 ==> Resolving mesa-amber...
+[i] 2026-06-12 20:53:46 ==> Found mesa-amber in pacman repos. Installing...
+[i] 2026-06-12 20:53:46 ==> Redirecting to KUBOS pacman..
+[i] 2026-06-12 20:53:46 Setting up closed environment..
+[i] 2026-06-12 20:53:46 Trying to create a directory on path: sandboxes/mesa-amber
+[V] 2026-06-12 20:53:46 Found desired directory on path: sandboxes/mesa-amber
+[i] 2026-06-12 20:53:46 Trying to create directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+[V] 2026-06-12 20:53:46 Successfully created directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+[i] 2026-06-12 20:53:46 Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+[V] 2026-06-12 20:53:46 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+[X] 2026-06-12 20:54:24 Error reading PTY: read /dev/ptmx: input/output error
+[!] 2026-06-12 20:54:24 Conflicting package found during sandbox installation. Would you like to commit change to your real system?

@@ -110,8 +110,12 @@ func ParsePacmanCommand(command string) PacmanParserResult {
 
 	// Separate option flags from the targets
 	for _, token := range tokens[1:] {
-		if strings.HasPrefix(token, "-") {
-			flagGroup = strings.TrimLeft(token, "-")
+		if strings.HasPrefix(token, "--") {
+			// Abaikan long-options atau masukkan ke penampung lain jika ingin diproses
+			continue
+		} else if strings.HasPrefix(token, "-") {
+			// Menggunakan penggabungan (concatenation) agar flag sebelumnya tidak hilang
+			flagGroup += strings.TrimLeft(token, "-")
 		} else {
 			res.Targets = append(res.Targets, token)
 		}
@@ -200,4 +204,24 @@ func (r PacmanParserResult) ToMap() map[string]any {
 		"targets":   r.Targets,
 		"modifiers": r.Modifiers,
 	}
+}
+
+var conflictRe = regexp.MustCompile(
+	`:: (\S+) and (\S+) are in conflict\. Remove (\S+)\? \[y/N\]`,
+)
+
+func ParseConflictingPackages(line string) (pkg1, pkg2, removeTarget string, ok bool) {
+	m := conflictRe.FindStringSubmatch(line)
+	if m == nil {
+		return "", "", "", false
+	}
+	return m[1], m[2], m[3], true
+}
+
+// Regex untuk menangkap OSC sequence (dimulai dengan ESC ], diikuti teks, diakhiri ESC \)
+var oscRegex = regexp.MustCompile(`\x1b\][^\x1b]*\x1b\\`)
+
+func CleanTerminalEscapeCodes(input string) string {
+	// Menghapus semua kode OSC sequence dari teks
+	return oscRegex.ReplaceAllString(input, "")
 }

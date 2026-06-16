@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"kubos/libraries/essentials"
 	"kubos/libraries/logger"
+	"maps"
+	"slices"
 )
 
 func installpkg(pkgName string) essentials.ExecutionResult {
@@ -11,7 +13,16 @@ func installpkg(pkgName string) essentials.ExecutionResult {
 	// 1. Check official repos first (pacman -Si exits 0 if found)
 	if IsInPacman(pkgName) {
 		logger.Print(essentials.LOG_INFO, fmt.Sprintf("==> Found %s in pacman repos. Installing...", pkgName), false, true)
-		return SpawnPacman([]string{"-S", pkgName}, pkgName)
+		res := SpawnPacman([]string{"-S", pkgName}, pkgName)
+		var conflicting []string
+		switch msg := res.Message.(type) {
+		case essentials.ConflictingPackages:
+			conflicting = slices.Collect(maps.Keys(msg))
+			fmt.Printf("\nConflicting packages detected: %v", conflicting)
+
+		}
+
+		fmt.Println("Running test for package " + pkgName)
 	}
 
 	// 2. Fall back to AUR
