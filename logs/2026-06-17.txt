@@ -1,0 +1,244 @@
+LOG FILE CREATED ON 2026-06-17 00:43:56
+=============================
+-------------------------------------------
+LOGGING START ON 2026-06-17 00:43:56
+[i] 2026-06-17 00:43:56 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-17 00:43:57     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-17 00:43:57 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-17 00:43:57     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-17 00:43:57 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[i] 2026-06-17 00:43:57     :: Trying to create a directory on path: sandboxes/mesa-amber
+
+[V] 2026-06-17 00:43:57     :: Found desired directory on path: sandboxes/mesa-amber
+
+[i] 2026-06-17 00:43:57     :: Trying to create directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[V] 2026-06-17 00:43:57     :: Successfully created directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[i] 2026-06-17 00:43:57     :: Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+
+[V] 2026-06-17 00:43:57 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+-------------------------------------------
+LOGGING START ON 2026-06-17 00:46:50
+[i] 2026-06-17 00:46:50 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-17 00:46:51     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-17 00:46:51 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-17 00:46:51     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-17 00:46:51 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[!] 2026-06-17 00:46:51 Sandbox already exists: mesa-amber
+[!] 2026-06-17 00:46:51     :: There is an existing sandbox with name mesa-amber. Would you like to use the sandbox? [y/n] 
+
+-------------------------------------------
+LOGGING START ON 2026-06-17 01:12:31
+[i] 2026-06-17 01:12:31 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-17 01:12:31     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-17 01:12:31 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-17 01:12:31     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-17 01:12:31 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[!] 2026-06-17 01:12:31 Sandbox already exists: mesa-amber
+[!] 2026-06-17 01:12:31     :: There is an existing sandbox with name mesa-amber. Would you like to use the sandbox? [y/n] 
+
+-------------------------------------------
+LOGGING START ON 2026-06-17 01:15:44
+[i] 2026-06-17 01:15:44 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-17 01:15:44     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-17 01:15:44 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-17 01:15:44     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-17 01:15:44 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[!] 2026-06-17 01:15:44 Sandbox already exists: mesa-amber
+[!] 2026-06-17 01:15:44     :: There is an existing sandbox with name mesa-amber. Would you like to use the sandbox? [y/n] 
+
+-------------------------------------------
+LOGGING START ON 2026-06-17 01:17:53
+[i] 2026-06-17 01:17:53 ==> [KUBOS] Cleaning up...
+
+[i] 2026-06-17 01:17:53 ==> [CLEANUP] Start tearing down sandbox mesa-amber...
+
+[i] 2026-06-17 01:17:53     :: Unmounting overlay for sandboxes/mesa-amber/merged
+
+[i] 2026-06-17 01:17:53 ==> [DEBUSY] Checking for busy processes on: sandboxes/mesa-amber/merged
+
+2026-06-17 01:18:00     :: Failed to run and get fuser output. The app won't stop, it's just the debusy app won't do anything. Error: 
+
+-------------------------------------------
+LOGGING START ON 2026-06-17 01:19:17
+[i] 2026-06-17 01:19:17 ==> [KUBOS] Cleaning up...
+
+[i] 2026-06-17 01:19:17 ==> [CLEANUP] Start tearing down sandbox mesa-amber...
+
+[i] 2026-06-17 01:19:17     :: Unmounting overlay for sandboxes/mesa-amber/merged
+
+[i] 2026-06-17 01:19:17 ==> [DEBUSY] Checking for busy processes on: sandboxes/mesa-amber/merged
+
+2026-06-17 01:19:24     :: Failed to run and get fuser output. The app won't stop, it's just the debusy app won't do anything. Error: 
+
+-------------------------------------------
+LOGGING START ON 2026-06-17 01:21:09
+[i] 2026-06-17 01:21:09 ==> [KUBOS] Cleaning up...
+
+[i] 2026-06-17 01:21:09 ==> [CLEANUP] Start tearing down sandbox mesa-amber...
+
+[i] 2026-06-17 01:21:09     :: Unmounting overlay for sandboxes/mesa-amber/merged
+
+[i] 2026-06-17 01:21:09 ==> [DEBUSY] Checking for busy processes on: sandboxes/mesa-amber/merged
+
+-------------------------------------------
+LOGGING START ON 2026-06-17 01:22:53
+[i] 2026-06-17 01:22:53 ==> [KUBOS] Cleaning up...
+
+[i] 2026-06-17 01:22:53 ==> [CLEANUP] Start tearing down sandbox mesa-amber...
+
+[i] 2026-06-17 01:22:53     :: Unmounting overlay for sandboxes/mesa-amber/merged
+
+[i] 2026-06-17 01:22:53 ==> [DEBUSY] Checking for busy processes on: sandboxes/mesa-amber/merged
+
+-------------------------------------------
+LOGGING START ON 2026-06-17 01:24:30
+[i] 2026-06-17 01:24:30 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-17 01:24:30     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-17 01:24:30 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-17 01:24:30     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-17 01:24:30 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[i] 2026-06-17 01:24:30     :: Trying to create a directory on path: sandboxes/mesa-amber
+
+[V] 2026-06-17 01:24:30     :: Found desired directory on path: sandboxes/mesa-amber
+
+[i] 2026-06-17 01:24:30     :: Trying to create directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[V] 2026-06-17 01:24:30     :: Successfully created directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[i] 2026-06-17 01:24:30     :: Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+
+[X] 2026-06-17 01:24:33 Failed with output: 
+-------------------------------------------
+LOGGING START ON 2026-06-17 01:24:53
+[i] 2026-06-17 01:24:53 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-17 01:24:53     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-17 01:24:53 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-17 01:24:53     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-17 01:24:53 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[!] 2026-06-17 01:24:53 Sandbox already exists: mesa-amber
+[!] 2026-06-17 01:24:53     :: There is an existing sandbox with name mesa-amber. Would you like to use the sandbox? [y/n] 
+
+-------------------------------------------
+LOGGING START ON 2026-06-17 01:25:03
+[i] 2026-06-17 01:25:03 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-17 01:25:03     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-17 01:25:03 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-17 01:25:03     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-17 01:25:03 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[i] 2026-06-17 01:25:03     :: Trying to create a directory on path: sandboxes/mesa-amber
+
+[V] 2026-06-17 01:25:03     :: Found desired directory on path: sandboxes/mesa-amber
+
+[i] 2026-06-17 01:25:03     :: Trying to create directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[V] 2026-06-17 01:25:03     :: Successfully created directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[i] 2026-06-17 01:25:03     :: Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+
+[X] 2026-06-17 01:25:05 Failed with output: 
+-------------------------------------------
+LOGGING START ON 2026-06-17 01:25:59
+[i] 2026-06-17 01:25:59 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-17 01:26:00     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-17 01:26:00 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-17 01:26:00     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-17 01:26:00 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[i] 2026-06-17 01:26:00     :: Trying to create a directory on path: sandboxes/mesa-amber
+
+[V] 2026-06-17 01:26:00     :: Found desired directory on path: sandboxes/mesa-amber
+
+[i] 2026-06-17 01:26:00     :: Trying to create directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[V] 2026-06-17 01:26:00     :: Successfully created directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[i] 2026-06-17 01:26:00     :: Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+
+[V] 2026-06-17 01:26:02 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+-------------------------------------------
+LOGGING START ON 2026-06-17 01:28:00
+[i] 2026-06-17 01:28:00 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-17 01:28:00     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-17 01:28:00 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-17 01:28:00     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-17 01:28:00 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[i] 2026-06-17 01:28:00     :: Trying to create a directory on path: sandboxes/mesa-amber
+
+[V] 2026-06-17 01:28:00     :: Found desired directory on path: sandboxes/mesa-amber
+
+[i] 2026-06-17 01:28:00     :: Trying to create directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[V] 2026-06-17 01:28:00     :: Successfully created directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[i] 2026-06-17 01:28:00     :: Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+
+[V] 2026-06-17 01:28:02 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+-------------------------------------------
+LOGGING START ON 2026-06-17 01:29:41
+[i] 2026-06-17 01:29:41 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-17 01:29:42     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-17 01:29:42 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-17 01:29:42     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-17 01:29:42 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[i] 2026-06-17 01:29:42     :: Trying to create a directory on path: sandboxes/mesa-amber
+
+[V] 2026-06-17 01:29:42     :: Found desired directory on path: sandboxes/mesa-amber
+
+[i] 2026-06-17 01:29:42     :: Trying to create directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[V] 2026-06-17 01:29:42     :: Successfully created directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[i] 2026-06-17 01:29:42     :: Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+
+[V] 2026-06-17 01:30:24 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged

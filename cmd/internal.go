@@ -16,6 +16,9 @@ func installpkg(pkgName string, verbose bool) essentials.ExecutionResult {
 	if IsInPacman(pkgName) {
 		logger.LoggedPrint(essentials.LOG_INFO, fmt.Sprintf("Found %s in pacman repos. Installing...", pkgName), true)
 		res := SpawnPacman([]string{"-S", pkgName}, pkgName, verbose)
+		if res.Code != essentials.EXECUTION_TASK_SUCCESS {
+			return res
+		}
 		var conflicting []string
 		switch msg := res.Message.(type) {
 		case essentials.ConflictingPackages:
@@ -33,15 +36,15 @@ func installpkg(pkgName string, verbose bool) essentials.ExecutionResult {
 	if err != nil {
 		logger.ColoredPrint(color.FgRed, "AUR Lookup failed")
 		logger.Print(essentials.LOG_ERROR, "AUR Lookup failed", true, true)
-		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: "AUR Lookup failed"}
+		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Context: "Looking package in AUR but resulted nothing.", Message: "AUR Lookup failed"}
 	}
 
 	if !found {
 		logger.LoggedPrint(essentials.LOG_ERROR, fmt.Sprintf("package '%s' not found in pacman repos or AUR", pkgName), true)
-		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: fmt.Sprintf("package '%s' not found in pacman repos or AUR", pkgName)}
+		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Context: "Looking for a package that doesn't exist.", Message: fmt.Sprintf("package '%s' not found in pacman repos or AUR", pkgName)}
 	}
 
-	logger.LoggedContextedPrint(essentials.LOG_SUCCESS, "Install-INFO", fmt.Sprintf("Found '%s' on AUR (v%s, %d votes)\n", pkg.Name, pkg.Version, pkg.NumVotes), true)
+	logger.LoggedContextedPrint(essentials.LOG_SUCCESS, "KUBOS", fmt.Sprintf("Found '%s' on AUR (v%s, %d votes)\n", pkg.Name, pkg.Version, pkg.NumVotes), true)
 	return SpawnYAY([]string{"-S", pkgName}, verbose)
 
 }
@@ -75,7 +78,7 @@ func Install(args []string, verbose bool) essentials.ExecutionResult {
 	if len(args) == 0 {
 		logger.ContextedColoredPrint(color.FgRed, "KUBOS", "No argument detected. Please type the package to install.")
 		logger.Print(essentials.LOG_ERROR, "No argument", !verbose, true)
-		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: "No argument"}
+		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Context: "Trying to install but no argument was sent.", Message: "No argument"}
 	}
 
 	for _, pkgName := range args {
@@ -92,7 +95,7 @@ func CleanUp(args []string, verbose bool) essentials.ExecutionResult {
 	if len(args) == 0 {
 		logger.ContextedColoredPrint(color.FgRed, "KUBOS", "No argument detected. Please type the package to install.")
 		logger.Print(essentials.LOG_ERROR, "No argument", !verbose, true)
-		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: "No argument"}
+		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Context: "Trying to clean up but no argument was sent.", Message: "No argument"}
 	}
 
 	for _, pkgName := range args {

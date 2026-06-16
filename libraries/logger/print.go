@@ -20,6 +20,10 @@ func LoggedPrint(Status essentials.LogStatus, Message string, WriteToFile bool) 
 	Print(Status, fmt.Sprintf("    :: %s\n", Message), true, WriteToFile)
 }
 
+func LoggedPrintNoNewline(Status essentials.LogStatus, Message string, WriteToFile bool) {
+	fmt.Printf("    %s %s", cyan("::"), Message)
+	Print(Status, fmt.Sprintf("    :: %s\n", Message), true, WriteToFile)
+}
 func LoggedBasicPrint(Status essentials.LogStatus, Message string, WriteToFile bool) {
 	fmt.Println(Message)
 	Print(Status, fmt.Sprintln(Message), true, WriteToFile)
@@ -91,4 +95,12 @@ func ErrorPanelPrint(exitCode string, reason string, context string) {
 
 	// 3. Cetak Garis Penutup Bawah Kotak
 	fmt.Printf("    %s%s\n", red("└"), red(lineLong[:58]))
+}
+
+func ParseAndPrintError(res essentials.ExecutionResult) {
+	message := res.Message
+	if message == "" {
+		message = "No message provided. This means there is no error detected, but certainly exited."
+	}
+	ErrorPanelPrint(essentials.EXECUTION_RESULT_STRING[res.Code], fmt.Sprintf("%+v", message), res.Context)
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"kubos/cmd"
 	"kubos/libraries/essentials"
+	"kubos/libraries/logger"
 	"os"
 	"strings"
 )
@@ -55,6 +56,9 @@ func main() {
 	switch first {
 	case "install":
 		res = cmd.Install(rest, verbose)
+		if res.Code != essentials.EXECUTION_TASK_SUCCESS {
+			logger.ParseAndPrintError(res)
+		}
 	case "sandbox-cleanup":
 		res = cmd.CleanUp(rest, verbose)
 	// case "remove":

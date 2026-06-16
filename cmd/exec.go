@@ -30,12 +30,23 @@ func cleanUp() essentials.ExecutionResult {
 	// Read the physical sandboxes directory
 	entries, err := os.ReadDir("sandboxes")
 	if err != nil {
-		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: err.Error()} // Directory doesn't exist yet, nothing to clean
+		return essentials.ExecutionResult{Code: essentials.EXECUTION_CLEANUP_DIR_NOEXIST, Context: "Cleaning non sandbox directories inside sandbox/", Message: err.Error()} // Directory doesn't exist yet, nothing to clean
 	}
 
 	for _, entry := range entries {
 		if entry.IsDir() && !validMap[entry.Name()] {
-			_ = os.RemoveAll(filepath.Join("sandboxes", entry.Name()))
+			sandboxDir := filepath.Join("sandboxes", entry.Name())
+			if err := os.RemoveAll(sandboxDir); err != nil {
+				// 1. Detect if it is explicitly a permission-denied issue
+				if errors.Is(err, os.ErrPermission) {
+					logger.LoggedPrint(essentials.EXECUTION_TASK_FAIL, "Failed to delete: Permission denied. Trying to run sudo mode instead..", true)
+					res := RunWithPTY(exec.Command("sudo", "rm", "-rf", sandboxDir), ptyPrintAndDone)
+					if res.Code != essentials.EXECUTION_TASK_SUCCESS {
+						logger.LoggedPrint(essentials.EXECUTION_TASK_FAIL, "Failed to delete the sandbox directory.", true)
+						return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Context: "Trying to delete the sandbox directory but couldn't.", Message: fmt.Sprintf("Deleting sandbox directory failed with error: %v", res.Message)}
+					}
+				}
+			}
 		}
 	}
 	return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_SUCCESS, Message: ""}
@@ -44,7 +55,7 @@ func cleanUp() essentials.ExecutionResult {
 // DeBusyPath identifies and kills processes that are accessing the given path.
 // This is particularly useful when an unmount fails because the target is busy.
 func DeBusyPath(path string, verbose bool) essentials.ExecutionResult {
-	logger.LoggedContextedPrint(essentials.LOG_INFO, "DeBusy-INFO", "Checking for busy processes on: "+path, true)
+	logger.LoggedContextedPrint(essentials.LOG_INFO, "DEBUSY", "Checking for busy processes on: "+path, true)
 
 	// fuser returns PIDs to stdout. We use sudo to ensure we see processes from all users.
 	// Note: fuser returns a non-zero exit code if no processes are found, which we ignore.
@@ -52,12 +63,24 @@ func DeBusyPath(path string, verbose bool) essentials.ExecutionResult {
 		logger.VerbosedPrint("Running command: sudo fuser " + path)
 	}
 	cmd := exec.Command("sudo", "fuser", path)
-	output, _ := cmd.Output()
-
+	var buf strings.Builder
+	_ = RunWithPTY(cmd, func(line string, w io.Writer) bool {
+		logger.ShellOutputPrint(line)
+		buf.WriteString(line)
+		return true
+	})
+	// if res.Code != essentials.EXECUTION_TASK_SUCCESS {
+	// 	logger.LoggedPrint(essentials.EXECUTION_TASK_FAIL, fmt.Sprintf("Failed to run and get fuser output. The app won't stop, it's just the debusy app won't do anything. Error: %v", res.Message), true)
+	// }
+	if err := cmd.Wait(); err != nil {
+		// Jangan langsung anggap gagal, karena exit status 1 di fuser artinya "tidak ada PID yang ditemukan"
+		// Kita biarkan regex di bawah yang memastikan apakah ada PID atau tidak
+	}
 	// fuser output is typically "path: PID1[suffix] PID2[suffix] ..."
 	// We use a regex to extract only the numeric PIDs.
 	re := regexp.MustCompile(`\d+`)
-	pids := re.FindAllString(string(output), -1)
+	output := buf.String()
+	pids := re.FindAllString(output, -1)
 
 	if len(pids) == 0 {
 		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_COMPLETED, Message: ""}
@@ -68,7 +91,8 @@ func DeBusyPath(path string, verbose bool) essentials.ExecutionResult {
 			logger.VerbosedPrint("Running command: sudo kill -9 " + pid)
 		}
 		logger.LoggedPrint(essentials.LOG_WARNING, fmt.Sprintf("Killing process %s keeping %s busy", pid, path), true)
-		_ = exec.Command("sudo", "kill", "-9", pid).Run()
+		cmd2 := exec.Command("sudo", "kill", "-9", pid)
+		_ = RunWithPTY(cmd2, ptyPrintAndDone)
 	}
 	// Give the kernel a small window to release the file handles
 	time.Sleep(200 * time.Millisecond)
@@ -198,17 +222,17 @@ func Spawn(container string, command string, verbose bool) essentials.ExecutionR
 	cmdParts := strings.Fields(command)
 	if len(cmdParts) == 0 {
 		logger.LoggedPrint(essentials.LOG_ERROR, "No command provided to Spawn", true)
-		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: "No command provided to Spawn"}
+		return essentials.ExecutionResult{Code: essentials.EXECUTION_NO_ARGS, Context: "Spawning systemd-nspawn but no argument was sent.", Message: "No command provided to Spawn"}
 	}
 
 	containerPath := essentials.GetSandboxPath(container)
 	if containerPath == "" {
-		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: fmt.Sprintf("sandbox %s does not exist", container)}
+		return essentials.ExecutionResult{Code: essentials.EXECUTION_SANDBOX_NOT_FOUND, Context: "Spawning systemd-nspawn but no sandbox was found.", Message: fmt.Sprintf("sandbox %s does not exist", container)}
 	}
 
 	parsedPacmanResult := essentials.ParsePacmanCommand(command)
 	if !parsedPacmanResult.IsValid {
-		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: "The command is not valid pacman command"}
+		return essentials.ExecutionResult{Code: essentials.EXECUTION_INVALID_CMD, Context: "Spawning systemd-nspawn but the command was invalid.", Message: "The command is not valid pacman command"}
 	}
 
 	if verbose {
@@ -258,10 +282,10 @@ func Spawn(container string, command string, verbose bool) essentials.ExecutionR
 		})
 
 		if mountPointError {
-			return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: "Systemd-nspawn mount point error."}
+			return essentials.ExecutionResult{Code: essentials.EXECUTION_SYSTEMD_MOUNTERR, Context: "Systemd-nspawn exited with mountpoint error.", Message: "Systemd-nspawn mount point error."}
 		}
-		if err != nil {
-			return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: err.Error()}
+		if err.Code != essentials.EXECUTION_TASK_SUCCESS {
+			return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Context: "Systemd-nspawn exited with an error.", Message: err.Message}
 		}
 	}
 
@@ -287,10 +311,10 @@ func SpawnPacman(args []string, pkgName string, verbose bool) essentials.Executi
 	if res.Code != essentials.EXECUTION_TASK_SUCCESS { // Ensure sandbox is set up before spawning pacman
 		if res.Message == "sandbox exists" {
 			for {
-				logger.LoggedPrint(essentials.LOG_WARNING, fmt.Sprintf("There is an existing sandbox with name %s. Would you like to use the sandbox? [y/n] ", pkgName), true)
+				logger.LoggedPrintNoNewline(essentials.LOG_WARNING, fmt.Sprintf("There is an existing sandbox with name %s. Would you like to use the sandbox? [y/n] ", pkgName), true)
 				_, err := fmt.Scan(&ans)
 				if err != nil {
-					return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: "Failed to scan stdin"}
+					return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Context: "Trying to scan stdin but failed.", Message: "Failed to scan stdin"}
 				}
 				if strings.ToLower(ans) == "y" || strings.ToLower(ans) == "yes" || strings.ToLower(ans) == "n" || strings.ToLower(ans) == "no" {
 					break
@@ -351,7 +375,7 @@ func Setup(givenName string, verbose bool) essentials.ExecutionResult {
 	if essentials.IsSandboxExists(givenName) {
 		logger.ColoredPrint(color.FgYellow, "Sandbox already exists: "+givenName)
 		logger.Print(essentials.LOG_WARNING, "Sandbox already exists: "+givenName, true, true)
-		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: "sandbox exists"}
+		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Context: "Trying to set up sandbox but sandbox already exist.", Message: "sandbox exists"}
 
 	}
 	// Check if the needed directory exist
@@ -362,7 +386,7 @@ func Setup(givenName string, verbose bool) essentials.ExecutionResult {
 			logger.ColoredPrint(color.FgRed, "Error creating sandbox directory: "+err.Error())
 
 			logger.Print(essentials.LOG_ERROR, err.Error(), true, true)
-			return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: err.Error()}
+			return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Context: "Trying to create a directory but failed.", Message: err.Error()}
 
 		}
 		logger.LoggedPrint(essentials.LOG_SUCCESS, "Found desired directory on path: sandboxes/"+givenName, true)
@@ -375,10 +399,10 @@ func Setup(givenName string, verbose bool) essentials.ExecutionResult {
 			fullPath := filepath.Join("sandboxes", givenName, dir)
 			err := os.MkdirAll(fullPath, 0755)
 			if err != nil {
-				logger.ColoredPrint(color.FgRed, fmt.Sprintf("Error creating subdirectory %s: %v", fullPath, err))
+				logger.ColoredPrint(color.FgRed, fmt.Sprintf("Error creating subdirectories %s: %v", fullPath, err))
 
-				logger.Print(essentials.LOG_ERROR, fmt.Sprintf("Error creating subdirectory %s: %v", fullPath, err), false, true)
-				return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: err.Error()}
+				logger.Print(essentials.LOG_ERROR, fmt.Sprintf("Error creating subdirectories %s: %v", fullPath, err), false, true)
+				return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Context: "Trying to create subdirectories but failed.", Message: err.Error()}
 			}
 		}
 		command := "sudo mount -t overlay overlay -o lowerdir=/,upperdir=" + filepath.Join("sandboxes", givenName, "upper") + ",workdir=" + filepath.Join("sandboxes", givenName, "work") + " " + filepath.Join("sandboxes", givenName, "merged")
@@ -389,18 +413,15 @@ func Setup(givenName string, verbose bool) essentials.ExecutionResult {
 		logger.VerbosedPrint("Running command: " + command)
 
 		parts := strings.Fields(command)
-		cmd := exec.Command(parts[0], parts[1:]...)
-
-		// Run the command and capture both Standard Output and Standard Error
-		output, err := cmd.CombinedOutput()
+		res := RunWithPTY(exec.Command(parts[0], parts[1:]...), ptyPrintAndDone)
 
 		// Check if the command succeeded
-		if err != nil {
+		if res.Code != essentials.EXECUTION_TASK_SUCCESS && res.Message != "" {
 			// Command failed (returned non-zero exit code)
-			logger.ColoredPrint(color.FgRed, fmt.Sprintf("Failed with output: %s and error: %s", output, err.Error()))
+			logger.ColoredPrint(color.FgRed, fmt.Sprintf("Failed with output: %v ", res.Message))
 
-			logger.Print(essentials.LOG_ERROR, fmt.Sprintf("Failed with output: %s and error: %s", output, err.Error()), true, true)
-			return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: "failed with error"}
+			logger.Print(essentials.LOG_ERROR, fmt.Sprintf("Failed with output: %v", res.Message), true, true)
+			return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Context: "Trying to mount overlayfs but failed.", Message: "failed with error"}
 
 		}
 
@@ -423,7 +444,7 @@ func Teardown(givenName string, verbose bool) essentials.ExecutionResult {
 		logger.ColoredPrint(color.FgRed, "Sandbox does not exist: "+givenName)
 
 		logger.Print(essentials.LOG_WARNING, "Sandbox does not exist: "+givenName, true, true)
-		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: fmt.Sprintf("sandbox %s does not exist", givenName)}
+		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Context: "Trying to teardown a sandbox that doesn't exist.", Message: fmt.Sprintf("sandbox %s does not exist", givenName)}
 	}
 	sandboxPath := filepath.Join("sandboxes", givenName)
 	mergedPath := filepath.Join(sandboxPath, "merged")
@@ -431,18 +452,19 @@ func Teardown(givenName string, verbose bool) essentials.ExecutionResult {
 	// 1. Unmount the overlay filesystem
 	// We use sudo here because the mount was likely created with sudo/root privileges.
 	logger.LoggedPrint(essentials.LOG_INFO, "Unmounting overlay for "+mergedPath, true)
-	logger.VerbosedPrint("Will run this command after debusy: sudo umount " + mergedPath)
 	DeBusyPath(mergedPath, verbose)
+	logger.VerbosedPrint("Runnign this command: sudo umount " + mergedPath)
 
 	umountCmd := exec.Command("sudo", "umount", mergedPath)
 	err := RunWithPTY(umountCmd, func(line string, w io.Writer) bool {
-
+		logger.ShellOutputPrint(line)
+		return true
 	})
-	if err != nil {
+	if err.Code != essentials.EXECUTION_TASK_SUCCESS {
 		// If it's already unmounted, we might want to continue anyway to clean up files
-		logger.ColoredPrint(color.FgRed, fmt.Sprintf("Unmount failed (it might already be unmounted): %s", string(output)))
+		logger.ColoredPrint(color.FgRed, fmt.Sprintf("Unmount failed (it might already be unmounted): %s", err.Message))
 
-		logger.Print(essentials.LOG_WARNING, fmt.Sprintf("Unmount failed (it might already be unmounted): %s", string(output)), true, true)
+		logger.Print(essentials.LOG_WARNING, fmt.Sprintf("Unmount failed (it might already be unmounted): %s", err.Message), true, true)
 	} else {
 		logger.ColoredPrint(color.FgGreen, "Successfully unmounted overlay for "+givenName)
 
@@ -453,12 +475,12 @@ func Teardown(givenName string, verbose bool) essentials.ExecutionResult {
 
 	logger.LoggedPrint(essentials.LOG_INFO, "Removing sandbox directories: "+sandboxPath, true)
 
-	err = os.RemoveAll(sandboxPath)
-	if err != nil {
-		logger.ColoredPrint(color.FgRed, "Failed to remove sandbox directory: "+err.Error())
+	err2 := os.RemoveAll(sandboxPath)
+	if err2 != nil {
+		logger.ColoredPrint(color.FgRed, "Failed to remove sandbox directory: "+err2.Error())
 
-		logger.Print(essentials.LOG_ERROR, "Failed to remove sandbox directory: "+err.Error(), true, true)
-		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: "Failed to remove sandbox directory: " + err.Error()}
+		logger.Print(essentials.LOG_ERROR, "Failed to remove sandbox directory: "+err2.Error(), true, true)
+		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Context: "Trying to remove sandbox directory but failed.", Message: "Failed to remove sandbox directory: " + err2.Error()}
 	}
 	logger.ColoredPrint(color.FgGreen, "Cleaned up sandbox directories for "+givenName)
 
@@ -469,12 +491,11 @@ func Teardown(givenName string, verbose bool) essentials.ExecutionResult {
 
 // LineProcessor adalah callback yang dipanggil untuk setiap baris output
 type LineProcessor func(line string, w io.Writer) bool // return false = stop loop
-
 // RunWithPTY menjalankan command dengan PTY dan memanggil processor per baris
 func RunWithPTY(cmd *exec.Cmd, processor LineProcessor) essentials.ExecutionResult {
 	ptmx, err := pty.Start(cmd)
 	if err != nil {
-		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: fmt.Sprintf("failed to start PTY: %w", err)}
+		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Context: "Trying to start PTY but failed.", Message: fmt.Sprintf("failed to start PTY: %v", err)}
 	}
 	defer ptmx.Close()
 
@@ -505,8 +526,13 @@ loop:
 			if errors.Is(err, io.EOF) || essentials.IsEOF(err) {
 				break loop
 			}
-			return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: fmt.Sprintf("failed reading PTY: %w", err)}
+			return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Context: "Trying to read PTY but failed.", Message: fmt.Sprintf("failed reading PTY: %v", err)}
 		}
 	}
 	return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_COMPLETED, Message: ""}
+}
+
+func ptyPrintAndDone(line string, w io.Writer) bool {
+	logger.ShellOutputPrint(line)
+	return true
 }
