@@ -31,6 +31,7 @@ PACMAN PASSTHROUGH:
 }
 
 func main() {
+	verbose := true
 	args := os.Args[1:]
 
 	if len(args) == 0 {
@@ -43,7 +44,7 @@ func main() {
 
 	// If the first arg starts with '-', it's a pacman flag → passthrough.
 	if strings.HasPrefix(first, "-") {
-		if err := cmd.SpawnPassthroughPacman(args); err.Code != essentials.EXECUTION_TASK_SUCCESS {
+		if err := cmd.SpawnPassthroughPacman(args, verbose); err.Code != essentials.EXECUTION_TASK_SUCCESS {
 			os.Exit(1)
 		}
 		return
@@ -53,7 +54,9 @@ func main() {
 	var res essentials.ExecutionResult
 	switch first {
 	case "install":
-		res = cmd.Install(rest)
+		res = cmd.Install(rest, verbose)
+	case "sandbox-cleanup":
+		res = cmd.CleanUp(rest, verbose)
 	// case "remove":
 	// 	err = Remove(rest)
 	// case "update":

@@ -14,6 +14,8 @@ var green = color.New(color.FgGreen).SprintFunc()
 var yellow = color.New(color.FgYellow).SprintFunc()
 var red = color.New(color.FgRed).SprintFunc()
 var blue = color.New(color.FgBlue).SprintFunc()
+var cyan = color.New(color.FgCyan).SprintFunc()
+var bold = color.New(color.Bold).SprintFunc()
 
 // init is called automatically when the package is initialized.
 // It records the start of the logging session.
@@ -29,7 +31,6 @@ func init() {
 //   - silent: If true, suppresses output to the standard output (console).
 //   - writetofile: If true, appends the log entry to a daily file in the 'logs' directory.
 func Print(status essentials.LogStatus, messages string, silent bool, writetofile bool) {
-	defer color.Unset()
 	decorator := ""
 	switch status {
 	case essentials.LOG_SUCCESS:

@@ -1,6 +1,7 @@
 package essentials
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"os/exec"
@@ -8,6 +9,7 @@ import (
 	"regexp"
 	"slices"
 	"strings"
+	"syscall"
 )
 
 // Sandbox represents an active container environment, storing its unique identifier and root filesystem path.
@@ -224,4 +226,13 @@ var oscRegex = regexp.MustCompile(`\x1b\][^\x1b]*\x1b\\`)
 func CleanTerminalEscapeCodes(input string) string {
 	// Menghapus semua kode OSC sequence dari teks
 	return oscRegex.ReplaceAllString(input, "")
+}
+
+// isEOF cek syscall.EIO karena PTY return EIO bukan io.EOF saat proses mati
+func IsEOF(err error) bool {
+	var errno syscall.Errno
+	if errors.As(err, &errno) {
+		return errno == syscall.EIO
+	}
+	return false
 }

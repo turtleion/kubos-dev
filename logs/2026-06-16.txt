@@ -1,0 +1,782 @@
+LOG FILE CREATED ON 2026-06-16 17:11:34
+=============================
+-------------------------------------------
+LOGGING START ON 2026-06-16 17:11:34
+[i] 2026-06-16 17:11:34 ==> [Pacman-INFO] Redirecting to PASSTHROUGH pacman..
+
+-------------------------------------------
+LOGGING START ON 2026-06-16 17:20:11
+[i] 2026-06-16 17:20:11 ==> [Pacman-INFO] Redirecting to PASSTHROUGH pacman..
+
+-------------------------------------------
+LOGGING START ON 2026-06-16 17:21:08
+[i] 2026-06-16 17:21:08 ==> [Pacman-INFO] Redirecting to PASSTHROUGH pacman..
+
+-------------------------------------------
+LOGGING START ON 2026-06-16 17:21:39
+[i] 2026-06-16 17:21:39 ==> [Install-INFO] Resolving mesa-amber...
+
+[i] 2026-06-16 17:21:39 ::  Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-16 17:21:39 ==> [Pacman-INFO] Redirecting to KUBOS pacman..
+
+[i] 2026-06-16 17:21:39 Setting up closed environment..
+[i] 2026-06-16 17:21:39 ==> [Setup-INFO] Setting up sandbox mesa-amber...
+
+[i] 2026-06-16 17:21:39 Trying to create a directory on path: sandboxes/mesa-amber
+[V] 2026-06-16 17:21:39 Found desired directory on path: sandboxes/mesa-amber
+[i] 2026-06-16 17:21:39 Trying to create directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+[V] 2026-06-16 17:21:39 Successfully created directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+[i] 2026-06-16 17:21:39 Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+[V] 2026-06-16 17:21:39 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+[i] 2026-06-16 17:22:08 [sudo] password for yosatsu: 
+
+[i] 2026-06-16 17:22:08 ░ [0;38:5:245mSpawning container merged on /home/yosatsu/Kubos/sandboxes/mesa-amber/merged.
+
+[i] 2026-06-16 17:22:08 ░ [0;38:5:245mPress Ctrl-][0;38:5:245m three times within 1s to kill container; two times followed by r
+
+[i] 2026-06-16 17:22:08 ░ [0;38:5:245mto reboot container; two times followed by p[0;38:5:245m to poweroff container.
+
+[i] 2026-06-16 17:22:08 [0;1;38:5:185mHost and machine ids are equal (cd2a9806519b4c81bae1288e2bc6b65b): refusing to link journals
+
+[i] 2026-06-16 17:22:09 [?25lresolving dependencies...
+
+[i] 2026-06-16 17:22:09 looking for conflicting packages...
+
+[i] 2026-06-16 17:22:09 y
+
+[i] 2026-06-16 17:22:09 [?25l
+
+[i] 2026-06-16 17:22:09 Package (2)       Old Version  New Version  Net Change  Download Size
+
+[i] 2026-06-16 17:22:09 mesa              1:26.1.2-1                -52.57 MiB               
+
+[i] 2026-06-16 17:22:09 extra/mesa-amber               21.3.9-6      40.51 MiB       6.75 MiB
+
+[i] 2026-06-16 17:22:09 Total Download Size:     6.75 MiB
+
+[i] 2026-06-16 17:22:09 Total Installed Size:   40.51 MiB
+
+[i] 2026-06-16 17:22:09 Net Upgrade Size:      -12.05 MiB
+
+[i] 2026-06-16 17:22:13 :: Proceed with installation? [Y/n] [?25h
+
+[i] 2026-06-16 17:22:13 [?25l:: Retrieving packages...
+
+[i] 2026-06-16 17:22:13  mesa-amber-21.3.9-6-x86_64
+
+[i] 2026-06-16 17:22:20  mesa-amber-21.3....  1360.0   B  0.00   B/s --:-- [Co  o  o  o  o  o  o  ]   0% mesa-amber-21.3....   229.9 KiB   353 KiB/s 00:18 [co  o  o  o  o  o  o  ]   3% mesa-amber-21.3....   583.9 KiB   803 KiB/s 00:07 [-C  o  o  o  o  o  o  ]   8% mesa-amber-21.3....   839.9 KiB   955 KiB/s 00:06 [--C o  o  o  o  o  o  ]  12% mesa-amber-21.3....  1080.0 KiB  1037 KiB/s 00:05 [---co  o  o  o  o  o  ]  15% mesa-amber-21.3....  1320.0 KiB  1089 KiB/s 00:05 [----c  o  o  o  o  o  ]  19% mesa-amber-21.3....  1543.9 KiB  1099 KiB/s 00:04 [----C  o  o  o  o  o  ]  22% mesa-amber-21.3....  1783.9 KiB  1133 KiB/s 00:04 [-----c o  o  o  o  o  ]  25% mesa-amber-21.3....  2023.9 KiB  1151 KiB/s 00:04 [------co  o  o  o  o  ]  29% mesa-amber-21.3....     2.2 MiB  1141 KiB/s 00:04 [-------C  o  o  o  o  ]  32% mesa-amber-21.3....     2.4 MiB  1161 KiB/s 00:03 [-------c  o  o  o  o  ]  35% mesa-amber-21.3....     2.7 MiB  1172 KiB/s 00:03 [--------c o  o  o  o  ]  39% mesa-amber-21.3....     2.9 MiB  1154 KiB/s 00:03 [---------Co  o  o  o  ]  42% mesa-amber-21.3....     3.1 MiB  1162 KiB/s 00:03 [----------C  o  o  o  ]  46% mesa-amber-21.3....     3.3 MiB  1171 KiB/s 00:02 [----------c  o  o  o  ]  49% mesa-amber-21.3....     3.6 MiB  1180 KiB/s 00:02 [-----------c o  o  o  ]  53% mesa-amber-21.3....     3.8 MiB  1160 KiB/s 00:02 [------------Co  o  o  ]  56% mesa-amber-21.3....     4.0 MiB  1169 KiB/s 00:02 [------------co  o  o  ]  59% mesa-amber-21.3....     4.3 MiB  1180 KiB/s 00:02 [-------------c  o  o  ]  63% mesa-amber-21.3....     4.5 MiB  1134 KiB/s 00:02 [--------------C o  o  ]  66% mesa-amber-21.3....     4.7 MiB  1150 KiB/s 00:01 [---------------co  o  ]  69% mesa-amber-21.3....     5.0 MiB  1193 KiB/s 00:01 [----------------c  o  ]  73% mesa-amber-21.3....     5.2 MiB  1169 KiB/s 00:01 [----------------C  o  ]  76% mesa-amber-21.3....     5.4 MiB  1175 KiB/s 00:01 [-----------------C o  ]  80% mesa-amber-21.3....     5.6 MiB  1157 KiB/s 00:00 [------------------co  ]  83% mesa-amber-21.3....     5.9 MiB  1145 KiB/s 00:00 [------------------Co  ]  86% mesa-amber-21.3....     6.1 MiB  1159 KiB/s 00:00 [-------------------C  ]  90% mesa-amber-21.3....     6.3 MiB  1173 KiB/s 00:00 [--------------------c ]  93% mesa-amber-21.3....     6.6 MiB  1182 KiB/s 00:00 [---------------------c]  97% mesa-amber-21.3....     6.8 MiB  1153 KiB/s 00:06 [----------------------] 100%(0/1) checking keys in keyring                     [Co  o  o  o  o  o  o  ]   0%(1/1) checking keys in keyring                     [----------------------] 100%
+
+[i] 2026-06-16 17:22:20 (0/1) checking package integrity                   [Co  o  o  o  o  o  o  ]   0%(1/1) checking package integrity                   [----------------------] 100%
+
+[i] 2026-06-16 17:22:20 (0/1) loading package files                        [Co  o  o  o  o  o  o  ]   0%(1/1) loading package files                        [----------------------] 100%
+
+[i] 2026-06-16 17:22:20 (0/1) checking for file conflicts                  [Co  o  o  o  o  o  o  ]   0%(1/1) checking for file conflicts                  [----------------------] 100%
+
+[i] 2026-06-16 17:22:20 :: Processing package changes...
+
+[i] 2026-06-16 17:22:37 (1/1) removing mesa                                [Co  o  o  o  o  o  o  ]   0%(1/1) removing mesa                                [Co  o  o  o  o  o  o  ]   0%(1/1) removing mesa                                [Co  o  o  o  o  o  o  ]   0%(1/1) removing mesa                                [----------------------] 100%
+
+[i] 2026-06-16 17:22:38 (1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [------------------Co  ]  84%(1/1) installing mesa-amber                        [----------------------] 100%
+
+[i] 2026-06-16 17:23:05 :: Running post-transaction hooks...
+
+[i] 2026-06-16 17:23:05 (1/1) Arming ConditionNeedsUpdate...
+
+[i] 2026-06-16 17:23:06 [?25h[!p[?7hContainer merged exited successfully.
+
+[!] 2026-06-16 17:23:06 ==> [Spawn-WARN] Conflicting package found during sandbox installation.
+
+[X] 2026-06-16 17:23:06 Conflicting packages detected: [mesa-amber-21.3.9-6]
+[i] 2026-06-16 17:23:06 ::  Running test for package mesa-amber
+
+[i] 2026-06-16 17:23:06 ==> [Install-INFO] Not in pacman repos. searching in AUR...
+
+[X] 2026-06-16 17:23:07 ::  package 'mesa-amber' not found in pacman repos or AUR
+
+-------------------------------------------
+LOGGING START ON 2026-06-16 17:27:58
+[i] 2026-06-16 17:27:58 ==> [Install-INFO] Resolving mesa-amber...
+
+[i] 2026-06-16 17:27:58 ::  Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-16 17:27:58 ==> [Pacman-INFO] Redirecting to KUBOS pacman..
+
+[i] 2026-06-16 17:27:58 Setting up closed environment..
+[i] 2026-06-16 17:27:58 ==> [Setup-INFO] Setting up sandbox mesa-amber...
+
+[i] 2026-06-16 17:27:58 Trying to create a directory on path: sandboxes/mesa-amber
+[V] 2026-06-16 17:27:58 Found desired directory on path: sandboxes/mesa-amber
+[i] 2026-06-16 17:27:58 Trying to create directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+[V] 2026-06-16 17:27:58 Successfully created directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+[i] 2026-06-16 17:27:58 Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+[V] 2026-06-16 17:27:59 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+[i] 2026-06-16 17:28:02 [sudo] password for yosatsu: 
+[i] 2026-06-16 17:28:02 ░ [0;38:5:245mSpawning container merged on /home/yosatsu/Kubos/sandboxes/mesa-amber/merged.
+[i] 2026-06-16 17:28:02 ░ [0;38:5:245mPress Ctrl-][0;38:5:245m three times within 1s to kill container; two times followed by r
+[i] 2026-06-16 17:28:02 ░ [0;38:5:245mto reboot container; two times followed by p[0;38:5:245m to poweroff container.
+[i] 2026-06-16 17:28:02 [0;1;38:5:185mHost and machine ids are equal (cd2a9806519b4c81bae1288e2bc6b65b): refusing to link journals
+[i] 2026-06-16 17:28:02 [?25lresolving dependencies...
+[i] 2026-06-16 17:28:03 looking for conflicting packages...
+[i] 2026-06-16 17:28:03 y
+[i] 2026-06-16 17:28:03 [?25l
+[i] 2026-06-16 17:28:03 Package (2)       Old Version  New Version  Net Change  Download Size
+[i] 2026-06-16 17:28:03 mesa              1:26.1.2-1                -52.57 MiB               
+[i] 2026-06-16 17:28:03 extra/mesa-amber               21.3.9-6      40.51 MiB       6.75 MiB
+[i] 2026-06-16 17:28:03 Total Download Size:     6.75 MiB
+[i] 2026-06-16 17:28:03 Total Installed Size:   40.51 MiB
+[i] 2026-06-16 17:28:03 Net Upgrade Size:      -12.05 MiB
+[i] 2026-06-16 17:28:04 :: Proceed with installation? [Y/n] [?25hy
+[i] 2026-06-16 17:28:04 [?25l:: Retrieving packages...
+[i] 2026-06-16 17:28:04  mesa-amber-21.3.9-6-x86_64
+[i] 2026-06-16 17:28:11  mesa-amber-21.3....     9.3 KiB  0.00   B/s --:-- [Co  o  o  o  o  o  o  ]   0% mesa-amber-21.3....   230.1 KiB   324 KiB/s 00:20 [co  o  o  o  o  o  o  ]   3% mesa-amber-21.3....   607.9 KiB   843 KiB/s 00:07 [-C  o  o  o  o  o  o  ]   8% mesa-amber-21.3....   831.9 KiB   935 KiB/s 00:06 [--C o  o  o  o  o  o  ]  12% mesa-amber-21.3....  1072.0 KiB  1021 KiB/s 00:05 [---co  o  o  o  o  o  ]  15% mesa-amber-21.3....  1312.0 KiB  1081 KiB/s 00:05 [---Co  o  o  o  o  o  ]  18% mesa-amber-21.3....  1551.9 KiB  1118 KiB/s 00:04 [----C  o  o  o  o  o  ]  22% mesa-amber-21.3....  1784.4 KiB  1131 KiB/s 00:04 [-----c o  o  o  o  o  ]  25% mesa-amber-21.3....  2008.4 KiB  1088 KiB/s 00:04 [------co  o  o  o  o  ]  29% mesa-amber-21.3....     2.2 MiB  1111 KiB/s 00:04 [-------C  o  o  o  o  ]  32% mesa-amber-21.3....     2.5 MiB  1135 KiB/s 00:03 [-------C  o  o  o  o  ]  36% mesa-amber-21.3....     2.6 MiB   980 KiB/s 00:04 [--------c o  o  o  o  ]  39% mesa-amber-21.3....     3.0 MiB  1313 KiB/s 00:02 [---------Co  o  o  o  ]  44% mesa-amber-21.3....     3.2 MiB  1245 KiB/s 00:02 [----------C  o  o  o  ]  48% mesa-amber-21.3....     3.5 MiB  1230 KiB/s 00:02 [-----------c o  o  o  ]  51% mesa-amber-21.3....     3.7 MiB  1218 KiB/s 00:02 [-----------C o  o  o  ]  54% mesa-amber-21.3....     3.9 MiB  1212 KiB/s 00:02 [------------Co  o  o  ]  58% mesa-amber-21.3....     4.2 MiB  1179 KiB/s 00:02 [-------------c  o  o  ]  61% mesa-amber-21.3....     4.4 MiB  1186 KiB/s 00:02 [--------------c o  o  ]  65% mesa-amber-21.3....     4.6 MiB  1189 KiB/s 00:01 [--------------C o  o  ]  68% mesa-amber-21.3....     4.9 MiB  1189 KiB/s 00:01 [---------------Co  o  ]  72% mesa-amber-21.3....     5.0 MiB  1086 KiB/s 00:01 [----------------C  o  ]  74% mesa-amber-21.3....     5.2 MiB   948 KiB/s 00:01 [----------------c  o  ]  77% mesa-amber-21.3....     5.6 MiB  1312 KiB/s 00:00 [------------------co  ]  83% mesa-amber-21.3....     5.8 MiB  1229 KiB/s 00:00 [------------------Co  ]  86% mesa-amber-21.3....     6.1 MiB  1207 KiB/s 00:00 [-------------------c  ]  89% mesa-amber-21.3....     6.3 MiB  1159 KiB/s 00:00 [--------------------c ]  93% mesa-amber-21.3....     6.6 MiB  1199 KiB/s 00:00 [---------------------c]  97% mesa-amber-21.3....     6.8 MiB  1167 KiB/s 00:06 [----------------------] 100%(0/1) checking keys in keyring                     [Co  o  o  o  o  o  o  ]   0%(1/1) checking keys in keyring                     [----------------------] 100%
+[i] 2026-06-16 17:28:11 (0/1) checking package integrity                   [Co  o  o  o  o  o  o  ]   0%(1/1) checking package integrity                   [----------------------] 100%
+[i] 2026-06-16 17:28:11 (0/1) loading package files                        [Co  o  o  o  o  o  o  ]   0%(1/1) loading package files                        [----------------------] 100%
+[i] 2026-06-16 17:28:11 (0/1) checking for file conflicts                  [Co  o  o  o  o  o  o  ]   0%(1/1) checking for file conflicts                  [----------------------] 100%
+[i] 2026-06-16 17:28:11 :: Processing package changes...
+[i] 2026-06-16 17:28:25 (1/1) removing mesa                                [Co  o  o  o  o  o  o  ]   0%(1/1) removing mesa                                [Co  o  o  o  o  o  o  ]   0%(1/1) removing mesa                                [Co  o  o  o  o  o  o  ]   0%(1/1) removing mesa                                [-------------------c  ]  89%(1/1) removing mesa                                [----------------------] 100%
+[i] 2026-06-16 17:28:26 (1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [----------------------] 100%
+[i] 2026-06-16 17:28:55 :: Running post-transaction hooks...
+[i] 2026-06-16 17:28:55 (1/1) Arming ConditionNeedsUpdate...
+[i] 2026-06-16 17:28:55 [?25h[!p[?7hContainer merged exited successfully.
+[!] 2026-06-16 17:28:55 ==> [Spawn-WARN] Conflicting package found during sandbox installation.
+
+[X] 2026-06-16 17:28:55 Conflicting packages detected: [mesa-amber-21.3.9-6]
+[i] 2026-06-16 17:28:55 ::  Running test for package mesa-amber
+
+[i] 2026-06-16 17:28:55 ==> [Install-INFO] Not in pacman repos. searching in AUR...
+
+[X] 2026-06-16 17:28:56 ::  package 'mesa-amber' not found in pacman repos or AUR
+
+-------------------------------------------
+LOGGING START ON 2026-06-16 18:19:17
+[i] 2026-06-16 18:19:17 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-16 18:19:17     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-16 18:19:17 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-16 18:19:17     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-16 18:19:17 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[i] 2026-06-16 18:19:17     :: Trying to create a directory on path: sandboxes/mesa-amber
+
+[V] 2026-06-16 18:19:17     :: Found desired directory on path: sandboxes/mesa-amber
+
+[i] 2026-06-16 18:19:17     :: Trying to create directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[V] 2026-06-16 18:19:17     :: Successfully created directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[i] 2026-06-16 18:19:17     :: Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+
+[V] 2026-06-16 18:19:18 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+[i] 2026-06-16 18:19:36 [sudo] password for yosatsu: 
+[i] 2026-06-16 18:19:37 ░ [0;38:5:245mSpawning container merged on /home/yosatsu/Kubos/sandboxes/mesa-amber/merged.
+[i] 2026-06-16 18:19:37 ░ [0;38:5:245mPress Ctrl-][0;38:5:245m three times within 1s to kill container; two times followed by r
+[i] 2026-06-16 18:19:37 ░ [0;38:5:245mto reboot container; two times followed by p[0;38:5:245m to poweroff container.
+[i] 2026-06-16 18:19:37 [0;1;38:5:185mHost and machine ids are equal (cd2a9806519b4c81bae1288e2bc6b65b): refusing to link journals
+[i] 2026-06-16 18:19:37 [?25lresolving dependencies...
+[i] 2026-06-16 18:19:51 looking for conflicting packages...
+[i] 2026-06-16 18:19:51 y
+[i] 2026-06-16 18:19:51 [?25l
+[i] 2026-06-16 18:19:51 Package (2)       Old Version  New Version  Net Change  Download Size
+[i] 2026-06-16 18:19:51 mesa              1:26.1.2-1                -52.57 MiB               
+[i] 2026-06-16 18:19:51 extra/mesa-amber               21.3.9-6      40.51 MiB       6.75 MiB
+[i] 2026-06-16 18:19:51 Total Download Size:     6.75 MiB
+[i] 2026-06-16 18:19:51 Total Installed Size:   40.51 MiB
+[i] 2026-06-16 18:19:51 Net Upgrade Size:      -12.05 MiB
+[i] 2026-06-16 18:19:54 :: Proceed with installation? [Y/n] [?25hy
+[i] 2026-06-16 18:19:54 [?25l:: Retrieving packages...
+[i] 2026-06-16 18:19:54  mesa-amber-21.3.9-6-x86_64
+[i] 2026-06-16 18:20:03  mesa-amber-21.3....     6.7 KiB  0.00   B/s --:-- [Co  o  o  o  o  o  o  ]   0% mesa-amber-21.3....   271.3 KiB   369 KiB/s 00:17 [co  o  o  o  o  o  o  ]   3% mesa-amber-21.3....   527.3 KiB   673 KiB/s 00:09 [-c  o  o  o  o  o  o  ]   7% mesa-amber-21.3....   831.2 KiB   950 KiB/s 00:06 [--C o  o  o  o  o  o  ]  12% mesa-amber-21.3....  1071.2 KiB  1031 KiB/s 00:05 [---co  o  o  o  o  o  ]  15% mesa-amber-21.3....  1279.3 KiB  1033 KiB/s 00:05 [---Co  o  o  o  o  o  ]  18% mesa-amber-21.3....  1471.2 KiB   995 KiB/s 00:05 [----c  o  o  o  o  o  ]  21% mesa-amber-21.3....  1711.2 KiB  1011 KiB/s 00:05 [-----C o  o  o  o  o  ]  24% mesa-amber-21.3....  1951.2 KiB  1016 KiB/s 00:04 [------Co  o  o  o  o  ]  28% mesa-amber-21.3....     2.1 MiB  1010 KiB/s 00:04 [------co  o  o  o  o  ]  31% mesa-amber-21.3....     2.4 MiB  1100 KiB/s 00:04 [-------c  o  o  o  o  ]  35% mesa-amber-21.3....     2.6 MiB  1107 KiB/s 00:03 [--------C o  o  o  o  ]  38% mesa-amber-21.3....     2.8 MiB  1057 KiB/s 00:03 [---------co  o  o  o  ]  41% mesa-amber-21.3....     3.1 MiB  1096 KiB/s 00:03 [---------co  o  o  o  ]  45% mesa-amber-21.3....     3.3 MiB  1117 KiB/s 00:03 [----------C  o  o  o  ]  48% mesa-amber-21.3....     3.5 MiB  1099 KiB/s 00:03 [-----------C o  o  o  ]  52% mesa-amber-21.3....     3.6 MiB   892 KiB/s 00:03 [-----------c o  o  o  ]  53% mesa-amber-21.3....     3.8 MiB   885 KiB/s 00:03 [------------Co  o  o  ]  56% mesa-amber-21.3....     3.9 MiB   813 KiB/s 00:03 [------------Co  o  o  ]  58% mesa-amber-21.3....     4.1 MiB   762 KiB/s 00:03 [-------------C  o  o  ]  60% mesa-amber-21.3....     4.3 MiB   853 KiB/s 00:02 [-------------c  o  o  ]  63% mesa-amber-21.3....     4.4 MiB   693 KiB/s 00:03 [--------------C o  o  ]  64% mesa-amber-21.3....     4.5 MiB   709 KiB/s 00:03 [--------------C o  o  ]  66% mesa-amber-21.3....     4.7 MiB   788 KiB/s 00:02 [---------------co  o  ]  69% mesa-amber-21.3....     4.8 MiB   764 KiB/s 00:02 [---------------co  o  ]  71% mesa-amber-21.3....     5.0 MiB   748 KiB/s 00:02 [----------------c  o  ]  73% mesa-amber-21.3....     5.1 MiB   614 KiB/s 00:02 [----------------C  o  ]  74% mesa-amber-21.3....     5.2 MiB   583 KiB/s 00:02 [----------------C  o  ]  76% mesa-amber-21.3....     5.3 MiB   654 KiB/s 00:02 [-----------------C o  ]  78% mesa-amber-21.3....     5.5 MiB   756 KiB/s 00:01 [-----------------c o  ]  81% mesa-amber-21.3....     5.7 MiB   807 KiB/s 00:01 [------------------Co  ]  84% mesa-amber-21.3....     5.9 MiB   796 KiB/s 00:01 [-------------------c  ]  87% mesa-amber-21.3....     6.2 MiB   948 KiB/s 00:00 [--------------------c ]  91% mesa-amber-21.3....     6.3 MiB   787 KiB/s 00:00 [--------------------c ]  93% mesa-amber-21.3....     6.6 MiB   895 KiB/s 00:00 [---------------------c]  97% mesa-amber-21.3....     6.7 MiB   883 KiB/s 00:00 [---------------------c]  99% mesa-amber-21.3....     6.8 MiB   885 KiB/s 00:08 [----------------------] 100%(0/1) checking keys in keyring                     [Co  o  o  o  o  o  o  ]   0%(1/1) checking keys in keyring                     [----------------------] 100%
+[i] 2026-06-16 18:20:03 (0/1) checking package integrity                   [Co  o  o  o  o  o  o  ]   0%(1/1) checking package integrity                   [----------------------] 100%
+[i] 2026-06-16 18:20:03 (0/1) loading package files                        [Co  o  o  o  o  o  o  ]   0%(1/1) loading package files                        [----------------------] 100%
+[i] 2026-06-16 18:20:03 (0/1) checking for file conflicts                  [Co  o  o  o  o  o  o  ]   0%(1/1) checking for file conflicts                  [----------------------] 100%
+[i] 2026-06-16 18:20:03 :: Processing package changes...
+[i] 2026-06-16 18:20:17 (1/1) removing mesa                                [Co  o  o  o  o  o  o  ]   0%(1/1) removing mesa                                [Co  o  o  o  o  o  o  ]   0%(1/1) removing mesa                                [Co  o  o  o  o  o  o  ]   0%(1/1) removing mesa                                [----------------------] 100%
+[i] 2026-06-16 18:20:17 (1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [------------------Co  ]  84%(1/1) installing mesa-amber                        [----------------------] 100%
+[i] 2026-06-16 18:20:48 :: Running post-transaction hooks...
+[i] 2026-06-16 18:20:48 (1/1) Arming ConditionNeedsUpdate...
+[i] 2026-06-16 18:20:49 [?25h[!p[?7hContainer merged exited successfully.
+[!] 2026-06-16 18:20:49     :: Conflicting package found during sandbox installation.
+
+[X] 2026-06-16 18:20:49 Conflicting packages detected: [mesa-amber-21.3.9-6]
+[i] 2026-06-16 18:20:49     :: Running test for package mesa-amber
+
+[i] 2026-06-16 18:20:49 ==> [Install-INFO] Not in pacman repos. searching in AUR...
+
+[X] 2026-06-16 18:20:50     :: package 'mesa-amber' not found in pacman repos or AUR
+
+-------------------------------------------
+LOGGING START ON 2026-06-16 18:24:46
+[i] 2026-06-16 18:24:46 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-16 18:24:47     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-16 18:24:47 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-16 18:24:47     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-16 18:24:47 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[i] 2026-06-16 18:24:47     :: Trying to create a directory on path: sandboxes/mesa-amber
+
+[V] 2026-06-16 18:24:47     :: Found desired directory on path: sandboxes/mesa-amber
+
+[i] 2026-06-16 18:24:47     :: Trying to create directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[V] 2026-06-16 18:24:47     :: Successfully created directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[i] 2026-06-16 18:24:47     :: Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+
+[V] 2026-06-16 18:24:47 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+[i] 2026-06-16 18:24:52 [sudo] password for yosatsu: 
+[i] 2026-06-16 18:24:52 ░ [0;38:5:245mSpawning container merged on /home/yosatsu/Kubos/sandboxes/mesa-amber/merged.
+[i] 2026-06-16 18:24:52 ░ [0;38:5:245mPress Ctrl-][0;38:5:245m three times within 1s to kill container; two times followed by r
+[i] 2026-06-16 18:24:52 ░ [0;38:5:245mto reboot container; two times followed by p[0;38:5:245m to poweroff container.
+[i] 2026-06-16 18:24:52 [0;1;38:5:185mHost and machine ids are equal (cd2a9806519b4c81bae1288e2bc6b65b): refusing to link journals
+[i] 2026-06-16 18:24:52 [?25lresolving dependencies...
+[i] 2026-06-16 18:25:05 looking for conflicting packages...
+[i] 2026-06-16 18:25:05 y
+[i] 2026-06-16 18:25:05 [?25l
+[i] 2026-06-16 18:25:05 Package (2)       Old Version  New Version  Net Change  Download Size
+[i] 2026-06-16 18:25:05 mesa              1:26.1.2-1                -52.57 MiB               
+[i] 2026-06-16 18:25:05 extra/mesa-amber               21.3.9-6      40.51 MiB       6.75 MiB
+[i] 2026-06-16 18:25:05 Total Download Size:     6.75 MiB
+[i] 2026-06-16 18:25:05 Total Installed Size:   40.51 MiB
+[i] 2026-06-16 18:25:05 Net Upgrade Size:      -12.05 MiB
+-------------------------------------------
+LOGGING START ON 2026-06-16 18:25:33
+[i] 2026-06-16 18:25:33 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-16 18:25:33     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-16 18:25:33 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-16 18:25:33     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-16 18:25:33 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[i] 2026-06-16 18:25:33     :: Trying to create a directory on path: sandboxes/mesa-amber
+
+[V] 2026-06-16 18:25:33     :: Found desired directory on path: sandboxes/mesa-amber
+
+[i] 2026-06-16 18:25:33     :: Trying to create directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[V] 2026-06-16 18:25:33     :: Successfully created directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[i] 2026-06-16 18:25:33     :: Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+
+[V] 2026-06-16 18:25:33 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+[i] 2026-06-16 18:25:36 [sudo] password for yosatsu: 
+[i] 2026-06-16 18:25:36 ░ [0;38:5:245mSpawning container merged on /home/yosatsu/Kubos/sandboxes/mesa-amber/merged.
+[i] 2026-06-16 18:25:36 ░ [0;38:5:245mPress Ctrl-][0;38:5:245m three times within 1s to kill container; two times followed by r
+[i] 2026-06-16 18:25:36 ░ [0;38:5:245mto reboot container; two times followed by p[0;38:5:245m to poweroff container.
+[i] 2026-06-16 18:25:36 Mount point '/run/systemd/nspawn/unix-export/merged' exists already, refusing.
+[i] 2026-06-16 18:25:36     :: Running test for package mesa-amber
+
+[i] 2026-06-16 18:25:36 ==> [Install-INFO] Not in pacman repos. searching in AUR...
+
+[X] 2026-06-16 18:25:37     :: package 'mesa-amber' not found in pacman repos or AUR
+
+-------------------------------------------
+LOGGING START ON 2026-06-16 18:57:37
+[i] 2026-06-16 18:57:37 ==> [KUBOS] Cleaning up...
+
+[i] 2026-06-16 18:57:37 ==> [CLEANUP] Start tearing down sandbox mesa-amber...
+
+[!] 2026-06-16 18:57:37 Sandbox does not exist: mesa-amber
+[X] 2026-06-16 18:57:37 Teardown failed
+-------------------------------------------
+LOGGING START ON 2026-06-16 18:59:39
+[i] 2026-06-16 18:59:39 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-16 18:59:40     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-16 18:59:40 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-16 18:59:40     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-16 18:59:40 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[i] 2026-06-16 18:59:40     :: Trying to create a directory on path: sandboxes/mesa-amber
+
+[V] 2026-06-16 18:59:40     :: Found desired directory on path: sandboxes/mesa-amber
+
+[i] 2026-06-16 18:59:40     :: Trying to create directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[V] 2026-06-16 18:59:40     :: Successfully created directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[i] 2026-06-16 18:59:40     :: Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+
+[V] 2026-06-16 18:59:40 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+[i] 2026-06-16 18:59:45 [sudo] password for yosatsu: 
+[i] 2026-06-16 18:59:45 ░ [0;38:5:245mSpawning container merged on /home/yosatsu/Kubos/sandboxes/mesa-amber/merged.
+[i] 2026-06-16 18:59:45 ░ [0;38:5:245mPress Ctrl-][0;38:5:245m three times within 1s to kill container; two times followed by r
+[i] 2026-06-16 18:59:45 ░ [0;38:5:245mto reboot container; two times followed by p[0;38:5:245m to poweroff container.
+[i] 2026-06-16 18:59:45 [0;1;38:5:185mHost and machine ids are equal (cd2a9806519b4c81bae1288e2bc6b65b): refusing to link journals
+[i] 2026-06-16 18:59:46 [?25lresolving dependencies...
+[i] 2026-06-16 18:59:57 looking for conflicting packages...
+[i] 2026-06-16 18:59:57 y
+[i] 2026-06-16 18:59:57 [?25l
+[i] 2026-06-16 18:59:57 Package (2)       Old Version  New Version  Net Change  Download Size
+[i] 2026-06-16 18:59:57 mesa              1:26.1.2-1                -52.57 MiB               
+[i] 2026-06-16 18:59:57 extra/mesa-amber               21.3.9-6      40.51 MiB       6.75 MiB
+[i] 2026-06-16 18:59:57 Total Download Size:     6.75 MiB
+[i] 2026-06-16 18:59:57 Total Installed Size:   40.51 MiB
+[i] 2026-06-16 18:59:57 Net Upgrade Size:      -12.05 MiB
+[i] 2026-06-16 19:00:00 :: Proceed with installation? [Y/n] [?25hy
+[i] 2026-06-16 19:00:00 [?25l:: Retrieving packages...
+[i] 2026-06-16 19:00:00  mesa-amber-21.3.9-6-x86_64
+[i] 2026-06-16 19:00:07  mesa-amber-21.3....  1360.0   B  0.00   B/s --:-- [Co  o  o  o  o  o  o  ]   0% mesa-amber-21.3....   201.5 KiB   330 KiB/s 00:20 [Co  o  o  o  o  o  o  ]   2% mesa-amber-21.3....   558.6 KiB   729 KiB/s 00:08 [-C  o  o  o  o  o  o  ]   8% mesa-amber-21.3....   798.7 KiB   824 KiB/s 00:07 [--c o  o  o  o  o  o  ]  11% mesa-amber-21.3....  1038.7 KiB   949 KiB/s 00:06 [---co  o  o  o  o  o  ]  15% mesa-amber-21.3....  1246.7 KiB   952 KiB/s 00:05 [---Co  o  o  o  o  o  ]  18% mesa-amber-21.3....  1470.6 KiB  1006 KiB/s 00:05 [----c  o  o  o  o  o  ]  21% mesa-amber-21.3....  1703.1 KiB  1051 KiB/s 00:04 [-----C o  o  o  o  o  ]  24% mesa-amber-21.3....  1943.2 KiB  1100 KiB/s 00:04 [------Co  o  o  o  o  ]  28% mesa-amber-21.3....     2.1 MiB  1107 KiB/s 00:04 [------co  o  o  o  o  ]  31% mesa-amber-21.3....     2.3 MiB  1073 KiB/s 00:04 [-------C  o  o  o  o  ]  34% mesa-amber-21.3....     2.6 MiB  1107 KiB/s 00:03 [--------c o  o  o  o  ]  37% mesa-amber-21.3....     2.8 MiB  1085 KiB/s 00:03 [--------C o  o  o  o  ]  40% mesa-amber-21.3....     3.0 MiB  1090 KiB/s 00:03 [---------Co  o  o  o  ]  44% mesa-amber-21.3....     3.2 MiB  1100 KiB/s 00:03 [----------c  o  o  o  ]  47% mesa-amber-21.3....     3.4 MiB  1101 KiB/s 00:03 [-----------C o  o  o  ]  50% mesa-amber-21.3....     3.6 MiB  1083 KiB/s 00:02 [-----------c o  o  o  ]  53% mesa-amber-21.3....     3.8 MiB  1095 KiB/s 00:02 [------------co  o  o  ]  57% mesa-amber-21.3....     4.1 MiB  1072 KiB/s 00:02 [-------------C  o  o  ]  60% mesa-amber-21.3....     4.3 MiB  1068 KiB/s 00:02 [-------------c  o  o  ]  63% mesa-amber-21.3....     4.5 MiB  1112 KiB/s 00:02 [--------------C o  o  ]  66% mesa-amber-21.3....     4.7 MiB  1115 KiB/s 00:01 [---------------co  o  ]  69% mesa-amber-21.3....     4.9 MiB  1063 KiB/s 00:01 [---------------Co  o  ]  72% mesa-amber-21.3....     5.1 MiB  1067 KiB/s 00:01 [----------------C  o  ]  76% mesa-amber-21.3....     5.4 MiB  1046 KiB/s 00:01 [-----------------c o  ]  79% mesa-amber-21.3....     5.6 MiB  1079 KiB/s 00:01 [------------------Co  ]  82% mesa-amber-21.3....     5.8 MiB  1091 KiB/s 00:00 [------------------Co  ]  86% mesa-amber-21.3....     6.1 MiB  1102 KiB/s 00:00 [-------------------c  ]  89% mesa-amber-21.3....     6.3 MiB  1135 KiB/s 00:00 [--------------------c ]  93% mesa-amber-21.3....     6.5 MiB  1090 KiB/s 00:00 [---------------------C]  96% mesa-amber-21.3....     6.7 MiB  1082 KiB/s 00:00 [---------------------c]  99% mesa-amber-21.3....     6.8 MiB  1038 KiB/s 00:07 [----------------------] 100%(0/1) checking keys in keyring                     [Co  o  o  o  o  o  o  ]   0%(1/1) checking keys in keyring                     [----------------------] 100%
+[i] 2026-06-16 19:00:07 (0/1) checking package integrity                   [Co  o  o  o  o  o  o  ]   0%(1/1) checking package integrity                   [----------------------] 100%
+[i] 2026-06-16 19:00:07 (0/1) loading package files                        [Co  o  o  o  o  o  o  ]   0%(1/1) loading package files                        [----------------------] 100%
+[i] 2026-06-16 19:00:07 (0/1) checking for file conflicts                  [Co  o  o  o  o  o  o  ]   0%(1/1) checking for file conflicts                  [----------------------] 100%
+[i] 2026-06-16 19:00:08 :: Processing package changes...
+[i] 2026-06-16 19:00:22 (1/1) removing mesa                                [Co  o  o  o  o  o  o  ]   0%(1/1) removing mesa                                [Co  o  o  o  o  o  o  ]   0%(1/1) removing mesa                                [Co  o  o  o  o  o  o  ]   0%(1/1) removing mesa                                [-------------------c  ]  89%(1/1) removing mesa                                [----------------------] 100%
+[i] 2026-06-16 19:00:22 (1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [Co  o  o  o  o  o  o  ]   0%(1/1) installing mesa-amber                        [------------------Co  ]  84%(1/1) installing mesa-amber                        [----------------------] 100%
+[i] 2026-06-16 19:00:54 :: Running post-transaction hooks...
+[i] 2026-06-16 19:00:54 (1/1) Arming ConditionNeedsUpdate...
+[i] 2026-06-16 19:00:54 [?25h[!p[?7hContainer merged exited successfully.
+[!] 2026-06-16 19:00:55     :: Conflicting package found during sandbox installation.
+
+[X] 2026-06-16 19:00:55     :: Conflicting packages detected: [mesa-amber-21.3.9-6]
+
+[X] 2026-06-16 19:00:55 Conflicting packages detected: [mesa-amber-21.3.9-6]
+[i] 2026-06-16 19:00:55     :: Running test for package mesa-amber
+
+[i] 2026-06-16 19:00:55 ==> [Install-INFO] Not in pacman repos. searching in AUR...
+
+[X] 2026-06-16 19:00:57     :: package 'mesa-amber' not found in pacman repos or AUR
+
+-------------------------------------------
+LOGGING START ON 2026-06-16 19:01:49
+[i] 2026-06-16 19:01:49 ==> [KUBOS] Cleaning up...
+
+[i] 2026-06-16 19:01:49 ==> [CLEANUP] Start tearing down sandbox mesa-amber...
+
+[i] 2026-06-16 19:01:49     :: Unmounting overlay for sandboxes/mesa-amber/merged
+
+[i] 2026-06-16 19:01:49 ==> [DeBusy-INFO] Checking for busy processes on: sandboxes/mesa-amber/merged
+
+[V] 2026-06-16 19:01:50 Successfully unmounted overlay for mesa-amber
+[i] 2026-06-16 19:01:50     :: Removing sandbox directories: sandboxes/mesa-amber
+
+[X] 2026-06-16 19:01:50 Failed to remove sandbox directory: unlinkat sandboxes/mesa-amber/upper/var/log/pacman.log: permission denied
+[X] 2026-06-16 19:01:50 Teardown failed
+-------------------------------------------
+LOGGING START ON 2026-06-16 19:02:08
+[i] 2026-06-16 19:02:08 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-16 19:02:08     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-16 19:02:08 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-16 19:02:08     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-16 19:02:08 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[i] 2026-06-16 19:02:08     :: Trying to create a directory on path: sandboxes/mesa-amber
+
+[V] 2026-06-16 19:02:08     :: Found desired directory on path: sandboxes/mesa-amber
+
+[i] 2026-06-16 19:02:08     :: Trying to create directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[V] 2026-06-16 19:02:08     :: Successfully created directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[i] 2026-06-16 19:02:08     :: Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+
+[V] 2026-06-16 19:02:08 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+[i] 2026-06-16 19:02:11 [sudo] password for yosatsu: 
+[i] 2026-06-16 19:02:11 ░ [0;38:5:245mSpawning container merged on /home/yosatsu/Kubos/sandboxes/mesa-amber/merged.
+[i] 2026-06-16 19:02:11 ░ [0;38:5:245mPress Ctrl-][0;38:5:245m three times within 1s to kill container; two times followed by r
+[i] 2026-06-16 19:02:11 ░ [0;38:5:245mto reboot container; two times followed by p[0;38:5:245m to poweroff container.
+[i] 2026-06-16 19:02:11 [0;1;38:5:185mHost and machine ids are equal (cd2a9806519b4c81bae1288e2bc6b65b): refusing to link journals
+[i] 2026-06-16 19:02:11 [?25lresolving dependencies...
+[i] 2026-06-16 19:02:25 looking for conflicting packages...
+[i] 2026-06-16 19:02:25 y
+[i] 2026-06-16 19:02:25 [?25l
+[i] 2026-06-16 19:02:25 Package (2)       Old Version  New Version  Net Change  Download Size
+[i] 2026-06-16 19:02:25 mesa              1:26.1.2-1                -52.57 MiB               
+[i] 2026-06-16 19:02:25 extra/mesa-amber               21.3.9-6      40.51 MiB       6.75 MiB
+[i] 2026-06-16 19:02:25 Total Download Size:     6.75 MiB
+[i] 2026-06-16 19:02:25 Total Installed Size:   40.51 MiB
+[i] 2026-06-16 19:02:25 Net Upgrade Size:      -12.05 MiB
+-------------------------------------------
+LOGGING START ON 2026-06-16 19:10:27
+[i] 2026-06-16 19:10:27 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-16 19:10:27     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-16 19:10:27 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-16 19:10:27     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-16 19:10:27 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[i] 2026-06-16 19:10:27     :: Trying to create a directory on path: sandboxes/mesa-amber
+
+[V] 2026-06-16 19:10:27     :: Found desired directory on path: sandboxes/mesa-amber
+
+[i] 2026-06-16 19:10:27     :: Trying to create directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[V] 2026-06-16 19:10:27     :: Successfully created directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[i] 2026-06-16 19:10:27     :: Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+
+[V] 2026-06-16 19:10:27 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+-------------------------------------------
+LOGGING START ON 2026-06-16 19:12:44
+[i] 2026-06-16 19:12:44 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-16 19:12:44     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-16 19:12:44 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-16 19:12:44     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-16 19:12:44 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[i] 2026-06-16 19:12:44     :: Trying to create a directory on path: sandboxes/mesa-amber
+
+[V] 2026-06-16 19:12:44     :: Found desired directory on path: sandboxes/mesa-amber
+
+[i] 2026-06-16 19:12:44     :: Trying to create directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[V] 2026-06-16 19:12:44     :: Successfully created directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[i] 2026-06-16 19:12:44     :: Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+
+[V] 2026-06-16 19:12:44 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+[i] 2026-06-16 19:17:44 [sudo] password for yosatsu: 
+[i] 2026-06-16 19:17:44 sudo: timed out reading password
+[i] 2026-06-16 19:17:47 sudo: a password is required
+[i] 2026-06-16 19:17:47     :: Running test for package mesa-amber
+
+[i] 2026-06-16 19:17:47 ==> [Install-INFO] Not in pacman repos. searching in AUR...
+
+[X] 2026-06-16 19:17:50     :: package 'mesa-amber' not found in pacman repos or AUR
+
+-------------------------------------------
+LOGGING START ON 2026-06-16 19:26:55
+[i] 2026-06-16 19:26:55 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-16 19:26:56     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-16 19:26:56 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-16 19:26:56     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-16 19:26:56 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[i] 2026-06-16 19:26:56     :: Trying to create a directory on path: sandboxes/mesa-amber
+
+[V] 2026-06-16 19:26:56     :: Found desired directory on path: sandboxes/mesa-amber
+
+[i] 2026-06-16 19:26:56     :: Trying to create directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[V] 2026-06-16 19:26:56     :: Successfully created directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[i] 2026-06-16 19:26:56     :: Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+
+[V] 2026-06-16 19:26:56 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+[i] 2026-06-16 19:27:06 [sudo] password for yosatsu: 
+[i] 2026-06-16 19:27:06 ░ [0;38:5:245mSpawning container merged on /home/yosatsu/Kubos/sandboxes/mesa-amber/merged.
+[i] 2026-06-16 19:27:06 ░ [0;38:5:245mPress Ctrl-][0;38:5:245m three times within 1s to kill container; two times followed by r
+[i] 2026-06-16 19:27:06 ░ [0;38:5:245mto reboot container; two times followed by p[0;38:5:245m to poweroff container.
+[i] 2026-06-16 19:27:06 Mount point '/run/systemd/nspawn/unix-export/merged' exists already, refusing.
+[i] 2026-06-16 19:27:06     :: Running test for package mesa-amber
+
+[i] 2026-06-16 19:27:06 ==> [Install-INFO] Not in pacman repos. searching in AUR...
+
+[X] 2026-06-16 19:27:07     :: package 'mesa-amber' not found in pacman repos or AUR
+
+-------------------------------------------
+LOGGING START ON 2026-06-16 19:33:15
+[i] 2026-06-16 19:33:15 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-16 19:33:16     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-16 19:33:16 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-16 19:33:16     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-16 19:33:16 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[i] 2026-06-16 19:33:16     :: Trying to create a directory on path: sandboxes/mesa-amber
+
+[V] 2026-06-16 19:33:16     :: Found desired directory on path: sandboxes/mesa-amber
+
+[i] 2026-06-16 19:33:16     :: Trying to create directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[V] 2026-06-16 19:33:16     :: Successfully created directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[i] 2026-06-16 19:33:16     :: Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+
+[V] 2026-06-16 19:33:16 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+[i] 2026-06-16 19:33:18 [sudo] password for yosatsu: 
+[i] 2026-06-16 19:33:19 ░ [0;38:5:245mSpawning container merged on /home/yosatsu/Kubos/sandboxes/mesa-amber/merged.
+[i] 2026-06-16 19:33:19 ░ [0;38:5:245mPress Ctrl-][0;38:5:245m three times within 1s to kill container; two times followed by r
+[i] 2026-06-16 19:33:19 ░ [0;38:5:245mto reboot container; two times followed by p[0;38:5:245m to poweroff container.
+[i] 2026-06-16 19:33:19 [0;1;38:5:185mHost and machine ids are equal (cd2a9806519b4c81bae1288e2bc6b65b): refusing to link journals
+[i] 2026-06-16 19:33:19 [?25lresolving dependencies...
+[i] 2026-06-16 19:33:33 looking for conflicting packages...
+[i] 2026-06-16 19:33:33 y
+[i] 2026-06-16 19:33:33 [?25l
+[i] 2026-06-16 19:33:33 Package (2)       Old Version  New Version  Net Change  Download Size
+[i] 2026-06-16 19:33:33 mesa              1:26.1.2-1                -52.57 MiB               
+[i] 2026-06-16 19:33:33 extra/mesa-amber               21.3.9-6      40.51 MiB       6.75 MiB
+[i] 2026-06-16 19:33:33 Total Download Size:     6.75 MiB
+[i] 2026-06-16 19:33:33 Total Installed Size:   40.51 MiB
+[i] 2026-06-16 19:33:33 Net Upgrade Size:      -12.05 MiB
+-------------------------------------------
+LOGGING START ON 2026-06-16 19:41:52
+[i] 2026-06-16 19:41:52 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-16 19:41:53     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-16 19:41:53 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-16 19:41:53     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-16 19:41:53 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[i] 2026-06-16 19:41:53     :: Trying to create a directory on path: sandboxes/mesa-amber
+
+[V] 2026-06-16 19:41:53     :: Found desired directory on path: sandboxes/mesa-amber
+
+[i] 2026-06-16 19:41:53     :: Trying to create directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[V] 2026-06-16 19:41:53     :: Successfully created directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[i] 2026-06-16 19:41:53     :: Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+
+[V] 2026-06-16 19:41:53 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+[i] 2026-06-16 19:41:56 [sudo] password for yosatsu: 
+[i] 2026-06-16 19:41:56 ░ [0;38:5:245mSpawning container merged on /home/yosatsu/Kubos/sandboxes/mesa-amber/merged.
+[i] 2026-06-16 19:41:56 ░ [0;38:5:245mPress Ctrl-][0;38:5:245m three times within 1s to kill container; two times followed by r
+[i] 2026-06-16 19:41:56 ░ [0;38:5:245mto reboot container; two times followed by p[0;38:5:245m to poweroff container.
+[i] 2026-06-16 19:41:56 Mount point '/run/systemd/nspawn/unix-export/merged' exists already, refusing.
+[i] 2026-06-16 19:41:56     :: Running test for package mesa-amber
+
+[i] 2026-06-16 19:41:56 ==> [Install-INFO] Not in pacman repos. searching in AUR...
+
+[X] 2026-06-16 19:41:57     :: package 'mesa-amber' not found in pacman repos or AUR
+
+-------------------------------------------
+LOGGING START ON 2026-06-16 19:42:31
+[i] 2026-06-16 19:42:31 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-16 19:42:31     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-16 19:42:31 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-16 19:42:31     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-16 19:42:31 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[i] 2026-06-16 19:42:31     :: Trying to create a directory on path: sandboxes/mesa-amber
+
+[V] 2026-06-16 19:42:31     :: Found desired directory on path: sandboxes/mesa-amber
+
+[i] 2026-06-16 19:42:31     :: Trying to create directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[V] 2026-06-16 19:42:31     :: Successfully created directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[i] 2026-06-16 19:42:31     :: Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+
+[V] 2026-06-16 19:42:32 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+[i] 2026-06-16 19:42:36 [sudo] password for yosatsu: 
+[i] 2026-06-16 19:42:36 ░ [0;38:5:245mSpawning container merged on /home/yosatsu/Kubos/sandboxes/mesa-amber/merged.
+[i] 2026-06-16 19:42:36 ░ [0;38:5:245mPress Ctrl-][0;38:5:245m three times within 1s to kill container; two times followed by r
+[i] 2026-06-16 19:42:36 ░ [0;38:5:245mto reboot container; two times followed by p[0;38:5:245m to poweroff container.
+[i] 2026-06-16 19:42:36 [0;1;38:5:185mHost and machine ids are equal (cd2a9806519b4c81bae1288e2bc6b65b): refusing to link journals
+[i] 2026-06-16 19:42:37 [?25lresolving dependencies...
+[i] 2026-06-16 19:42:49 looking for conflicting packages...
+[i] 2026-06-16 19:42:49 y
+[i] 2026-06-16 19:42:50 [?25l
+[i] 2026-06-16 19:42:50 Package (2)       Old Version  New Version  Net Change  Download Size
+[i] 2026-06-16 19:42:50 mesa              1:26.1.2-1                -52.57 MiB               
+[i] 2026-06-16 19:42:50 extra/mesa-amber               21.3.9-6      40.51 MiB       6.75 MiB
+[i] 2026-06-16 19:42:50 Total Download Size:     6.75 MiB
+[i] 2026-06-16 19:42:50 Total Installed Size:   40.51 MiB
+[i] 2026-06-16 19:42:50 Net Upgrade Size:      -12.05 MiB
+-------------------------------------------
+LOGGING START ON 2026-06-16 19:47:55
+[i] 2026-06-16 19:47:55 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-16 19:47:56     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-16 19:47:56 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-16 19:47:56     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-16 19:47:56 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[i] 2026-06-16 19:47:56     :: Trying to create a directory on path: sandboxes/mesa-amber
+
+[V] 2026-06-16 19:47:56     :: Found desired directory on path: sandboxes/mesa-amber
+
+[i] 2026-06-16 19:47:56     :: Trying to create directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[V] 2026-06-16 19:47:56     :: Successfully created directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[i] 2026-06-16 19:47:56     :: Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+
+[V] 2026-06-16 19:47:56 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+[i] 2026-06-16 19:48:03 [sudo] password for yosatsu: 
+[i] 2026-06-16 19:48:03 ░ [0;38:5:245mSpawning container merged on /home/yosatsu/Kubos/sandboxes/mesa-amber/merged.
+[i] 2026-06-16 19:48:03 ░ [0;38:5:245mPress Ctrl-][0;38:5:245m three times within 1s to kill container; two times followed by r
+[i] 2026-06-16 19:48:03 ░ [0;38:5:245mto reboot container; two times followed by p[0;38:5:245m to poweroff container.
+[i] 2026-06-16 19:48:03 Mount point '/run/systemd/nspawn/unix-export/merged' exists already, refusing.
+[i] 2026-06-16 19:48:03     :: Running test for package mesa-amber
+
+[i] 2026-06-16 19:48:03 ==> [Install-INFO] Not in pacman repos. searching in AUR...
+
+[X] 2026-06-16 19:48:04     :: package 'mesa-amber' not found in pacman repos or AUR
+
+-------------------------------------------
+LOGGING START ON 2026-06-16 19:48:15
+[i] 2026-06-16 19:48:15 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-16 19:48:15     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-16 19:48:15 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-16 19:48:15     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-16 19:48:15 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[i] 2026-06-16 19:48:15     :: Trying to create a directory on path: sandboxes/mesa-amber
+
+[V] 2026-06-16 19:48:15     :: Found desired directory on path: sandboxes/mesa-amber
+
+[i] 2026-06-16 19:48:15     :: Trying to create directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[V] 2026-06-16 19:48:15     :: Successfully created directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[i] 2026-06-16 19:48:15     :: Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+
+[V] 2026-06-16 19:48:15 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+[i] 2026-06-16 19:48:18 [sudo] password for yosatsu: 
+[i] 2026-06-16 19:48:18 ░ [0;38:5:245mSpawning container merged on /home/yosatsu/Kubos/sandboxes/mesa-amber/merged.
+[i] 2026-06-16 19:48:18 ░ [0;38:5:245mPress Ctrl-][0;38:5:245m three times within 1s to kill container; two times followed by r
+[i] 2026-06-16 19:48:18 ░ [0;38:5:245mto reboot container; two times followed by p[0;38:5:245m to poweroff container.
+[i] 2026-06-16 19:48:18 [0;1;38:5:185mHost and machine ids are equal (cd2a9806519b4c81bae1288e2bc6b65b): refusing to link journals
+[i] 2026-06-16 19:48:19 [?25lresolving dependencies...
+[i] 2026-06-16 19:48:32 looking for conflicting packages...
+[i] 2026-06-16 19:48:32 y
+[i] 2026-06-16 19:48:32 [?25l
+[i] 2026-06-16 19:48:32 Package (2)       Old Version  New Version  Net Change  Download Size
+[i] 2026-06-16 19:48:32 mesa              1:26.1.2-1                -52.57 MiB               
+[i] 2026-06-16 19:48:32 extra/mesa-amber               21.3.9-6      40.51 MiB       6.75 MiB
+[i] 2026-06-16 19:48:32 Total Download Size:     6.75 MiB
+[i] 2026-06-16 19:48:32 Total Installed Size:   40.51 MiB
+[i] 2026-06-16 19:48:32 Net Upgrade Size:      -12.05 MiB
+-------------------------------------------
+LOGGING START ON 2026-06-16 20:12:38
+[i] 2026-06-16 20:12:38 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-16 20:12:39     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-16 20:12:39 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-16 20:12:39     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-16 20:12:39 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[i] 2026-06-16 20:12:39     :: Trying to create a directory on path: sandboxes/mesa-amber
+
+[V] 2026-06-16 20:12:39     :: Found desired directory on path: sandboxes/mesa-amber
+
+[i] 2026-06-16 20:12:39     :: Trying to create directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[V] 2026-06-16 20:12:39     :: Successfully created directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[i] 2026-06-16 20:12:39     :: Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+
+[V] 2026-06-16 20:12:39 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+[i] 2026-06-16 20:12:41 [sudo] password for yosatsu: 
+[i] 2026-06-16 20:12:41 ░ [0;38:5:245mSpawning container merged on /home/yosatsu/Kubos/sandboxes/mesa-amber/merged.
+[i] 2026-06-16 20:12:41 ░ [0;38:5:245mPress Ctrl-][0;38:5:245m three times within 1s to kill container; two times followed by r
+[i] 2026-06-16 20:12:41 ░ [0;38:5:245mto reboot container; two times followed by p[0;38:5:245m to poweroff container.
+[i] 2026-06-16 20:12:41 Mount point '/run/systemd/nspawn/unix-export/merged' exists already, refusing.
+[i] 2026-06-16 20:12:41     :: Running test for package mesa-amber
+
+[i] 2026-06-16 20:12:41 ==> [Install-INFO] Not in pacman repos. searching in AUR...
+
+[X] 2026-06-16 20:12:42     :: package 'mesa-amber' not found in pacman repos or AUR
+
+-------------------------------------------
+LOGGING START ON 2026-06-16 20:12:52
+[i] 2026-06-16 20:12:52 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-16 20:12:53     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-16 20:12:53 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-16 20:12:53     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-16 20:12:53 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[i] 2026-06-16 20:12:53     :: Trying to create a directory on path: sandboxes/mesa-amber
+
+[V] 2026-06-16 20:12:53     :: Found desired directory on path: sandboxes/mesa-amber
+
+[i] 2026-06-16 20:12:53     :: Trying to create directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[V] 2026-06-16 20:12:53     :: Successfully created directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[i] 2026-06-16 20:12:53     :: Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+
+[V] 2026-06-16 20:12:53 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+[i] 2026-06-16 20:12:55 [sudo] password for yosatsu: 
+[i] 2026-06-16 20:12:55 ░ [0;38:5:245mSpawning container merged on /home/yosatsu/Kubos/sandboxes/mesa-amber/merged.
+[i] 2026-06-16 20:12:55 ░ [0;38:5:245mPress Ctrl-][0;38:5:245m three times within 1s to kill container; two times followed by r
+[i] 2026-06-16 20:12:55 ░ [0;38:5:245mto reboot container; two times followed by p[0;38:5:245m to poweroff container.
+[i] 2026-06-16 20:12:55 [0;1;38:5:185mHost and machine ids are equal (cd2a9806519b4c81bae1288e2bc6b65b): refusing to link journals
+[i] 2026-06-16 20:12:56 [?25lresolving dependencies...
+[i] 2026-06-16 20:12:56 looking for conflicting packages...
+[i] 2026-06-16 20:12:56 y
+[i] 2026-06-16 20:12:56 [?25l
+[i] 2026-06-16 20:12:56 Package (2)       Old Version  New Version  Net Change  Download Size
+[i] 2026-06-16 20:12:56 mesa              1:26.1.2-1                -52.57 MiB               
+[i] 2026-06-16 20:12:56 extra/mesa-amber               21.3.9-6      40.51 MiB       6.75 MiB
+[i] 2026-06-16 20:12:56 Total Download Size:     6.75 MiB
+[i] 2026-06-16 20:12:56 Total Installed Size:   40.51 MiB
+[i] 2026-06-16 20:12:56 Net Upgrade Size:      -12.05 MiB
+-------------------------------------------
+LOGGING START ON 2026-06-16 20:13:39
+[i] 2026-06-16 20:13:39 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-16 20:13:40     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-16 20:13:40 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-16 20:13:40     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-16 20:13:40 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[i] 2026-06-16 20:13:40     :: Trying to create a directory on path: sandboxes/mesa-amber
+
+[V] 2026-06-16 20:13:40     :: Found desired directory on path: sandboxes/mesa-amber
+
+[i] 2026-06-16 20:13:40     :: Trying to create directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[V] 2026-06-16 20:13:40     :: Successfully created directories on path: sandboxes/mesa-amber/upper, sandboxes/mesa-amber/merged, sandboxes/mesa-amber/work
+
+[i] 2026-06-16 20:13:40     :: Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+
+[V] 2026-06-16 20:13:40 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+[i] 2026-06-16 20:13:46 [sudo] password for yosatsu: 
+[i] 2026-06-16 20:13:46 ░ [0;38:5:245mSpawning container merged on /home/yosatsu/Kubos/sandboxes/mesa-amber/merged.
+[i] 2026-06-16 20:13:46 ░ [0;38:5:245mPress Ctrl-][0;38:5:245m three times within 1s to kill container; two times followed by r
+[i] 2026-06-16 20:13:46 ░ [0;38:5:245mto reboot container; two times followed by p[0;38:5:245m to poweroff container.
+[i] 2026-06-16 20:13:46 Mount point '/run/systemd/nspawn/unix-export/merged' exists already, refusing.
+[i] 2026-06-16 20:13:46     :: Running test for package mesa-amber
+
+[i] 2026-06-16 20:13:46 ==> [Install-INFO] Not in pacman repos. searching in AUR...
+
+[X] 2026-06-16 20:13:47     :: package 'mesa-amber' not found in pacman repos or AUR
+
