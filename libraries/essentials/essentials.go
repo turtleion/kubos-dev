@@ -16,26 +16,53 @@ import (
 
 // IsValidSandbox verifies if the specified directory follows the required OverlayFS structure
 // (upper, merged, and work directories) and confirms the merged path is an active mount.
-func IsValidSandbox(sandboxPath string) bool {
-	// OverlayFS requires an 'upper' directory for new files, a 'work' directory for
-	// metadata/atomicity, and a 'merged' directory to serve as the mount point.
-	subDirs := []string{"upper", "merged", "work"}
-	for _, dir := range subDirs {
-		if _, err := os.Stat(filepath.Join(sandboxPath, dir)); os.IsNotExist(err) {
-			return false
+type ValidSandboxCode int8
+
+const (
+	VALID_SANDBOX ValidSandboxCode = iota
+	DIR_EXIST_INVALID_SANDBOX
+	INVALID_SANDBOX
+)
+
+func IsValidSandbox(sandboxPath string) ValidSandboxCode {
+
+	info, err := os.Stat(sandboxPath)
+	if os.IsNotExist(err) {
+		return INVALID_SANDBOX
+	}
+
+	if err != nil || !info.IsDir() {
+		return INVALID_SANDBOX
+	}
+
+	for _, dir := range []string{"upper", "work", "merged"} {
+		p := filepath.Join(sandboxPath, dir)
+
+		info, err := os.Stat(p)
+		if err != nil || !info.IsDir() {
+			return DIR_EXIST_INVALID_SANDBOX
 		}
 	}
 
-	// Check if the merged directory is an overlay filesystem
-	// -n: no headings, -o FSTYPE: only output fstype, -t overlay: filter by type
 	mergedPath := filepath.Join(sandboxPath, "merged")
-	cmd := exec.Command("findmnt", "-n", "-o", "FSTYPE", "-t", "overlay", mergedPath)
-	output, err := cmd.Output()
+
+	cmd := exec.Command(
+		"findmnt",
+		"-n",
+		"-o", "TARGET,FSTYPE",
+		mergedPath,
+	)
+
+	out, err := cmd.Output()
 	if err != nil {
-		return false
+		return DIR_EXIST_INVALID_SANDBOX
 	}
 
-	return strings.TrimSpace(string(output)) == "overlay"
+	if strings.TrimSpace(string(out)) != "overlay" {
+		return DIR_EXIST_INVALID_SANDBOX
+	}
+
+	return VALID_SANDBOX
 }
 
 // GetSandboxes scans the local 'sandboxes' root directory and returns a slice
@@ -50,7 +77,7 @@ func GetSandboxes() []Sandbox {
 	for _, entry := range entries {
 		if entry.IsDir() {
 			sandboxPath := filepath.Join("sandboxes", entry.Name())
-			if IsValidSandbox(sandboxPath) {
+			if IsValidSandbox(sandboxPath) == VALID_SANDBOX {
 				sandboxes = append(sandboxes, Sandbox{
 					Name: entry.Name(),
 					Path: sandboxPath,

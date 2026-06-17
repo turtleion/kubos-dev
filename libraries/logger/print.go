@@ -68,7 +68,7 @@ func ShellOutputPrint(Message string) {
 		if strings.Contains(cleanMessage, "[sudo] password for") {
 			color.New(color.FgYellow).Println("<< [WARNING!] Your sudo password will be echoed, please be careful when you type it! >>")
 		}
-		fmt.Printf("    %s  %s", cyan("│"), cleanMessage)
+		fmt.Printf("    %s  %s ", cyan("│"), cleanMessage)
 
 	} else {
 		fmt.Printf("    %s  %s\n", cyan("│"), cleanMessage)

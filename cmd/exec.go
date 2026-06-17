@@ -8,6 +8,7 @@ import (
 	"kubos/libraries/logger"
 	"os"
 	"os/exec"
+	"path"
 	"path/filepath"
 	"regexp"
 	"slices"
@@ -37,13 +38,14 @@ func cleanUp() essentials.ExecutionResult {
 		if entry.IsDir() && !validMap[entry.Name()] {
 			sandboxDir := filepath.Join("sandboxes", entry.Name())
 			if err := os.RemoveAll(sandboxDir); err != nil {
+				fmt.Println(err)
 				// 1. Detect if it is explicitly a permission-denied issue
 				if errors.Is(err, os.ErrPermission) {
 					logger.LoggedPrint(essentials.EXECUTION_TASK_FAIL, "Failed to delete: Permission denied. Trying to run sudo mode instead..", true)
-					res := RunWithPTY(exec.Command("sudo", "rm", "-rf", sandboxDir), ptyPrintAndDone)
-					if res.Code != essentials.EXECUTION_TASK_SUCCESS {
+					res := RunWithTTY(exec.Command("sudo", "rm", "-rf", sandboxDir), "run")
+					if res.ExecutionResult.Code != essentials.EXECUTION_TASK_SUCCESS {
 						logger.LoggedPrint(essentials.EXECUTION_TASK_FAIL, "Failed to delete the sandbox directory.", true)
-						return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Context: "Trying to delete the sandbox directory but couldn't.", Message: fmt.Sprintf("Deleting sandbox directory failed with error: %v", res.Message)}
+						return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Context: "Trying to delete the sandbox directory but couldn't.", Message: fmt.Sprintf("Deleting sandbox directory failed with error: %v", res.ExecutionResult.Message)}
 					}
 				}
 			}
@@ -63,24 +65,25 @@ func DeBusyPath(path string, verbose bool) essentials.ExecutionResult {
 		logger.VerbosedPrint("Running command: sudo fuser " + path)
 	}
 	cmd := exec.Command("sudo", "fuser", path)
-	var buf strings.Builder
-	_ = RunWithPTY(cmd, func(line string, w io.Writer) bool {
-		logger.ShellOutputPrint(line)
-		buf.WriteString(line)
-		return true
-	})
+	output := RunWithTTY(cmd, "output").Output
+	// var buf strings.Builder
+	// _ = RunWithPTY(cmd, func(line string, w io.Writer) bool {
+	// 	logger.ShellOutputPrint(line)
+	// 	buf.WriteString(line)
+	// 	return true
+	// })
 	// if res.Code != essentials.EXECUTION_TASK_SUCCESS {
 	// 	logger.LoggedPrint(essentials.EXECUTION_TASK_FAIL, fmt.Sprintf("Failed to run and get fuser output. The app won't stop, it's just the debusy app won't do anything. Error: %v", res.Message), true)
 	// }
-	if err := cmd.Wait(); err != nil {
-		// Jangan langsung anggap gagal, karena exit status 1 di fuser artinya "tidak ada PID yang ditemukan"
-		// Kita biarkan regex di bawah yang memastikan apakah ada PID atau tidak
-	}
+	// if err := cmd.Wait(); err != nil {
+	// 	// Jangan langsung anggap gagal, karena exit status 1 di fuser artinya "tidak ada PID yang ditemukan"
+	// 	// Kita biarkan regex di bawah yang memastikan apakah ada PID atau tidak
+	// }
 	// fuser output is typically "path: PID1[suffix] PID2[suffix] ..."
 	// We use a regex to extract only the numeric PIDs.
 	re := regexp.MustCompile(`\d+`)
-	output := buf.String()
-	pids := re.FindAllString(output, -1)
+	// output := buf.String()
+	pids := re.FindAllString(string(output), -1)
 
 	if len(pids) == 0 {
 		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_COMPLETED, Message: ""}
@@ -91,8 +94,8 @@ func DeBusyPath(path string, verbose bool) essentials.ExecutionResult {
 			logger.VerbosedPrint("Running command: sudo kill -9 " + pid)
 		}
 		logger.LoggedPrint(essentials.LOG_WARNING, fmt.Sprintf("Killing process %s keeping %s busy", pid, path), true)
-		cmd2 := exec.Command("sudo", "kill", "-9", pid)
-		_ = RunWithPTY(cmd2, ptyPrintAndDone)
+		// cmd2 := exec.Command("sudo", "kill", "-9", pid)
+		_ = RunWithTTY(exec.Command("sudo", "kill", "-9", pid), "run")
 	}
 	// Give the kernel a small window to release the file handles
 	time.Sleep(200 * time.Millisecond)
@@ -247,7 +250,7 @@ func Spawn(container string, command string, verbose bool) essentials.ExecutionR
 
 	if parsedPacmanResult.Action == "install" {
 		err := RunWithPTY(cmd, func(line string, w io.Writer) bool {
-			cleanLine := strings.TrimSpace(essentials.ClearColor(essentials.CleanTerminalEscapeCodes(line)))
+			cleanLine := essentials.ClearColor(essentials.CleanTerminalEscapeCodes(line))
 			if cleanLine == "" {
 				return true
 			}
@@ -308,6 +311,7 @@ func SpawnPacman(args []string, pkgName string, verbose bool) essentials.Executi
 	logger.LoggedPrint(essentials.LOG_INFO, "Setting up closed environment (sandbox)..", true)
 	var ans string
 	res := Setup(pkgName, verbose)
+
 	if res.Code != essentials.EXECUTION_TASK_SUCCESS { // Ensure sandbox is set up before spawning pacman
 		if res.Message == "sandbox exists" {
 			for {
@@ -323,6 +327,8 @@ func SpawnPacman(args []string, pkgName string, verbose bool) essentials.Executi
 					continue
 				}
 			}
+		} else {
+			return res
 		}
 	}
 	if ans == "n" || ans == "no" {
@@ -338,17 +344,22 @@ func SpawnPassthroughPacman(args []string, verbose bool) essentials.ExecutionRes
 		logger.VerbosedPrint("Running command: sudo " + strings.Join(args, " "))
 	}
 	cmd := exec.Command("sudo", args...)
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-
-	err := cmd.Run()
-	var msg string
-	if err != nil {
-		msg = err.Error()
+	res := RunWithPTY(cmd, ptyPrintAndDone)
+	if res.Code != essentials.EXECUTION_TASK_SUCCESS {
+		logger.LoggedPrint(essentials.LOG_ERROR, fmt.Sprintf("Error happened during running pacman. Error: %v", res.Message), true)
+		return res
 	}
+	// cmd.Stdin = os.Stdin
+	// cmd.Stdout = os.Stdout
+	// cmd.Stderr = os.Stderr
 
-	return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_SUCCESS, Message: msg}
+	// err := cmd.Run()
+	// var msg string
+	// if err != nil {
+	// 	msg = err.Error()
+	// }
+
+	return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_SUCCESS, Message: ""}
 }
 
 func SpawnYAY(args []string, verbose bool) essentials.ExecutionResult {
@@ -357,25 +368,35 @@ func SpawnYAY(args []string, verbose bool) essentials.ExecutionResult {
 		logger.VerbosedPrint("Running command: yay " + strings.Join(args, " "))
 	}
 	cmd := exec.Command("yay", args...)
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-
-	err := cmd.Run()
-	var msg string
-	if err != nil {
-		msg = err.Error()
+	res := RunWithPTY(cmd, ptyPrintAndDone)
+	if res.Code != essentials.EXECUTION_TASK_SUCCESS {
+		logger.LoggedPrint(essentials.LOG_ERROR, fmt.Sprintf("Error happened during running pacman. Error: %v", res.Message), true)
+		return res
 	}
+	// cmd.Stdin = os.Stdin
+	// cmd.Stdout = os.Stdout
+	// cmd.Stderr = os.Stderr
 
-	return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_SUCCESS, Message: msg}
+	// err := cmd.Run()
+	// var msg string
+	// if err != nil {
+	// 	msg = err.Error()
+	// }
+
+	return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_SUCCESS, Message: ""}
 }
 
 func Setup(givenName string, verbose bool) essentials.ExecutionResult {
 	logger.LoggedContextedPrint(essentials.LOG_INFO, "SANDBOX", fmt.Sprintf("Setting up sandbox %s...", givenName), true)
+	// fmt.Println(essentials.IsValidSandbox(path.Join("sandboxes", givenName)), essentials.DIR_EXIST_INVALID_SANDBOX, essentials.IsValidSandbox(path.Join("sandboxes", givenName)) == essentials.DIR_EXIST_INVALID_SANDBOX)
 	if essentials.IsSandboxExists(givenName) {
 		logger.ColoredPrint(color.FgYellow, "Sandbox already exists: "+givenName)
 		logger.Print(essentials.LOG_WARNING, "Sandbox already exists: "+givenName, true, true)
 		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Context: "Trying to set up sandbox but sandbox already exist.", Message: "sandbox exists"}
+
+	} else if essentials.IsValidSandbox(path.Join("sandboxes/", givenName)) == essentials.DIR_EXIST_INVALID_SANDBOX {
+		logger.LoggedPrint(essentials.LOG_ERROR, "Sandbox directory exists, but it is invalid sandbox. Try running 'kubos sandbox-cleanup "+givenName+"'.", true)
+		return essentials.ExecutionResult{Code: essentials.EXECUTION_INVALID_SANDBOX, Context: "Trying to run a sandbox, but it is an invalid sandbox.", Message: "Sandbox is invalid"}
 
 	}
 	// Check if the needed directory exist
@@ -413,14 +434,14 @@ func Setup(givenName string, verbose bool) essentials.ExecutionResult {
 		logger.VerbosedPrint("Running command: " + command)
 
 		parts := strings.Fields(command)
-		res := RunWithPTY(exec.Command(parts[0], parts[1:]...), ptyPrintAndDone)
+		res := RunWithTTY(exec.Command(parts[0], parts[1:]...), "run")
 
 		// Check if the command succeeded
-		if res.Code != essentials.EXECUTION_TASK_SUCCESS && res.Message != "" {
+		if res.ExecutionResult.Code != essentials.EXECUTION_TASK_SUCCESS && res.ExecutionResult.Message != "" {
 			// Command failed (returned non-zero exit code)
-			logger.ColoredPrint(color.FgRed, fmt.Sprintf("Failed with output: %v ", res.Message))
+			logger.ColoredPrint(color.FgRed, fmt.Sprintf("Failed with output: %v ", res.ExecutionResult.Message))
 
-			logger.Print(essentials.LOG_ERROR, fmt.Sprintf("Failed with output: %v", res.Message), true, true)
+			logger.Print(essentials.LOG_ERROR, fmt.Sprintf("Failed with output: %v", res.ExecutionResult.Message), true, true)
 			return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Context: "Trying to mount overlayfs but failed.", Message: "failed with error"}
 
 		}
@@ -440,47 +461,51 @@ func Setup(givenName string, verbose bool) essentials.ExecutionResult {
 // Teardown cleans up the sandbox by unmounting the overlay and removing the directories.
 func Teardown(givenName string, verbose bool) essentials.ExecutionResult {
 	logger.LoggedContextedPrint(essentials.LOG_INFO, "CLEANUP", fmt.Sprintf("Start tearing down sandbox %s...", givenName), true)
+	var isExistDir bool
 	if !essentials.IsSandboxExists(givenName) {
-		logger.ColoredPrint(color.FgRed, "Sandbox does not exist: "+givenName)
+		if essentials.IsValidSandbox(path.Join("sandboxes", givenName)) == essentials.DIR_EXIST_INVALID_SANDBOX {
+			isExistDir = true
+		} else {
+			logger.ColoredPrint(color.FgRed, "Sandbox does not exist: "+givenName)
 
-		logger.Print(essentials.LOG_WARNING, "Sandbox does not exist: "+givenName, true, true)
-		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Context: "Trying to teardown a sandbox that doesn't exist.", Message: fmt.Sprintf("sandbox %s does not exist", givenName)}
+			logger.Print(essentials.LOG_WARNING, "Sandbox does not exist: "+givenName, true, true)
+			return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Context: "Trying to teardown a sandbox that doesn't exist.", Message: fmt.Sprintf("sandbox %s does not exist", givenName)}
+
+		}
 	}
 	sandboxPath := filepath.Join("sandboxes", givenName)
 	mergedPath := filepath.Join(sandboxPath, "merged")
 
 	// 1. Unmount the overlay filesystem
 	// We use sudo here because the mount was likely created with sudo/root privileges.
-	logger.LoggedPrint(essentials.LOG_INFO, "Unmounting overlay for "+mergedPath, true)
-	DeBusyPath(mergedPath, verbose)
-	logger.VerbosedPrint("Runnign this command: sudo umount " + mergedPath)
+	if !isExistDir {
 
-	umountCmd := exec.Command("sudo", "umount", mergedPath)
-	err := RunWithPTY(umountCmd, func(line string, w io.Writer) bool {
-		logger.ShellOutputPrint(line)
-		return true
-	})
-	if err.Code != essentials.EXECUTION_TASK_SUCCESS {
-		// If it's already unmounted, we might want to continue anyway to clean up files
-		logger.ColoredPrint(color.FgRed, fmt.Sprintf("Unmount failed (it might already be unmounted): %s", err.Message))
+		logger.LoggedPrint(essentials.LOG_INFO, "Unmounting overlay for "+mergedPath, true)
+		DeBusyPath(mergedPath, verbose)
+		logger.VerbosedPrint("Running this command: sudo umount " + mergedPath)
 
-		logger.Print(essentials.LOG_WARNING, fmt.Sprintf("Unmount failed (it might already be unmounted): %s", err.Message), true, true)
-	} else {
-		logger.ColoredPrint(color.FgGreen, "Successfully unmounted overlay for "+givenName)
+		umountCmd := exec.Command("sudo", "umount", mergedPath)
+		err := RunWithTTY(umountCmd, "run")
+		if err.ExecutionResult.Code != essentials.EXECUTION_TASK_SUCCESS {
+			// If it's already unmounted, we might want to continue anyway to clean up files
+			logger.ColoredPrint(color.FgRed, fmt.Sprintf("Unmount failed (it might already be unmounted): %s", err.ExecutionResult.Message))
 
-		logger.Print(essentials.LOG_SUCCESS, "Successfully unmounted overlay for "+givenName, true, true)
+			logger.Print(essentials.LOG_WARNING, fmt.Sprintf("Unmount failed (it might already be unmounted): %s", err.ExecutionResult.Message), true, true)
+		} else {
+			logger.ColoredPrint(color.FgGreen, "Successfully unmounted overlay for "+givenName)
+
+			logger.Print(essentials.LOG_SUCCESS, "Successfully unmounted overlay for "+givenName, true, true)
+		}
+
 	}
-
 	// 2. Remove the sandbox directory structure
 
 	logger.LoggedPrint(essentials.LOG_INFO, "Removing sandbox directories: "+sandboxPath, true)
 
-	err2 := os.RemoveAll(sandboxPath)
-	if err2 != nil {
-		logger.ColoredPrint(color.FgRed, "Failed to remove sandbox directory: "+err2.Error())
-
-		logger.Print(essentials.LOG_ERROR, "Failed to remove sandbox directory: "+err2.Error(), true, true)
-		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Context: "Trying to remove sandbox directory but failed.", Message: "Failed to remove sandbox directory: " + err2.Error()}
+	res := removeSandboxDir(sandboxPath)
+	if res.Code != essentials.EXECUTION_TASK_SUCCESS {
+		logger.LoggedPrint(essentials.LOG_ERROR, "Failed to remove sandbox directory.", true)
+		return res
 	}
 	logger.ColoredPrint(color.FgGreen, "Cleaned up sandbox directories for "+givenName)
 
@@ -529,10 +554,89 @@ loop:
 			return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Context: "Trying to read PTY but failed.", Message: fmt.Sprintf("failed reading PTY: %v", err)}
 		}
 	}
-	return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_COMPLETED, Message: ""}
+	return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_SUCCESS, Message: ""}
+}
+
+// RunWithTTY menjalankan command di TTY langsung.
+// Mode:
+//   - "run"    → jalankan dan tunggu selesai (seperti cmd.Run())
+//   - "output" → jalankan dan kembalikan output sebagai string (seperti cmd.Output())
+//   - "start"  → jalankan tanpa tunggu (seperti cmd.Start())
+
+type TTYResult struct {
+	essentials.ExecutionResult
+	Output string // hanya terisi kalau mode "output"
+}
+
+func RunWithTTY(cmd *exec.Cmd, mode string) TTYResult {
+	cmd.Stdin = os.Stdin
+
+	var outBuf strings.Builder
+
+	switch mode {
+	case "output":
+		// Tidak set cmd.Stdout — kita capture sendiri
+		cmd.Stdout = &outBuf
+		cmd.Stderr = os.Stderr
+	default: // "run", "start"
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+	}
+
+	var runErr error
+	switch mode {
+	case "start":
+		runErr = cmd.Start()
+	default: // "run", "output"
+		runErr = cmd.Run()
+	}
+
+	if runErr != nil {
+		var exitErr *exec.ExitError
+		if errors.As(runErr, &exitErr) {
+			return TTYResult{
+				ExecutionResult: essentials.ExecutionResult{
+					Code:    essentials.EXECUTION_TASK_FAIL,
+					Context: "Command exited with non-zero status.",
+					Message: fmt.Sprintf("exit code %d", exitErr.ExitCode()),
+				},
+			}
+		}
+		return TTYResult{
+			ExecutionResult: essentials.ExecutionResult{
+				Code:    essentials.EXECUTION_TASK_FAIL,
+				Context: "Command failed to run.",
+				Message: runErr.Error(),
+			},
+		}
+	}
+
+	return TTYResult{
+		ExecutionResult: essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_SUCCESS},
+		Output:          outBuf.String(),
+	}
 }
 
 func ptyPrintAndDone(line string, w io.Writer) bool {
 	logger.ShellOutputPrint(line)
 	return true
+}
+
+func removeSandboxDir(sandboxPath string) essentials.ExecutionResult {
+	err := os.RemoveAll(sandboxPath)
+	if err == nil {
+		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_SUCCESS}
+	}
+
+	if errors.Is(err, os.ErrPermission) {
+		res := RunWithTTY(exec.Command("sudo", "rm", "-rf", sandboxPath), "run")
+		if res.ExecutionResult.Code == essentials.EXECUTION_TASK_SUCCESS {
+			return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_SUCCESS}
+		}
+	}
+
+	return essentials.ExecutionResult{
+		Code:    essentials.EXECUTION_TASK_FAIL,
+		Message: err.Error(),
+	}
 }

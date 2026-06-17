@@ -60,15 +60,15 @@ func cleanup(pkgName string, verbose bool) essentials.ExecutionResult {
 
 		logger.Print(essentials.LOG_SUCCESS, "Teardown succeeded", true, true)
 		logger.LoggedPrint(essentials.LOG_INFO, "Cleaning up sandbox directory", true)
-		err2 := cleanUp()
-		if err2.Code != essentials.EXECUTION_TASK_SUCCESS {
-			logger.ColoredPrint(color.FgRed, "Clean up failed")
-			logger.Print(essentials.LOG_ERROR, "Clean up failed", true, true)
-		} else {
-			logger.ColoredPrint(color.FgGreen, "Clean up succeeded")
+		// err2 := cleanUp()
+		// if err2.Code != essentials.EXECUTION_TASK_SUCCESS {
+		// 	logger.ColoredPrint(color.FgRed, "Clean up failed")
+		// 	logger.Print(essentials.LOG_ERROR, "Clean up failed", true, true)
+		// } else {
+		// 	logger.ColoredPrint(color.FgGreen, "Clean up succeeded")
 
-			logger.Print(essentials.LOG_SUCCESS, "Clean up succeeded", true, true)
-		}
+		// 	logger.Print(essentials.LOG_SUCCESS, "Clean up succeeded", true, true)
+		// }
 	}
 	return err
 }

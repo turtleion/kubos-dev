@@ -1,0 +1,33 @@
+LOG FILE CREATED ON 2026-06-18 00:24:24
+=============================
+-------------------------------------------
+LOGGING START ON 2026-06-18 00:24:24
+[i] 2026-06-18 00:24:24 ==> [KUBOS] Cleaning up...
+
+[i] 2026-06-18 00:24:24 ==> [CLEANUP] Start tearing down sandbox mesa-amber...
+
+[i] 2026-06-18 00:24:24     :: Removing sandbox directories: sandboxes/mesa-amber
+
+[X] 2026-06-18 00:24:24 Failed to remove sandbox directory: unlinkat sandboxes/mesa-amber/upper/var/log/pacman.log: permission denied
+[X] 2026-06-18 00:24:24 Teardown failed
+-------------------------------------------
+LOGGING START ON 2026-06-18 00:30:55
+[i] 2026-06-18 00:30:55 ==> [KUBOS] Cleaning up...
+
+[i] 2026-06-18 00:30:55 ==> [CLEANUP] Start tearing down sandbox mesa-amber...
+
+[i] 2026-06-18 00:30:55     :: Removing sandbox directories: sandboxes/mesa-amber
+
+[V] 2026-06-18 00:30:59 Cleaned up sandbox directories for mesa-amber
+[V] 2026-06-18 00:30:59 Teardown succeeded
+[i] 2026-06-18 00:30:59     :: Cleaning up sandbox directory
+
+[V] 2026-06-18 00:30:59 Clean up succeeded
+-------------------------------------------
+LOGGING START ON 2026-06-18 00:33:58
+[i] 2026-06-18 00:33:58 ==> [KUBOS] Cleaning up...
+
+[i] 2026-06-18 00:33:58 ==> [CLEANUP] Start tearing down sandbox mesa-amber...
+
+[!] 2026-06-18 00:33:58 Sandbox does not exist: mesa-amber
+[X] 2026-06-18 00:33:58 Teardown failed
