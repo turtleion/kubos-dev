@@ -38,15 +38,18 @@ func cleanUp() essentials.ExecutionResult {
 		if entry.IsDir() && !validMap[entry.Name()] {
 			sandboxDir := filepath.Join("sandboxes", entry.Name())
 			if err := os.RemoveAll(sandboxDir); err != nil {
-				fmt.Println(err)
 				// 1. Detect if it is explicitly a permission-denied issue
 				if errors.Is(err, os.ErrPermission) {
-					logger.LoggedPrint(essentials.EXECUTION_TASK_FAIL, "Failed to delete: Permission denied. Trying to run sudo mode instead..", true)
+					logger.LoggedPrint(essentials.EXECUTION_TASK_FAIL, "Failed to clean sandbox directories: Permission denied. Trying to run sudo mode instead..", true)
 					res := RunWithTTY(exec.Command("sudo", "rm", "-rf", sandboxDir), "run")
 					if res.ExecutionResult.Code != essentials.EXECUTION_TASK_SUCCESS {
 						logger.LoggedPrint(essentials.EXECUTION_TASK_FAIL, "Failed to delete the sandbox directory.", true)
-						return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Context: "Trying to delete the sandbox directory but couldn't.", Message: fmt.Sprintf("Deleting sandbox directory failed with error: %v", res.ExecutionResult.Message)}
+						return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Context: "Trying to delete the sandbox directories but couldn't.", Message: fmt.Sprintf("Deleting sandbox directory failed with error: %v", res.ExecutionResult.Message)}
 					}
+				} else {
+					logger.LoggedPrint(essentials.EXECUTION_TASK_FAIL, "Failed to clean sandbox directories.", true)
+					return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Context: "Trying to delete the sandbox directories but couldn't.", Message: fmt.Sprintf("Deleting sandbox directories failed with error: %v", err.Error())}
+
 				}
 			}
 		}
@@ -81,12 +84,27 @@ func DeBusyPath(path string, verbose bool) essentials.ExecutionResult {
 	// }
 	// fuser output is typically "path: PID1[suffix] PID2[suffix] ..."
 	// We use a regex to extract only the numeric PIDs.
-	re := regexp.MustCompile(`\d+`)
-	// output := buf.String()
-	pids := re.FindAllString(string(output), -1)
+	// fuser output typically separates PIDs by whitespace (e.g., "  1234 5678m ")
+	var pids []string
+	for _, token := range strings.Fields(output) {
+		cleaned := token
+		if len(token) > 0 {
+			// fuser sometimes appends an access type character to the end of a PID
+			// (e.g., 'c' for current directory, 'm' for mapped file).
+			lastChar := token[len(token)-1]
+			if lastChar < '0' || lastChar > '9' {
+				cleaned = token[:len(token)-1]
+			}
+		}
+
+		// Ensure the token is genuinely a standalone numeric PID
+		if _, err := strconv.Atoi(cleaned); err == nil && cleaned != "" {
+			pids = append(pids, cleaned)
+		}
+	}
 
 	if len(pids) == 0 {
-		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_COMPLETED, Message: ""}
+		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_SUCCESS, Message: ""}
 	}
 
 	for _, pid := range pids {
@@ -399,62 +417,68 @@ func Setup(givenName string, verbose bool) essentials.ExecutionResult {
 		return essentials.ExecutionResult{Code: essentials.EXECUTION_INVALID_SANDBOX, Context: "Trying to run a sandbox, but it is an invalid sandbox.", Message: "Sandbox is invalid"}
 
 	}
-	// Check if the needed directory exist
-	logger.LoggedPrint(essentials.LOG_INFO, "Trying to create a directory on path: sandboxes/"+givenName, true)
-	if _, err := os.Stat(filepath.Join("sandboxes", givenName)); os.IsNotExist(err) {
-		err := os.MkdirAll(filepath.Join("sandboxes", givenName), 0755)
-		if err != nil {
-			logger.ColoredPrint(color.FgRed, "Error creating sandbox directory: "+err.Error())
+	// Check if the needed directory exists safely
+	logger.LoggedPrint(essentials.LOG_INFO, "Checking sandbox path status: sandboxes/"+givenName, true)
 
-			logger.Print(essentials.LOG_ERROR, err.Error(), true, true)
-			return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Context: "Trying to create a directory but failed.", Message: err.Error()}
+	sandboxPath := filepath.Join("sandboxes", givenName)
+	info, err := os.Stat(sandboxPath)
 
-		}
-		logger.LoggedPrint(essentials.LOG_SUCCESS, "Found desired directory on path: sandboxes/"+givenName, true)
-
-		// Now create the subdirectories for the overlay filesystem
-		logger.LoggedPrint(essentials.LOG_INFO, "Trying to create directories on path: sandboxes/"+givenName+"/upper, sandboxes/"+givenName+"/merged, sandboxes/"+givenName+"/work", true)
-
-		subDirs := []string{"upper", "merged", "work"}
-		for _, dir := range subDirs {
-			fullPath := filepath.Join("sandboxes", givenName, dir)
-			err := os.MkdirAll(fullPath, 0755)
-			if err != nil {
-				logger.ColoredPrint(color.FgRed, fmt.Sprintf("Error creating subdirectories %s: %v", fullPath, err))
-
-				logger.Print(essentials.LOG_ERROR, fmt.Sprintf("Error creating subdirectories %s: %v", fullPath, err), false, true)
-				return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Context: "Trying to create subdirectories but failed.", Message: err.Error()}
+	if err != nil {
+		if os.IsNotExist(err) {
+			// Scenario A: It genuinely doesn't exist. Create it.
+			logger.LoggedPrint(essentials.LOG_INFO, ">> Directory does not exist. Creating path: "+sandboxPath, true)
+			if err := os.MkdirAll(sandboxPath, 0755); err != nil {
+				logger.ColoredPrint(color.FgRed, "Error creating sandbox directory: "+err.Error())
+				logger.Print(essentials.LOG_ERROR, err.Error(), true, true)
+				return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Context: "Trying to create a directory but failed.", Message: err.Error()}
 			}
+
+			logger.LoggedPrint(essentials.LOG_SUCCESS, "Created directory on path: "+sandboxPath, true)
+
+			// Create the subdirectories for the overlay filesystem
+			logger.LoggedPrint(essentials.LOG_INFO, fmt.Sprintf("Trying to create subdirectories in: %s", sandboxPath), true)
+			subDirs := []string{"upper", "merged", "work"}
+			for _, dir := range subDirs {
+				fullPath := filepath.Join(sandboxPath, dir)
+				if err := os.MkdirAll(fullPath, 0755); err != nil {
+					logger.ColoredPrint(color.FgRed, fmt.Sprintf("Error creating subdirectories %s: %v", fullPath, err))
+					logger.Print(essentials.LOG_ERROR, fmt.Sprintf("Error creating subdirectories %s: %v", fullPath, err), false, true)
+					return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Context: "Trying to create subdirectories but failed.", Message: err.Error()}
+				}
+			}
+
+			// Mount overlay filesystem
+			command := "sudo mount -t overlay overlay -o lowerdir=/,upperdir=" + filepath.Join(sandboxPath, "upper") + ",workdir=" + filepath.Join(sandboxPath, "work") + " " + filepath.Join(sandboxPath, "merged")
+			logger.LoggedPrint(essentials.LOG_INFO, "Mounting overlay filesystem on path: "+filepath.Join(sandboxPath, "merged"), true)
+			logger.VerbosedPrint("Running command: " + command)
+
+			parts := strings.Fields(command)
+			res := RunWithTTY(exec.Command(parts[0], parts[1:]...), "run")
+
+			if res.ExecutionResult.Code != essentials.EXECUTION_TASK_SUCCESS && res.ExecutionResult.Message != "" {
+				logger.ColoredPrint(color.FgRed, fmt.Sprintf("Failed with output: %v ", res.ExecutionResult.Message))
+				logger.Print(essentials.LOG_ERROR, fmt.Sprintf("Failed with output: %v", res.ExecutionResult.Message), true, true)
+				return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Context: "Trying to mount overlayfs but failed.", Message: "failed with error"}
+			}
+
+			logger.ColoredPrint(color.FgGreen, "Successfully mounted overlay filesystem on path: "+filepath.Join(sandboxPath, "merged"))
+			logger.Print(essentials.LOG_SUCCESS, "Successfully mounted overlay filesystem on path: "+filepath.Join(sandboxPath, "merged"), true, true)
+		} else {
+			// Scenario B: os.Stat failed due to another error (e.g., Permission Denied)
+			logger.LoggedPrint(essentials.LOG_ERROR, "Failed to inspect sandbox path: "+err.Error(), true)
+			return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Context: "Error checking if sandbox path exists.", Message: err.Error()}
 		}
-		command := "sudo mount -t overlay overlay -o lowerdir=/,upperdir=" + filepath.Join("sandboxes", givenName, "upper") + ",workdir=" + filepath.Join("sandboxes", givenName, "work") + " " + filepath.Join("sandboxes", givenName, "merged")
-
-		logger.LoggedPrint(essentials.LOG_SUCCESS, "Successfully created directories on path: sandboxes/"+givenName+"/upper, sandboxes/"+givenName+"/merged, sandboxes/"+givenName+"/work", true)
-
-		logger.LoggedPrint(essentials.LOG_INFO, "Mounting overlay filesystem on path: sandboxes/"+givenName+"/merged", true)
-		logger.VerbosedPrint("Running command: " + command)
-
-		parts := strings.Fields(command)
-		res := RunWithTTY(exec.Command(parts[0], parts[1:]...), "run")
-
-		// Check if the command succeeded
-		if res.ExecutionResult.Code != essentials.EXECUTION_TASK_SUCCESS && res.ExecutionResult.Message != "" {
-			// Command failed (returned non-zero exit code)
-			logger.ColoredPrint(color.FgRed, fmt.Sprintf("Failed with output: %v ", res.ExecutionResult.Message))
-
-			logger.Print(essentials.LOG_ERROR, fmt.Sprintf("Failed with output: %v", res.ExecutionResult.Message), true, true)
-			return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Context: "Trying to mount overlayfs but failed.", Message: "failed with error"}
-
-		}
-
-		logger.ColoredPrint(color.FgGreen, "Successfully mounted overlay filesystem on path: sandboxes/"+givenName+"/merged")
-
-		logger.Print(essentials.LOG_SUCCESS, "Successfully mounted overlay filesystem on path: sandboxes/"+givenName+"/merged", true, true)
-
+	} else if !info.IsDir() {
+		// Scenario C: The path exists, but it's a file instead of a folder!
+		logger.LoggedPrint(essentials.LOG_ERROR, "Sandbox path exists but is a regular file, not a directory: "+sandboxPath, true)
+		return essentials.ExecutionResult{Code: essentials.EXECUTION_INVALID_SANDBOX, Context: "Sandbox path collision with an existing file.", Message: "path exists but is not a directory"}
 	}
+
+	// If the directory already exists securely or was successfully set up, return success path
+	return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_SUCCESS, Message: sandboxPath}
 	// If the directory already exists or was successfully created,
 	// we should return the path to the sandbox.
 	// Assuming the function should return the path to the base sandbox directory.
-	return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_SUCCESS, Message: filepath.Join("sandboxes", givenName)}
 
 }
 
@@ -501,10 +525,9 @@ func Teardown(givenName string, verbose bool) essentials.ExecutionResult {
 	// 2. Remove the sandbox directory structure
 
 	logger.LoggedPrint(essentials.LOG_INFO, "Removing sandbox directories: "+sandboxPath, true)
-
 	res := removeSandboxDir(sandboxPath)
 	if res.Code != essentials.EXECUTION_TASK_SUCCESS {
-		logger.LoggedPrint(essentials.LOG_ERROR, "Failed to remove sandbox directory.", true)
+		logger.LoggedPrint(essentials.LOG_ERROR, fmt.Sprintf("Failed to remove sandbox directory, Error: %v", res.Message), true)
 		return res
 	}
 	logger.ColoredPrint(color.FgGreen, "Cleaned up sandbox directories for "+givenName)
@@ -554,6 +577,23 @@ loop:
 			return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Context: "Trying to read PTY but failed.", Message: fmt.Sprintf("failed reading PTY: %v", err)}
 		}
 	}
+
+	// NEW CODE: Wait for the process to exit and capture its exit code
+	// if err := cmd.Wait(); err != nil {
+	// 	var exitErr *exec.ExitError
+	// 	if errors.As(err, &exitErr) {
+	// 		return essentials.ExecutionResult{
+	// 			Code:    essentials.EXECUTION_TASK_FAIL,
+	// 			Context: "Command exited with non-zero status.",
+	// 			Message: fmt.Sprintf("Command failed with exit code %d", exitErr.ExitCode()),
+	// 		}
+	// 	}
+	// 	return essentials.ExecutionResult{
+	// 		Code:    essentials.EXECUTION_TASK_FAIL,
+	// 		Context: "Command wait failed.",
+	// 		Message: err.Error(),
+	// 	}
+	// }
 	return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_SUCCESS, Message: ""}
 }
 
@@ -632,6 +672,8 @@ func removeSandboxDir(sandboxPath string) essentials.ExecutionResult {
 		res := RunWithTTY(exec.Command("sudo", "rm", "-rf", sandboxPath), "run")
 		if res.ExecutionResult.Code == essentials.EXECUTION_TASK_SUCCESS {
 			return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_SUCCESS}
+		} else {
+			return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Message: fmt.Sprintf("Failed to remove the sandbox directory using the legacy mode. Error: %v", err.Error()), Context: "Trying to remove the sandbox directory using legacy mode but still failed."}
 		}
 	}
 

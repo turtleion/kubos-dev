@@ -49,7 +49,7 @@ func IsValidSandbox(sandboxPath string) ValidSandboxCode {
 	cmd := exec.Command(
 		"findmnt",
 		"-n",
-		"-o", "TARGET,FSTYPE",
+		"-o", "FSTYPE",
 		mergedPath,
 	)
 
