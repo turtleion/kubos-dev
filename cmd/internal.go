@@ -5,6 +5,7 @@ import (
 	"kubos/libraries/essentials"
 	"kubos/libraries/logger"
 	"maps"
+	"path"
 	"slices"
 
 	"github.com/fatih/color"
@@ -17,17 +18,30 @@ func installpkg(pkgName string, verbose bool) essentials.ExecutionResult {
 		logger.LoggedPrint(essentials.LOG_INFO, fmt.Sprintf("Found %s in pacman repos. Installing...", pkgName), true)
 		res := SpawnPacman([]string{"-S", pkgName}, pkgName, verbose)
 		if res.Code != essentials.EXECUTION_TASK_SUCCESS {
+			logger.LoggedPrint(essentials.LOG_ERROR, "Failed to install the package, rolling back and cleaning the sandbox...", true)
+			logger.LoggedContextedPrint(essentials.LOG_INFO, "CLEANUP", "Cleaning up sandbox directory...", true)
+			res2 := RemoveSandboxDir(path.Join("sandboxes", pkgName))
+			if res2.Code != essentials.EXECUTION_TASK_SUCCESS {
+				logger.LoggedPrint(essentials.LOG_ERROR, "Failed to clean up sandbox directory", true)
+			}
 			return res
 		}
 		var conflicting []string
+		var conflictingMap map[string][]string
 		switch msg := res.Message.(type) {
 		case essentials.ConflictingPackages:
 			conflicting = slices.Collect(maps.Keys(msg))
+			conflictingMap = res.Message.(essentials.ConflictingPackages)
+		case string:
 			logger.LoggedPrint(essentials.LOG_ERROR, fmt.Sprintf("Conflicting packages detected: %v", conflicting), true)
 			logger.Print(essentials.LOG_ERROR, fmt.Sprintf("Conflicting packages detected: %v", conflicting), true, true)
 		}
 
 		logger.LoggedPrint(essentials.LOG_INFO, fmt.Sprintf("Running test for package %s", pkgName), true)
+		report := RunTestSuite(path.Join("sandboxes", pkgName, "merged"), pkgName, conflictingMap, conflicting, res)
+		_, ok := conflictingMap[pkgName]
+		fmt.Println("COnflictMap: ", conflictingMap, " | PkgName: ", pkgName, " | is conflictMap["+pkgName+"] okay? ", ok)
+		fmt.Println(report)
 	}
 
 	// 2. Fall back to AUR

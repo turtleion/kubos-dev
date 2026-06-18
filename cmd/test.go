@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"io/fs"
+	"kubos/libraries/essentials"
 	"os/exec"
 	"path/filepath"
 	"strings"
@@ -131,7 +132,7 @@ func testDBConflict(mergeDir, pkg string, conflictMap map[string][]string) TestR
 	r := TestResult{Name: "DB conflict check", Weight: 30}
 
 	// pkg target harus ADA
-	checkPkg := exec.Command("systemd-nspawn", "--directory", mergeDir,
+	checkPkg := exec.Command("sudo", "systemd-nspawn", "--directory", mergeDir,
 		"--", "pacman", "-Qi", pkg)
 	checkPkg.Stdout, checkPkg.Stderr = nil, nil
 	if checkPkg.Run() != nil {
@@ -143,7 +144,7 @@ func testDBConflict(mergeDir, pkg string, conflictMap map[string][]string) TestR
 	// Cek konflik — kalau pkg adalah mesa-amber, mesa tidak boleh ada
 	if conflict, ok := conflictMap[pkg]; ok {
 		rival, _ := conflict[0], conflict[1]
-		checkRival := exec.Command("systemd-nspawn", "--directory", mergeDir,
+		checkRival := exec.Command("sudo", "systemd-nspawn", "--directory", mergeDir,
 			"--", "pacman", "-Qi", rival)
 		checkRival.Stdout, checkRival.Stderr = nil, nil
 		if checkRival.Run() == nil {
@@ -171,7 +172,7 @@ func testNoRemnants(mergeDir, pkg string, conflictMap map[string][]string) TestR
 	}
 	rival := conflict[0]
 	var found string
-	cmd := exec.Command("systemd-nspawn", "--directory", mergeDir,
+	cmd := exec.Command("sudo", "systemd-nspawn", "--directory", mergeDir,
 		"--", "pacman", "-Qi", rival)
 	cmd.Stdout = nil
 	cmd.Stderr = nil
@@ -192,7 +193,7 @@ func testNoRemnants(mergeDir, pkg string, conflictMap map[string][]string) TestR
 	return r
 }
 
-func testFileDelta(mergeDir, pkg string, conflictMap map[string][]string) TestResult {
+func testFileDelta(mergeDir, pkg string, _ map[string][]string) TestResult {
 	r := TestResult{Name: "File count delta", Weight: 10}
 
 	// Hitung file di upperdir — OverlayFS hanya tulis file yang berubah ke sini
@@ -236,7 +237,7 @@ func testFileDelta(mergeDir, pkg string, conflictMap map[string][]string) TestRe
 func testLdconfig(mergeDir, _ string, conflictMap map[string][]string) TestResult {
 	r := TestResult{Name: "ldconfig clean", Weight: 20}
 	var stderr bytes.Buffer
-	cmd := exec.Command("systemd-nspawn", "--directory", mergeDir,
+	cmd := exec.Command("sudo", "systemd-nspawn", "--directory", mergeDir,
 		"--", "ldconfig")
 	cmd.Stderr = &stderr
 	if err := cmd.Run(); err != nil {
@@ -256,26 +257,51 @@ func testLdconfig(mergeDir, _ string, conflictMap map[string][]string) TestResul
 	return r
 }
 
-//
-//func testSmoke(mergeDir, pkg string, conflictMap map[string][]string) TestResult {
-//	r := TestResult{Name: "Smoke test", Weight: 15}
-//	cmds, ok := smokeCommands[pkg]
-//	if !ok {
-//		r.Status = StatusSkip
-//		r.Detail = "tidak ada smoke test untuk " + pkg
+//	func testSmoke(mergeDir, pkg string, conflictMap map[string][]string) TestResult {
+//		r := TestResult{Name: "Smoke test", Weight: 15}
+//		cmds, ok := smokeCommands[pkg]
+//		if !ok {
+//			r.Status = StatusSkip
+//			r.Detail = "tidak ada smoke test untuk " + pkg
+//			return r
+//		}
+//		args := append([]string{"--directory", mergeDir, "--"}, cmds...)
+//		cmd := exec.Command("systemd-nspawn", args...)
+//		var out bytes.Buffer
+//		cmd.Stdout, cmd.Stderr = &out, &out
+//		if err := cmd.Run(); err != nil {
+//			r.Status = StatusWarn // warn, bukan fail — smoke test bisa gagal karena no GPU
+//			r.Score = r.Weight / 2
+//			r.Detail = "smoke test exit non-zero (mungkin butuh display/GPU)"
+//			return r
+//		}
+//		r.Status = StatusPass
+//		r.Score = r.Weight
 //		return r
 //	}
-//	args := append([]string{"--directory", mergeDir, "--"}, cmds...)
-//	cmd := exec.Command("systemd-nspawn", args...)
-//	var out bytes.Buffer
-//	cmd.Stdout, cmd.Stderr = &out, &out
-//	if err := cmd.Run(); err != nil {
-//		r.Status = StatusWarn // warn, bukan fail — smoke test bisa gagal karena no GPU
-//		r.Score = r.Weight / 2
-//		r.Detail = "smoke test exit non-zero (mungkin butuh display/GPU)"
-//		return r
-//	}
-//	r.Status = StatusPass
-//	r.Score = r.Weight
-//	return r
-//}
+func RunTestSuite(mergeDir, pkgName string, conflictMap map[string][]string, conflictingKeys []string, spawnResult essentials.ExecutionResult) *TestReport {
+	report := &TestReport{
+		Package: pkgName,
+	}
+
+	tests := []func() TestResult{
+		func() TestResult { return testDBConflict(mergeDir, pkgName, conflictMap) },
+		func() TestResult { return testNoRemnants(mergeDir, pkgName, conflictMap) },
+		func() TestResult { return testLdconfig(mergeDir, pkgName, conflictMap) },
+		// func() TestResult { return testSmoke(mergeDir, pkgName) },
+		func() TestResult { return testFileDelta(mergeDir, pkgName, conflictMap) },
+	}
+
+	for _, fn := range tests {
+		result := fn()
+		report.Results = append(report.Results, result)
+
+		// Skip masuk ke Total tapi tidak ke Earned
+		if result.Status != StatusSkip {
+			report.Total += result.Weight
+			report.Earned += result.Score
+		}
+	}
+
+	return report
+}

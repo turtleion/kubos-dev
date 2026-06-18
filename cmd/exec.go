@@ -525,7 +525,7 @@ func Teardown(givenName string, verbose bool) essentials.ExecutionResult {
 	// 2. Remove the sandbox directory structure
 
 	logger.LoggedPrint(essentials.LOG_INFO, "Removing sandbox directories: "+sandboxPath, true)
-	res := removeSandboxDir(sandboxPath)
+	res := RemoveSandboxDir(sandboxPath)
 	if res.Code != essentials.EXECUTION_TASK_SUCCESS {
 		logger.LoggedPrint(essentials.LOG_ERROR, fmt.Sprintf("Failed to remove sandbox directory, Error: %v", res.Message), true)
 		return res
@@ -662,7 +662,7 @@ func ptyPrintAndDone(line string, w io.Writer) bool {
 	return true
 }
 
-func removeSandboxDir(sandboxPath string) essentials.ExecutionResult {
+func RemoveSandboxDir(sandboxPath string) essentials.ExecutionResult {
 	err := os.RemoveAll(sandboxPath)
 	if err == nil {
 		return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_SUCCESS}

@@ -273,3 +273,149 @@ LOGGING START ON 2026-06-18 01:42:26
 [V] 2026-06-18 01:42:28 Teardown succeeded
 [i] 2026-06-18 01:42:28     :: Cleaning up sandbox directory
 
+-------------------------------------------
+LOGGING START ON 2026-06-18 13:45:53
+[i] 2026-06-18 13:45:53 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-18 13:45:53     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-18 13:45:53 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-18 13:45:53     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-18 13:45:53 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[i] 2026-06-18 13:45:53     :: Checking sandbox path status: sandboxes/mesa-amber
+
+[i] 2026-06-18 13:45:53     :: >> Directory does not exist. Creating path: sandboxes/mesa-amber
+
+[V] 2026-06-18 13:45:53     :: Created directory on path: sandboxes/mesa-amber
+
+[i] 2026-06-18 13:45:53     :: Trying to create subdirectories in: sandboxes/mesa-amber
+
+[i] 2026-06-18 13:45:53     :: Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+
+[V] 2026-06-18 13:49:09 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+[!] 2026-06-18 13:50:34     :: Conflicting package found during sandbox installation.
+
+[i] 2026-06-18 13:50:34     :: Running test for package mesa-amber
+
+[i] 2026-06-18 13:50:35 ==> [KUBOS] Not in pacman repos. searching in AUR...
+
+[X] 2026-06-18 13:50:36     :: package 'mesa-amber' not found in pacman repos or AUR
+
+-------------------------------------------
+LOGGING START ON 2026-06-18 13:57:54
+[i] 2026-06-18 13:57:54 ==> [KUBOS] Cleaning up...
+
+[i] 2026-06-18 13:57:54 ==> [CLEANUP] Start tearing down sandbox mesa-amber...
+
+[i] 2026-06-18 13:57:54     :: Unmounting overlay for sandboxes/mesa-amber/merged
+
+[i] 2026-06-18 13:57:54 ==> [DEBUSY] Checking for busy processes on: sandboxes/mesa-amber/merged
+
+[V] 2026-06-18 13:57:59 Successfully unmounted overlay for mesa-amber
+[i] 2026-06-18 13:57:59     :: Removing sandbox directories: sandboxes/mesa-amber
+
+[V] 2026-06-18 13:57:59 Cleaned up sandbox directories for mesa-amber
+[V] 2026-06-18 13:57:59 Teardown succeeded
+[i] 2026-06-18 13:57:59     :: Cleaning up sandbox directory
+
+-------------------------------------------
+LOGGING START ON 2026-06-18 13:58:09
+[i] 2026-06-18 13:58:09 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-18 13:58:10     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-18 13:58:10 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-18 13:58:10     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-18 13:58:10 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[i] 2026-06-18 13:58:10     :: Checking sandbox path status: sandboxes/mesa-amber
+
+[i] 2026-06-18 13:58:10     :: >> Directory does not exist. Creating path: sandboxes/mesa-amber
+
+[V] 2026-06-18 13:58:10     :: Created directory on path: sandboxes/mesa-amber
+
+[i] 2026-06-18 13:58:10     :: Trying to create subdirectories in: sandboxes/mesa-amber
+
+[i] 2026-06-18 13:58:10     :: Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+
+[V] 2026-06-18 13:58:10 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+[!] 2026-06-18 13:58:47     :: Conflicting package found during sandbox installation.
+
+[i] 2026-06-18 13:58:47     :: Running test for package mesa-amber
+
+-------------------------------------------
+LOGGING START ON 2026-06-18 13:58:53
+[i] 2026-06-18 13:58:53 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-18 13:58:54     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-18 13:58:54 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-18 13:58:54     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-18 13:58:54 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[!] 2026-06-18 13:58:54 Sandbox already exists: mesa-amber
+[!] 2026-06-18 13:58:54     :: There is an existing sandbox with name mesa-amber. Would you like to use the sandbox? [y/n] 
+
+[!] 2026-06-18 13:59:49     :: Conflicting package found during sandbox installation.
+
+[i] 2026-06-18 13:59:49     :: Running test for package mesa-amber
+
+[i] 2026-06-18 14:00:02 ==> [KUBOS] Not in pacman repos. searching in AUR...
+
+[X] 2026-06-18 14:00:03     :: package 'mesa-amber' not found in pacman repos or AUR
+
+-------------------------------------------
+LOGGING START ON 2026-06-18 14:04:34
+[i] 2026-06-18 14:04:34 ==> [KUBOS] Cleaning up...
+
+[i] 2026-06-18 14:04:34 ==> [CLEANUP] Start tearing down sandbox mesa-amber...
+
+[i] 2026-06-18 14:04:34     :: Unmounting overlay for sandboxes/mesa-amber/merged
+
+[i] 2026-06-18 14:04:34 ==> [DEBUSY] Checking for busy processes on: sandboxes/mesa-amber/merged
+
+[V] 2026-06-18 14:04:37 Successfully unmounted overlay for mesa-amber
+[i] 2026-06-18 14:04:37     :: Removing sandbox directories: sandboxes/mesa-amber
+
+[V] 2026-06-18 14:04:37 Cleaned up sandbox directories for mesa-amber
+[V] 2026-06-18 14:04:37 Teardown succeeded
+[i] 2026-06-18 14:04:37     :: Cleaning up sandbox directory
+
+-------------------------------------------
+LOGGING START ON 2026-06-18 14:04:42
+[i] 2026-06-18 14:04:42 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-18 14:04:42     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-18 14:04:42 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-18 14:04:42     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-18 14:04:42 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[i] 2026-06-18 14:04:42     :: Checking sandbox path status: sandboxes/mesa-amber
+
+[i] 2026-06-18 14:04:42     :: >> Directory does not exist. Creating path: sandboxes/mesa-amber
+
+[V] 2026-06-18 14:04:42     :: Created directory on path: sandboxes/mesa-amber
+
+[i] 2026-06-18 14:04:42     :: Trying to create subdirectories in: sandboxes/mesa-amber
+
+[i] 2026-06-18 14:04:42     :: Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+
+[V] 2026-06-18 14:04:42 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+[!] 2026-06-18 14:06:54     :: Conflicting package found during sandbox installation.
+
+[i] 2026-06-18 14:06:54     :: Running test for package mesa-amber
+
+[i] 2026-06-18 14:07:01 ==> [KUBOS] Not in pacman repos. searching in AUR...
+
+[X] 2026-06-18 14:07:02     :: package 'mesa-amber' not found in pacman repos or AUR
+
