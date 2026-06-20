@@ -36,10 +36,12 @@ func installpkg(pkgName string, verbose bool) essentials.ExecutionResult {
 			logger.LoggedPrint(essentials.LOG_ERROR, fmt.Sprintf("Conflicting packages detected: %v", conflicting), true)
 			logger.Print(essentials.LOG_ERROR, fmt.Sprintf("Conflicting packages detected: %v", conflicting), true, true)
 		}
+		Sanitized, _, _, ok := essentials.ParsePacmanPkgName(conflicting[0])
+		fmt.Println("WOY! PkgName: ", conflicting[0], " Sannitized Version Name: ", Sanitized, " is Okay? ", ok)
 
 		logger.LoggedPrint(essentials.LOG_INFO, fmt.Sprintf("Running test for package %s", pkgName), true)
 		report := RunTestSuite(path.Join("sandboxes", pkgName, "merged"), pkgName, conflictingMap, conflicting, res)
-		_, ok := conflictingMap[pkgName]
+		_, ok = conflictingMap[pkgName]
 		fmt.Println("COnflictMap: ", conflictingMap, " | PkgName: ", pkgName, " | is conflictMap["+pkgName+"] okay? ", ok)
 		fmt.Println(report)
 	}

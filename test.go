@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"kubos/cmd"
@@ -44,6 +45,30 @@ func CleanUp() {
 	}
 }
 
+func testLdconfig(mergeDir, _ string, _ map[string][]string) cmd.TestResult {
+	r := cmd.TestResult{Name: "ldconfig clean", Weight: 20}
+	var stderr bytes.Buffer
+	cmdd := exec.Command("sudo", "systemd-nspawn", "--quiet", "--directory", mergeDir,
+		"--", "ldconfig")
+	cmdd.Stderr = &stderr
+	if err := cmdd.Run(); err != nil {
+		r.Status = cmd.StatusFail
+		r.Detail = "ldconfig error: " + stderr.String()
+		return r
+	}
+	// ldconfig prints warnings to stderr even on partial success
+	if stderr.Len() > 1 {
+		r.Status = cmd.StatusWarn
+		r.Score = r.Weight / 2
+		r.Detail = "ldconfig selesai dengan warning"
+		fmt.Println(stderr.String())
+		return r
+	}
+	r.Status = cmd.StatusPass
+	r.Score = r.Weight
+	return r
+}
+
 func main() {
 	fmt.Println("Logger loading")
 	// cmd.CleanUp()
@@ -54,7 +79,7 @@ func main() {
 	// }
 
 	// cmd.Setup("test")
-	cmd.Teardown("mesa-amber")
+	fmt.Println(testLdconfig("sandboxes/mesa-amber/merged", "", make(map[string][]string)))
 
 	// logger.Print(logger.LOG_ERROR, "Log fail", false, true)
 }

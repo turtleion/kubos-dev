@@ -144,6 +144,7 @@ func testDBConflict(mergeDir, pkg string, conflictMap map[string][]string) TestR
 	// Cek konflik — kalau pkg adalah mesa-amber, mesa tidak boleh ada
 	if conflict, ok := conflictMap[pkg]; ok {
 		rival, _ := conflict[0], conflict[1]
+		rival, _, _, _ = essentials.ParsePacmanPkgName(rival)
 		checkRival := exec.Command("sudo", "systemd-nspawn", "--directory", mergeDir,
 			"--", "pacman", "-Qi", rival)
 		checkRival.Stdout, checkRival.Stderr = nil, nil

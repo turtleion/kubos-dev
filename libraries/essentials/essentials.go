@@ -263,3 +263,27 @@ func IsEOF(err error) bool {
 	}
 	return false
 }
+
+func ParsePacmanPkgName(s string) (name, version, release string, ok bool) {
+	last := strings.LastIndex(s, "-")
+	if last == -1 {
+		return "", "", "", false
+	}
+
+	release = s[last+1:]
+	left := s[:last]
+
+	prev := strings.LastIndex(left, "-")
+	if prev == -1 {
+		return "", "", "", false
+	}
+
+	name = left[:prev]
+	version = left[prev+1:]
+
+	if name == "" || version == "" || release == "" {
+		return "", "", "", false
+	}
+	fmt.Println("SANITIZED NAME: ", name)
+	return name, version, release, true
+}

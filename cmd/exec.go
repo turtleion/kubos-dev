@@ -283,7 +283,11 @@ func Spawn(container string, command string, verbose bool) essentials.ExecutionR
 			// Cek conflict prompt
 			if strings.Contains(strings.ToLower(cleanLine), "are in conflict") && strings.Contains(cleanLine, "[y/N]") {
 				pkgName, conflictedWith, _, status := essentials.ParseConflictingPackages(cleanLine)
-				conflictingPackages[pkgName] = []string{conflictedWith, strconv.FormatBool(status)}
+				pkgNameSanitized, _, _, ok := essentials.ParsePacmanPkgName(pkgName)
+				if !ok {
+					logger.LoggedPrint(essentials.LOG_ERROR, "Package name is not valid. Failed to insert it to conflicting package list.", false)
+				}
+				conflictingPackages[pkgNameSanitized] = []string{conflictedWith, strconv.FormatBool(status)}
 				if _, werr := w.Write([]byte("y\n")); werr != nil {
 					logger.ColoredPrint(color.FgRed, "Could not write answer into stdin. Please input yes.")
 					logger.LoggedPrint(essentials.LOG_ERROR, "Could not write answer into stdin. Please input yes.", true)
@@ -294,7 +298,13 @@ func Spawn(container string, command string, verbose bool) essentials.ExecutionR
 			// Cek conflict line tanpa prompt (informational)
 			pkgName, conflictedWith, _, status := essentials.ParseConflictingPackages(cleanLine)
 			if status {
-				conflictingPackages[pkgName] = []string{conflictedWith, strconv.FormatBool(status)}
+				pkgNameSanitized, _, _, ok := essentials.ParsePacmanPkgName(pkgName)
+				if !ok {
+					logger.LoggedPrint(essentials.LOG_ERROR, "Package name is not valid. Failed to insert it to conflicting package list.", false)
+				} else {
+					conflictingPackages[pkgNameSanitized] = []string{conflictedWith, strconv.FormatBool(status)}
+
+				}
 				return true
 			}
 
