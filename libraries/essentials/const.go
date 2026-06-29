@@ -4,7 +4,7 @@ package essentials
 type LogStatus int8
 type ExecutionStatusCode int8
 
-type ConflictingPackages map[string][]string
+type ConflictingPackages map[string]string
 
 type Sandbox struct {
 	Name, Path string

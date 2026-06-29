@@ -27,7 +27,7 @@ func installpkg(pkgName string, verbose bool) essentials.ExecutionResult {
 			return res
 		}
 		var conflicting []string
-		var conflictingMap map[string][]string
+		var conflictingMap essentials.ConflictingPackages
 		switch msg := res.Message.(type) {
 		case essentials.ConflictingPackages:
 			conflicting = slices.Collect(maps.Keys(msg))
@@ -36,14 +36,29 @@ func installpkg(pkgName string, verbose bool) essentials.ExecutionResult {
 			logger.LoggedPrint(essentials.LOG_ERROR, fmt.Sprintf("Conflicting packages detected: %v", conflicting), true)
 			logger.Print(essentials.LOG_ERROR, fmt.Sprintf("Conflicting packages detected: %v", conflicting), true, true)
 		}
-		Sanitized, _, _, ok := essentials.ParsePacmanPkgName(conflicting[0])
-		fmt.Println("WOY! PkgName: ", conflicting[0], " Sannitized Version Name: ", Sanitized, " is Okay? ", ok)
+		// Sanitized, _, _, ok := essentials.ParsePacmanPkgName(conflicting[0])
+		// fmt.Println("WOY! PkgName: ", conflicting[0], " Sannitized Version Name: ", Sanitized, " is Okay? ", ok)
 
 		logger.LoggedPrint(essentials.LOG_INFO, fmt.Sprintf("Running test for package %s", pkgName), true)
-		report := RunTestSuite(path.Join("sandboxes", pkgName, "merged"), pkgName, conflictingMap, conflicting, res)
-		_, ok = conflictingMap[pkgName]
-		fmt.Println("COnflictMap: ", conflictingMap, " | PkgName: ", pkgName, " | is conflictMap["+pkgName+"] okay? ", ok)
-		fmt.Println(report)
+		report := RunTestSuite(path.Join("sandboxes", pkgName, "upper"), path.Join("sandboxes", pkgName, "merged"), pkgName, conflictingMap, conflicting, res)
+		PrintReport(report)
+		choice, err := essentials.AskSelection("Would you like to commit it to your real machine?", []string{"Yes, I would like to. I'm conscious of any risks.", "Nah, nevermind."})
+		if err != nil {
+			return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_FAIL, Context: "Trying to ask user but failed", Message: "Failed to ask user due to: " + err.Error()}
+		}
+		if choice == "Yes, I would like to. I'm conscious of any risks." {
+			logger.LoggedContextedPrint(essentials.LOG_INFO, "KUBOS", "Installing package "+pkgName+" to the real machine.", true)
+			res := HostPTYSpawn("sudo pacman -S "+pkgName, true)
+			if res.Code != essentials.EXECUTION_TASK_SUCCESS {
+				return res
+			}
+		} else {
+			fmt.Printf("\n\nAlright alright bro, I will do nothing. :v\n")
+			return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_SUCCESS}
+		}
+		// _, ok = conflictingMap[pkgName]
+		// fmt.Println("COnflictMap: ", conflictingMap, " | PkgName: ", pkgName, " | is conflictMap["+pkgName+"] okay? ", ok)
+		// fmt.Println(report)
 	}
 
 	// 2. Fall back to AUR

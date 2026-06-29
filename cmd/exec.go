@@ -239,6 +239,24 @@ func DeBusyPath(path string, verbose bool) essentials.ExecutionResult {
 // 	return essentials.ExecutionResult{Code: essentials.EXECUTION_TASK_SUCCESS, Message: ""}
 // }
 
+func HostPTYSpawn(command string, verbose bool) essentials.ExecutionResult {
+	cmdParts := strings.Fields(command)
+	if len(cmdParts) == 0 {
+		logger.LoggedPrint(essentials.LOG_ERROR, "No command provided to Spawn", true)
+		return essentials.ExecutionResult{Code: essentials.EXECUTION_NO_ARGS, Context: "Spawning systemd-nspawn but no argument was sent.", Message: "No command provided to Spawn"}
+	}
+	// Run with PTY
+	cmd := exec.Command(command)
+	if verbose {
+		logger.VerbosedPrint(fmt.Sprintf("Running command %s", command))
+	}
+	err := RunWithPTY(cmd, func(line string, w io.Writer) bool {
+		logger.ShellOutputPrint(line)
+		return true
+	})
+	return err
+}
+
 func Spawn(container string, command string, verbose bool) essentials.ExecutionResult {
 	cmdParts := strings.Fields(command)
 	if len(cmdParts) == 0 {
@@ -283,11 +301,14 @@ func Spawn(container string, command string, verbose bool) essentials.ExecutionR
 			// Cek conflict prompt
 			if strings.Contains(strings.ToLower(cleanLine), "are in conflict") && strings.Contains(cleanLine, "[y/N]") {
 				pkgName, conflictedWith, _, status := essentials.ParseConflictingPackages(cleanLine)
+				if !status {
+					logger.LoggedPrint(essentials.LOG_ERROR, "Failed to parse conflicting packages from pacman output. Skipping conflicting packages feature.", true)
+				}
 				pkgNameSanitized, _, _, ok := essentials.ParsePacmanPkgName(pkgName)
 				if !ok {
 					logger.LoggedPrint(essentials.LOG_ERROR, "Package name is not valid. Failed to insert it to conflicting package list.", false)
 				}
-				conflictingPackages[pkgNameSanitized] = []string{conflictedWith, strconv.FormatBool(status)}
+				conflictingPackages[pkgNameSanitized] = conflictedWith
 				if _, werr := w.Write([]byte("y\n")); werr != nil {
 					logger.ColoredPrint(color.FgRed, "Could not write answer into stdin. Please input yes.")
 					logger.LoggedPrint(essentials.LOG_ERROR, "Could not write answer into stdin. Please input yes.", true)
@@ -302,7 +323,7 @@ func Spawn(container string, command string, verbose bool) essentials.ExecutionR
 				if !ok {
 					logger.LoggedPrint(essentials.LOG_ERROR, "Package name is not valid. Failed to insert it to conflicting package list.", false)
 				} else {
-					conflictingPackages[pkgNameSanitized] = []string{conflictedWith, strconv.FormatBool(status)}
+					conflictingPackages[pkgNameSanitized] = conflictedWith
 
 				}
 				return true

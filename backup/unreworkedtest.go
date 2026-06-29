@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"context"
+	"bytes"
 	"fmt"
 	"io/fs"
 	"kubos/libraries/essentials"
@@ -10,7 +10,6 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
-	"time"
 
 	"github.com/fatih/color"
 )
@@ -22,7 +21,6 @@ const (
 	StatusWarn
 	StatusFail
 	StatusSkip
-	StatusUnavailable
 )
 
 type TestResult struct {
@@ -75,88 +73,57 @@ func NormalizePacmanPkgName(s string) string {
 	return s
 }
 
-// Core functions
 func autoSmoke(mergeDir, pkg string) TestResult {
 	r := TestResult{Name: "Smoke test", Weight: 15}
 
-	cleanPkg := NormalizePacmanPkgName(pkg)
-
-	// 1. Natively read the pacman file list from disk instead of spawning a container
-	// Pacman stores the file list in var/lib/pacman/local/<pkg>-<version>/files
-	filesPattern := filepath.Join(mergeDir, "var/lib/pacman/local", cleanPkg+"-*", "files")
-	matches, err := filepath.Glob(filesPattern)
-	if err != nil || len(matches) == 0 {
+	// Tanya pacman: file apa saja yang diinstall package ini?
+	cmd := exec.Command("systemd-nspawn", "--directory", mergeDir,
+		"--", "pacman", "-Ql", pkg)
+	var out bytes.Buffer
+	cmd.Stdout = &out
+	if cmd.Run() != nil {
 		r.Status = StatusSkip
-		r.Detail = "tidak bisa baca list file untuk " + cleanPkg
+		r.Detail = "tidak bisa list files dari " + pkg
 		return r
 	}
 
-	// Read the files file natively
-	content, err := os.ReadFile(matches[0])
-	if err != nil {
-		r.Status = StatusSkip
-		r.Detail = "couldn't read the database file list"
-		return r
-	}
-
+	// Cari file di /usr/bin/ → itu binary yang bisa dicoba
 	var binary string
-	var hasLibraries bool
-
-	// Parse lines to detect binaries or shared libraries
-	for _, line := range strings.Split(string(content), "\n") {
-		line = strings.TrimSpace(line)
-		if strings.HasPrefix(line, "usr/bin/") {
-			binary = "/" + line
-			break // Found a binary to execute!
-		}
-		if strings.HasSuffix(line, ".so") || strings.Contains(line, ".so.") {
-			hasLibraries = true
+	for _, line := range strings.Split(out.String(), "\n") {
+		// format: "pkgname /usr/bin/something"
+		parts := strings.Fields(line)
+		if len(parts) == 2 && strings.HasPrefix(parts[1], "/usr/bin/") {
+			binary = parts[1]
+			break
 		}
 	}
 
-	// 2. Execution Mode: If it's an application with a binary
-	if binary != "" {
-		// Run with --version but wrap it inside a strict timeout context so it can't hang if it's a daemon
-		ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
-		defer cancel()
-
-		cmd := exec.CommandContext(ctx, "systemd-nspawn", "-D", mergeDir, "--", binary, "--version")
-		if cmd.Run() == nil {
-			r.Status = StatusPass
-			r.Score = r.Weight
-			r.Detail = fmt.Sprintf("%s ran successfully with --version", filepath.Base(binary))
-			return r
-		}
-
-		// Fallback to -V
-		cmd2 := exec.CommandContext(ctx, "systemd-nspawn", "-D", mergeDir, "--", binary, "-V")
-		if cmd2.Run() == nil {
-			r.Status = StatusPass
-			r.Score = r.Weight
-			r.Detail = fmt.Sprintf("%s ran successfully with -V", filepath.Base(binary))
-			return r
-		}
-
-		// It has a binary but it crashed or timed out
-		r.Status = StatusWarn
-		r.Score = r.Weight / 2
-		r.Detail = fmt.Sprintf("binary %s but didn't respond to version check.", binary)
+	if binary == "" {
+		r.Status = StatusSkip
+		r.Detail = "tidak ada binary di /usr/bin, skip smoke test"
 		return r
 	}
 
-	// 3. Library Mode: If it has no binary but contains shared objects (.so)
-	if hasLibraries {
-		// Run a quick check using your existing parseLdconfigOutput logic inside the container!
-		// If ldconfig output doesn't throw a hard error for this package, the library is safe.
-		r.Status = StatusPass
-		r.Score = r.Weight
-		r.Detail = fmt.Sprintf("library %s terverifikasi aman melalui sub-sistem link", cleanPkg)
-		return r
+	// Coba jalankan binary dengan --version
+	testCmd := exec.Command("systemd-nspawn", "--directory", mergeDir,
+		"--", binary, "--version")
+	testCmd.Stdout, testCmd.Stderr = nil, nil
+	if testCmd.Run() != nil {
+		// Coba -V kalau --version tidak jalan
+		testCmd2 := exec.Command("systemd-nspawn", "--directory", mergeDir,
+			"--", binary, "-V")
+		testCmd2.Stdout, testCmd2.Stderr = nil, nil
+		if testCmd2.Run() != nil {
+			r.Status = StatusWarn
+			r.Score = r.Weight / 2
+			r.Detail = binary + " ditemukan tapi --version exit non-zero"
+			return r
+		}
 	}
 
-	// Meta package or data package (no binaries, no libraries)
-	r.Status = StatusSkip
-	r.Detail = "package tidak memiliki binary atau library untuk ditest (data/meta package)"
+	r.Status = StatusPass
+	r.Score = r.Weight
+	r.Detail = "binary " + binary + " berjalan normal"
 	return r
 }
 
@@ -174,6 +141,38 @@ var testSuite = []struct {
 }
 
 func testDBConflict(mergeDir, pkg string, conflictMap map[string]string) TestResult {
+	r := TestResult{Name: "DB conflict check", Weight: 30}
+
+	// pkg target harus ADA
+	checkPkg := exec.Command("sudo", "systemd-nspawn", "--directory", mergeDir,
+		"--", "pacman", "-Qi", pkg)
+	checkPkg.Stdout, checkPkg.Stderr = nil, nil
+	if checkPkg.Run() != nil {
+		r.Status = StatusFail
+		r.Detail = pkg + " tidak ditemukan di database container"
+		return r
+	}
+
+	// Cek konflik — kalau pkg adalah mesa-amber, mesa tidak boleh ada
+	if conflict, ok := conflictMap[pkg]; ok {
+		conflict, _, _, _ = essentials.ParsePacmanPkgName(conflict)
+		checkconflict := exec.Command("sudo", "systemd-nspawn", "--directory", mergeDir,
+			"--", "pacman", "-Qi", conflict)
+		checkconflict.Stdout, checkconflict.Stderr = nil, nil
+		if checkconflict.Run() == nil {
+			r.Status = StatusFail
+			r.Detail = fmt.Sprintf("konflik: %s dan %s sama-sama ada", pkg, conflict)
+			return r
+		}
+	}
+
+	r.Status = StatusPass
+	r.Score = r.Weight
+	r.Detail = "tidak ada konflik ditemukan"
+	return r
+}
+
+func TestDBConflict(mergeDir, pkg string, conflictMap map[string]string) TestResult {
 	r := TestResult{Name: "DB conflict check", Weight: 30}
 
 	// 1. Clean the target package name (remove version suffixes if any exist)
@@ -211,6 +210,38 @@ func testNoRemnants(mergeDir, pkg string, conflictMap map[string]string) TestRes
 	r := TestResult{Name: "No old pkg remnants", Weight: 25}
 
 	conflict, ok := conflictMap[pkg]
+	if !ok {
+		// tidak ada konflik yang diketahui → skip, bukan fail
+		r.Status = StatusSkip
+		r.Detail = "there is no conflicting package with " + pkg
+		return r
+	}
+	var found string
+	cmd := exec.Command("sudo", "systemd-nspawn", "-D", mergeDir,
+		"--", "pacman", "-Qi", conflict)
+	cmd.Stdout = nil
+	cmd.Stderr = nil
+	if cmd.Run() == nil {
+		// exit 0 = package masih ada = remnant
+		found = conflict
+	}
+
+	if len(found) > 0 {
+		r.Status = StatusFail
+		r.Detail = "masih ada di DB: " + found
+		return r
+	}
+
+	r.Status = StatusPass
+	r.Score = r.Weight
+	r.Detail = "semua rival package sudah bersih"
+	return r
+}
+
+func TestNoRemnants(mergeDir, pkg string, conflictMap map[string]string) TestResult {
+	r := TestResult{Name: "No old pkg remnants", Weight: 25}
+
+	conflict, ok := conflictMap[pkg]
 	if !ok || conflict == "" { // FIXED: Must have at least 2 elements [pkg, isValid]
 		r.Status = StatusSkip
 		r.Detail = "there is no package conflicting with " + pkg
@@ -235,6 +266,47 @@ func testNoRemnants(mergeDir, pkg string, conflictMap map[string]string) TestRes
 	r.Detail = fmt.Sprintf("rival package (%s) sudah bersih", rival)
 	return r
 }
+
+// func testFileDelta(upperDir, pkg string, _ map[string][]string) TestResult {
+// 	r := TestResult{Name: "File count delta", Weight: 10}
+
+// 	// Hitung file di upperdir — OverlayFS hanya tulis file yang berubah ke sini
+// 	var count int
+// 	err := filepath.WalkDir(upperDir, func(path string, d fs.DirEntry, err error) error {
+// 		if err != nil {
+// 			return err
+// 		}
+// 		if !d.IsDir() {
+// 			count++
+// 		}
+// 		return nil
+// 	})
+// 	if err != nil {
+// 		r.Status = StatusFail
+// 		r.Detail = "gagal baca upperdir: " + err.Error()
+// 		return r
+// 	}
+
+// 	switch {
+// 	case count == 0:
+// 		// Install tidak menulis apa-apa ke upperdir — kemungkinan gagal diam-diam
+// 		r.Status = StatusFail
+// 		r.Detail = "upperdir kosong, install mungkin tidak berjalan"
+
+// 	case count > 5000:
+// 		// Terlalu banyak file — curiga ada yang salah (misal nulis ke / tanpa sandbox)
+// 		r.Status = StatusWarn
+// 		r.Score = r.Weight / 2
+// 		r.Detail = fmt.Sprintf("%d file — lebih banyak dari yang diharapkan", count)
+
+// 	default:
+// 		r.Status = StatusPass
+// 		r.Score = r.Weight
+// 		r.Detail = fmt.Sprintf("%d file ditulis ke upperdir", count)
+// 	}
+
+// 	return r
+// }
 
 func testFileDelta(upperDir, pkg string, _ map[string]string) TestResult {
 	r := TestResult{Name: "File count delta", Weight: 10}
@@ -342,6 +414,29 @@ func isSuspiciousPath(relPath string) bool {
 	return true
 }
 
+// func testLdconfig(mergeDir, _ string, conflictMap map[string]string) TestResult {
+// 	r := TestResult{Name: "ldconfig clean", Weight: 20}
+// 	var stderr bytes.Buffer
+// 	cmd := exec.Command("sudo", "systemd-nspawn", "--directory", mergeDir,
+// 		"--", "ldconfig")
+// 	cmd.Stderr = &stderr
+// 	if err := cmd.Run(); err != nil {
+// 		r.Status = StatusFail
+// 		r.Detail = "ldconfig error: " + stderr.String()
+// 		return r
+// 	}
+// 	// ldconfig prints warnings to stderr even on partial success
+// 	if stderr.Len() > 0 {
+// 		r.Status = StatusWarn
+// 		r.Score = r.Weight / 2
+// 		r.Detail = "ldconfig selesai dengan warning"
+// 		return r
+// 	}
+// 	r.Status = StatusPass
+// 	r.Score = r.Weight
+// 	return r
+// }
+
 func testLdconfig(root string, _ string, _ map[string]string) TestResult {
 	issues, err := RunLdconfigInNspawn(root)
 	r := TestResult{Name: "ldconfig clean", Weight: 20}
@@ -422,24 +517,17 @@ func testLdconfig(root string, _ string, _ map[string]string) TestResult {
 //		r.Score = r.Weight
 //		return r
 //	}
-func RunTestSuite(upperDir, mergeDir, pkgName string, conflictMap map[string]string, conflictingKeys []string, spawnResult essentials.ExecutionResult) *TestReport {
+func RunTestSuite(mergeDir, pkgName string, conflictMap map[string]string, conflictingKeys []string, spawnResult essentials.ExecutionResult) *TestReport {
 	report := &TestReport{
 		Package: pkgName,
-	}
-
-	tmptestSmoke := func() TestResult {
-		r := TestResult{Name: "Smoke test", Weight: 15}
-		r.Status = StatusUnavailable
-		r.Detail = "Test currently unavailable"
-		return r
 	}
 
 	tests := []func() TestResult{
 		func() TestResult { return testDBConflict(mergeDir, pkgName, conflictMap) },
 		func() TestResult { return testNoRemnants(mergeDir, pkgName, conflictMap) },
 		func() TestResult { return testLdconfig(mergeDir, pkgName, conflictMap) },
-		func() TestResult { return tmptestSmoke() },
-		func() TestResult { return testFileDelta(upperDir, pkgName, conflictMap) },
+		// func() TestResult { return testSmoke(mergeDir, pkgName) },
+		func() TestResult { return testFileDelta(mergeDir, pkgName, conflictMap) },
 	}
 
 	for _, fn := range tests {
@@ -447,101 +535,11 @@ func RunTestSuite(upperDir, mergeDir, pkgName string, conflictMap map[string]str
 		report.Results = append(report.Results, result)
 
 		// Skip masuk ke Total tapi tidak ke Earned
-		if result.Status != StatusUnavailable {
+		if result.Status != StatusSkip {
 			report.Total += result.Weight
 			report.Earned += result.Score
 		}
 	}
 
 	return report
-}
-
-var bold = color.New(color.Bold).SprintFunc()
-
-func PrintReport(report *TestReport) {
-	const (
-		colName   = 28
-		colStatus = 12
-	)
-
-	statusIcon := map[TestStatus]string{
-		StatusPass:        color.New(color.FgGreen).Sprint(bold("✓")),
-		StatusWarn:        color.New(color.FgYellow).Sprint(bold("~")),
-		StatusFail:        color.New(color.FgRed).Sprint(bold("✗")),
-		StatusSkip:        bold("-"),
-		StatusUnavailable: bold("?"),
-	}
-
-	statusString := map[TestStatus]string{
-		StatusPass: "pass",
-		StatusWarn: "warn",
-		StatusFail: "fail",
-	}
-
-	fmt.Printf("\n==> test report: %s\n", report.Package)
-
-	// Header
-	fmt.Printf("    %-*s %-*s %s\n", colName, "test", colStatus, "status", "score")
-	fmt.Println("    " + strings.Repeat("─", colName+colStatus+8))
-
-	// Rows
-	for _, r := range report.Results {
-		icon := statusIcon[r.Status]
-
-		switch r.Status {
-		case StatusUnavailable:
-			fmt.Printf("\n    %s %-*s %s\n",
-				icon,
-				colName, r.Name,
-				"unavailable",
-			)
-		case StatusSkip:
-			fmt.Printf("\n    %s %-*s %s\n",
-				icon,
-				colName, r.Name,
-				"skip",
-			)
-		default:
-			fmt.Printf("\n    %s %-*s %-*s %d\n",
-				icon,
-				colName, r.Name,
-				colStatus, statusString[r.Status],
-				r.Score,
-			)
-		}
-
-		if r.Detail != "" {
-			fmt.Printf("      └ %s\n", r.Detail)
-		}
-	}
-
-	// Score bar
-	fmt.Printf("\n\n")
-	pct := report.Percent()
-	barTotal := 30
-	barFilled := (pct * barTotal) / 100
-	var barTmp string
-	switch {
-	case pct >= 80:
-		barTmp = color.New(color.FgGreen).Sprint("█")
-	case pct < 80 && pct >= 50:
-		barTmp = color.New(color.FgYellow).Sprint("█")
-	case pct < 50:
-		barTmp = color.New(color.FgRed).Sprint("█")
-
-	}
-	bar := strings.Repeat(barTmp, barFilled) + strings.Repeat("░", barTotal-barFilled)
-	fmt.Printf("    score: %d / %d  (%d%%)\n", report.Earned, report.Total, pct)
-	fmt.Printf("    [%s]\n\n", bar)
-
-	// Rekomendasi
-	switch report.Recommend() {
-	case RecommendCommit:
-		fmt.Println(bold("  [√] safe to commit to your real machine."))
-	case RecommendSnapshot:
-		fmt.Println(bold("  [~] prefer to make a snapshot point before committing."))
-	case RecommendAbort:
-		fmt.Println(bold("  [✗] recommended to not commit."))
-	}
-	fmt.Println()
 }

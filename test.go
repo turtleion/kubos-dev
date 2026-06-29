@@ -79,7 +79,10 @@ func main() {
 	// }
 
 	// cmd.Setup("test")
-	fmt.Println(testLdconfig("sandboxes/mesa-amber/merged", "", make(map[string][]string)))
-
+	// fmt.Println(testLdconfig("sandboxes/mesa-amber/merged", "", make(map[string][]string)))
+	fakeCM := make(map[string]string)
+	fakeCM["mesa-amber"] = "mesa"
+	fmt.Println(cmd.TestNoRemnants("sandboxes/mesa-amber/merged", "mesa-amber", fakeCM))
+	fmt.Println(cmd.TestDBConflict("sandboxes/mesa-amber/merged", "mesa-amber", fakeCM))
 	// logger.Print(logger.LOG_ERROR, "Log fail", false, true)
 }
