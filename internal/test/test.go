@@ -77,6 +77,27 @@ func NormalizePacmanPkgName(s string) string {
 	return s
 }
 
+// packageInDB checks whether pkgName is an actual installed package in the
+// container's local db — exact name match, not prefix glob match.
+func packageInDB(mergeDir, pkgName string) bool {
+	dbDir := filepath.Join(mergeDir, "var/lib/pacman/local")
+	entries, err := os.ReadDir(dbDir)
+	if err != nil {
+		return false
+	}
+
+	for _, e := range entries {
+		if !e.IsDir() {
+			continue // real db entries are always directories
+		}
+		name, _, _, ok := util.ParsePacmanPkgName(e.Name())
+		if ok && name == pkgName {
+			return true
+		}
+	}
+	return false
+}
+
 // Core functions
 func autoSmoke(mergeDir, pkg string) TestResult {
 	r := TestResult{Name: "Smoke test", Weight: 15}
@@ -181,9 +202,7 @@ func testDBConflict(mergeDir, pkg string, conflictMap map[string]string) TestRes
 	// 1. Clean the target package name (remove version suffixes if any exist)
 	cleanPkg := NormalizePacmanPkgName(pkg)
 	// 2. The target package MUST exist in the container DB
-	pkgPattern := filepath.Join(mergeDir, "var/lib/pacman/local", cleanPkg+"-*")
-	pkgMatches, err := filepath.Glob(pkgPattern)
-	if err != nil || len(pkgMatches) == 0 {
+	if !packageInDB(mergeDir, pkg) {
 		r.Status = StatusFail
 		r.Detail = cleanPkg + " not found in container"
 		return r
@@ -193,12 +212,9 @@ func testDBConflict(mergeDir, pkg string, conflictMap map[string]string) TestRes
 
 	if conflict, ok := conflictMap[pkg]; ok {
 		cleanConflict := NormalizePacmanPkgName(conflict)
-		conflictPattern := filepath.Join(mergeDir, "var/lib/pacman/local", cleanConflict+"-*")
-		conflictMatches, err := filepath.Glob(conflictPattern)
-
-		if err == nil && len(conflictMatches) > 0 {
+		if packageInDB(mergeDir, cleanConflict) {
 			r.Status = StatusFail
-			r.Detail = fmt.Sprintf("conflict: %s and %s are in database. This mean they both still exist and conflicting", cleanPkg, cleanConflict)
+			r.Detail = fmt.Sprintf("conflict: %s and %s are in database. This means they both still exist and conflicting", cleanPkg, cleanConflict)
 			return r
 		}
 	}
@@ -424,6 +440,7 @@ func testLdconfig(root string, _ string, _ map[string]string) TestResult {
 //		r.Score = r.Weight
 //		return r
 //	}
+
 func RunTestSuite(upperDir, mergeDir, pkgName string, conflictMap map[string]string, conflictingKeys []string, spawnResult exectypes.ExecutionResult) *TestReport {
 	report := &TestReport{
 		Package: pkgName,

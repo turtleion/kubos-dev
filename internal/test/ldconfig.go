@@ -1,9 +1,12 @@
 package test
 
 import (
-	"bytes"
 	"fmt"
+	"kubos/internal/exec/exectypes"
+	"kubos/internal/exec/tty"
+	"kubos/internal/log"
 	"os/exec"
+	"regexp"
 	"strings"
 )
 
@@ -24,7 +27,6 @@ func (e LdconfigError) String() string {
 // RunLdconfigInNspawn runs ldconfig inside the nspawn container and
 // returns any library errors/warnings found.
 func RunLdconfigInNspawn(root string) ([]LdconfigError, error) {
-	var stdout, stderr bytes.Buffer
 
 	cmd := exec.Command(
 		"sudo",
@@ -33,18 +35,14 @@ func RunLdconfigInNspawn(root string) ([]LdconfigError, error) {
 		"-D", root, // container root
 		"ldconfig", "-v", // -v makes it print what it's processing
 	)
-	cmd.Stdout = &stdout
-	cmd.Stderr = &stderr
-
-	err := cmd.Run()
-	exitCode := 0
-	if exitErr, ok := err.(*exec.ExitError); ok {
-		exitCode = exitErr.ExitCode()
-	} else if err != nil {
-		return nil, fmt.Errorf("failed to launch nspawn: %w", err)
+	res := tty.RunWithTTY(cmd, "output")
+	if res.ExecutionResult.Code != exectypes.EXECUTION_TASK_SUCCESS {
+		return nil, fmt.Errorf("failed to launch nspawn: %v", res.ExecutionResult.Message)
 	}
 
-	issues := parseIdconfigOutput(stdout.String(), stderr.String(), exitCode != 0)
+	log.LoggedBasicPrint(log.INFO, "\n\n  LDConfig test will ignore /usr/lib/libx32. If you want to enable libx32 checking, then go to settings\n\n", true)
+
+	issues := parseIdconfigOutput(res.Output.Stdout, res.Output.Stderr, res.Code != exectypes.EXECUTION_TASK_SUCCESS)
 	// fmt.Println("LDCONF ISSUE: ", stdout.String())
 	return issues, nil
 }
@@ -108,8 +106,9 @@ func isLdconfigError(line string) bool {
 		"permission denied",     // CRITICAL: Severe ACL/chmod issues
 	}
 	lower := strings.ToLower(line)
+	benignPattern := regexp.MustCompile(`libx32|lib32x32|x32`)
 	for _, p := range hardPrefixes {
-		if strings.Contains(lower, strings.ToLower(p)) {
+		if strings.Contains(lower, strings.ToLower(p)) && !benignPattern.MatchString(lower) {
 			return true
 		}
 	}

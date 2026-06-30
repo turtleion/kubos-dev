@@ -238,3 +238,35 @@ LOGGING START ON 2026-06-30 21:15:45
 [X] 2026-06-30 21:19:29 Cannot read sandboxes/mesa-amber/upper/var/cache/ldconfig: permission error
 [i] 2026-06-30 21:27:30 ==> [KUBOS] Installing package mesa-amber to the real machine.
 
+-------------------------------------------
+LOGGING START ON 2026-06-30 23:52:50
+[i] 2026-06-30 23:52:50 ==> [KUBOS] Cleaning up...
+
+[i] 2026-06-30 23:52:50 ==> [CLEANUP] Start tearing down sandbox mesa-amber...
+
+[i] 2026-06-30 23:52:50     :: Removing sandbox directories: sandboxes/mesa-amber
+
+-------------------------------------------
+LOGGING START ON 2026-06-30 23:53:38
+[i] 2026-06-30 23:53:38 ==> [KUBOS] Cleaning up...
+
+[i] 2026-06-30 23:53:38 ==> [CLEANUP] Start tearing down sandbox mesa-amber...
+
+[i] 2026-06-30 23:53:38     :: Removing sandbox directories: sandboxes/mesa-amber
+
+-------------------------------------------
+LOGGING START ON 2026-06-30 23:54:40
+[i] 2026-06-30 23:54:40 ==> [KUBOS] Cleaning up...
+
+[i] 2026-06-30 23:54:40 ==> [CLEANUP] Start tearing down sandbox mesa-amber...
+
+[i] 2026-06-30 23:54:40     :: Removing sandbox directories: sandboxes/mesa-amber
+
+-------------------------------------------
+LOGGING START ON 2026-06-30 23:56:08
+[i] 2026-06-30 23:56:08 ==> [KUBOS] Cleaning up...
+
+[i] 2026-06-30 23:56:08 ==> [CLEANUP] Start tearing down sandbox mesa-amber...
+
+[i] 2026-06-30 23:56:08     :: Removing sandbox directories: sandboxes/mesa-amber
+

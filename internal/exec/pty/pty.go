@@ -22,7 +22,7 @@ func HostPTYSpawn(command string, verbose bool) exectypes.ExecutionResult {
 		return exectypes.ExecutionResult{Code: exectypes.EXECUTION_NO_ARGS, Context: "Spawning systemd-nspawn but no argument was sent.", Message: "No command provided to Spawn"}
 	}
 	// Run with PTY
-	cmd := exec.Command(command)
+	cmd := exec.Command("sudo", cmdParts...)
 	if verbose {
 		log.VerbosedPrint(fmt.Sprintf("Running command %s", command))
 	}

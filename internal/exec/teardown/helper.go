@@ -82,7 +82,7 @@ func DeBusyPath(path string, verbose bool) exectypes.ExecutionResult {
 	// We use a regex to extract only the numeric PIDs.
 	// fuser output typically separates PIDs by whitespace (e.g., "  1234 5678m ")
 	var pids []string
-	for _, token := range strings.Fields(output) {
+	for _, token := range strings.Fields(output.Stdout) {
 		cleaned := token
 		if len(token) > 0 {
 			// fuser sometimes appends an access type character to the end of a PID

@@ -9,21 +9,31 @@ import (
 	"strings"
 )
 
-type TTYResult struct {
-	exectypes.ExecutionResult
-	Output string // hanya terisi kalau mode "output"
+type TTYOutput struct {
+	Stdout string
+	Stderr string
 }
 
+type TTYResult struct {
+	exectypes.ExecutionResult
+	Output TTYOutput // hanya terisi kalau mode "output"
+}
+
+// Run shell command with TTY instead of PTY. Each new session will carry data from the previous session (such sudo session)
+// You need to describe its mode,
+//   - "output" to capture the output.
+//   - "start" if only you want to get the error, and
+//   - "run" you don't care anything about it
 func RunWithTTY(cmd *exec.Cmd, mode string) TTYResult {
 	cmd.Stdin = os.Stdin
 
-	var outBuf strings.Builder
+	var outBuf, errBuf strings.Builder
 
 	switch mode {
 	case "output":
 		// Tidak set cmd.Stdout — kita capture sendiri
 		cmd.Stdout = &outBuf
-		cmd.Stderr = os.Stderr
+		cmd.Stderr = &errBuf
 	default: // "run", "start"
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
@@ -59,6 +69,6 @@ func RunWithTTY(cmd *exec.Cmd, mode string) TTYResult {
 
 	return TTYResult{
 		ExecutionResult: exectypes.ExecutionResult{Code: exectypes.EXECUTION_TASK_SUCCESS},
-		Output:          outBuf.String(),
+		Output:          TTYOutput{outBuf.String(), errBuf.String()},
 	}
 }

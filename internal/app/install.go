@@ -58,7 +58,7 @@ func installpkg(pkgName string, verbose bool) exectypes.ExecutionResult {
 		}
 		if choice == "Yes, I would like to. I'm conscious of any risks." {
 			log.LoggedContextedPrint(log.INFO, "KUBOS", "Installing package "+pkgName+" to the real machine.", true)
-			res := pty.HostPTYSpawn("sudo pacman -S "+pkgName, true)
+			res := pty.HostPTYSpawn("pacman -S "+pkgName, true)
 			if res.Code != exectypes.EXECUTION_TASK_SUCCESS {
 				return res
 			}
