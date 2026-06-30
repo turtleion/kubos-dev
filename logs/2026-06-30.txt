@@ -1,0 +1,240 @@
+LOG FILE CREATED ON 2026-06-30 15:14:18
+=============================
+-------------------------------------------
+LOGGING START ON 2026-06-30 15:14:18
+-------------------------------------------
+LOGGING START ON 2026-06-30 15:14:44
+[i] 2026-06-30 15:14:44 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-30 15:14:45     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-30 15:14:45 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-30 15:14:45     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-30 15:14:45 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[X] 2026-06-30 15:14:45     :: Sandbox directory exists, but it is invalid sandbox. Try running 'kubos sandbox-cleanup mesa-amber'.
+
+[X] 2026-06-30 15:14:45     :: Failed to install the package, rolling back and cleaning the sandbox...
+
+[i] 2026-06-30 15:14:45 ==> [CLEANUP] Cleaning up sandbox directory...
+
+-------------------------------------------
+LOGGING START ON 2026-06-30 15:15:02
+[i] 2026-06-30 15:15:02 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-30 15:15:03     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-30 15:15:03 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-30 15:15:03     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-30 15:15:03 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[i] 2026-06-30 15:15:03     :: Checking sandbox path status: sandboxes/mesa-amber
+
+[i] 2026-06-30 15:15:03     :: >> Directory does not exist. Creating path: sandboxes/mesa-amber
+
+[V] 2026-06-30 15:15:03     :: Created directory on path: sandboxes/mesa-amber
+
+[i] 2026-06-30 15:15:03     :: Trying to create subdirectories in: sandboxes/mesa-amber
+
+[i] 2026-06-30 15:15:03     :: Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+
+[V] 2026-06-30 15:15:03 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+[!] 2026-06-30 15:16:19     :: Conflicting package found during sandbox installation.
+
+[i] 2026-06-30 15:16:19     :: Running test for package mesa-amber
+
+[X] 2026-06-30 15:16:20 Cannot read sandboxes/mesa-amber/upper/var/cache/ldconfig: permission error
+-------------------------------------------
+LOGGING START ON 2026-06-30 15:25:09
+-------------------------------------------
+LOGGING START ON 2026-06-30 15:28:54
+-------------------------------------------
+LOGGING START ON 2026-06-30 15:29:31
+[i] 2026-06-30 15:29:31 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-30 15:29:32     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-30 15:29:32 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-30 15:29:32     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-30 15:29:32 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[!] 2026-06-30 15:29:32 Sandbox already exists: mesa-amber
+[!] 2026-06-30 15:29:32     :: There is an existing sandbox with name mesa-amber. Would you like to use the sandbox? [y/n] 
+
+[X] 2026-06-30 15:29:36     :: Failed to install the package, rolling back and cleaning the sandbox...
+
+[i] 2026-06-30 15:29:36 ==> [CLEANUP] Cleaning up sandbox directory...
+
+[X] 2026-06-30 15:30:23     :: Failed to clean up sandbox directory
+
+-------------------------------------------
+LOGGING START ON 2026-06-30 15:36:25
+[i] 2026-06-30 15:36:25 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-30 15:36:25     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-30 15:36:25 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-30 15:36:25     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-30 15:36:25 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[X] 2026-06-30 15:36:25     :: Sandbox directory exists, but it is invalid sandbox. Try running 'kubos sandbox-cleanup mesa-amber'.
+
+[X] 2026-06-30 15:36:25     :: Failed to install the package, rolling back and cleaning the sandbox...
+
+[i] 2026-06-30 15:36:25 ==> [CLEANUP] Cleaning up sandbox directory...
+
+[X] 2026-06-30 15:36:25     :: Failed to clean up sandbox directory
+
+-------------------------------------------
+LOGGING START ON 2026-06-30 15:36:34
+[i] 2026-06-30 15:36:34 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-30 15:36:34     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-30 15:36:34 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-30 15:36:34     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-30 15:36:34 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[X] 2026-06-30 15:36:34     :: Sandbox directory exists, but it is invalid sandbox. Try running 'kubos sandbox-cleanup mesa-amber'.
+
+[X] 2026-06-30 15:36:34     :: Failed to install the package, rolling back and cleaning the sandbox...
+
+[i] 2026-06-30 15:36:34 ==> [CLEANUP] Cleaning up sandbox directory...
+
+[X] 2026-06-30 15:36:34     :: Failed to clean up sandbox directory
+
+-------------------------------------------
+LOGGING START ON 2026-06-30 15:37:15
+[i] 2026-06-30 15:37:15 ==> [KUBOS] Cleaning up...
+
+[i] 2026-06-30 15:37:15 ==> [CLEANUP] Start tearing down sandbox mesa-amber...
+
+[i] 2026-06-30 15:37:15     :: Removing sandbox directories: sandboxes/mesa-amber
+
+[X] 2026-06-30 15:37:15     :: Failed to remove sandbox directory, Error: unlinkat sandboxes/mesa-amber: directory not empty
+
+[X] 2026-06-30 15:37:15 Teardown failed
+-------------------------------------------
+LOGGING START ON 2026-06-30 15:40:42
+[i] 2026-06-30 15:40:42 ==> [KUBOS] Cleaning up...
+
+[i] 2026-06-30 15:40:42 ==> [CLEANUP] Start tearing down sandbox mesa-amber...
+
+[i] 2026-06-30 15:40:42     :: Removing sandbox directories: sandboxes/mesa-amber
+
+[X] 2026-06-30 15:40:42     :: Failed to remove sandbox directory, Error: unlinkat sandboxes/mesa-amber: directory not empty
+
+[X] 2026-06-30 15:40:42 Teardown failed
+-------------------------------------------
+LOGGING START ON 2026-06-30 15:40:45
+[i] 2026-06-30 15:40:45 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-30 15:40:45     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-30 15:40:45 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-30 15:40:45     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-30 15:40:45 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[X] 2026-06-30 15:40:45     :: Sandbox directory exists, but it is invalid sandbox. Try running 'kubos sandbox-cleanup mesa-amber'.
+
+-------------------------------------------
+LOGGING START ON 2026-06-30 15:48:53
+[i] 2026-06-30 15:48:53 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-30 15:48:53     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-30 15:48:53 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-30 15:48:53     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-30 15:48:53 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[X] 2026-06-30 15:48:53     :: Sandbox directory exists, but it is invalid sandbox. Try running 'kubos sandbox-cleanup mesa-amber'.
+
+-------------------------------------------
+LOGGING START ON 2026-06-30 15:48:59
+[i] 2026-06-30 15:48:59 ==> [KUBOS] Cleaning up...
+
+[i] 2026-06-30 15:48:59 ==> [CLEANUP] Start tearing down sandbox mesa-amber...
+
+[i] 2026-06-30 15:48:59     :: Removing sandbox directories: sandboxes/mesa-amber
+
+[i] 2026-06-30 15:48:59     :: Failed to remove using default mode, falling back to legacy mode (rm -rf)..
+
+[X] 2026-06-30 15:49:05     :: Failed to remove sandbox directory, Error: Failed to remove the sandbox directory using the legacy mode. Error: unlinkat sandboxes/mesa-amber: directory not empty
+
+[X] 2026-06-30 15:49:05 Teardown failed
+-------------------------------------------
+LOGGING START ON 2026-06-30 15:55:33
+[i] 2026-06-30 15:55:33 ==> [KUBOS] Cleaning up...
+
+[i] 2026-06-30 15:55:33 ==> [CLEANUP] Start tearing down sandbox mesa-amber...
+
+[i] 2026-06-30 15:55:33     :: Removing sandbox directories: sandboxes/mesa-amber
+
+[i] 2026-06-30 15:55:33     :: Failed to remove using default mode, falling back to legacy mode (rm -rf)..
+
+[X] 2026-06-30 15:55:33     :: Failed to remove sandbox directory, Error: Failed to remove the sandbox directory using the legacy mode. Error: unlinkat sandboxes/mesa-amber: directory not empty
+
+[X] 2026-06-30 15:55:33 Teardown failed
+-------------------------------------------
+LOGGING START ON 2026-06-30 21:15:33
+[i] 2026-06-30 21:15:33 ==> [KUBOS] Cleaning up...
+
+[i] 2026-06-30 21:15:33 ==> [CLEANUP] Start tearing down sandbox mesa-amber...
+
+[i] 2026-06-30 21:15:33     :: Unmounting overlay for sandboxes/mesa-amber/merged
+
+[i] 2026-06-30 21:15:33 ==> [DEBUSY] Checking for busy processes on: sandboxes/mesa-amber/merged
+
+[!] 2026-06-30 21:15:36     :: Killing process 73159 keeping sandboxes/mesa-amber/merged busy
+
+[V] 2026-06-30 21:15:37 Successfully unmounted overlay for mesa-amber
+[i] 2026-06-30 21:15:37     :: Removing sandbox directories: sandboxes/mesa-amber
+
+[V] 2026-06-30 21:15:37 Cleaned up sandbox directories for mesa-amber
+[V] 2026-06-30 21:15:37 Teardown succeeded
+[i] 2026-06-30 21:15:37     :: Cleaning up sandbox directory
+
+-------------------------------------------
+LOGGING START ON 2026-06-30 21:15:45
+[i] 2026-06-30 21:15:45 ==> [KUBOS] Resolving mesa-amber...
+
+[i] 2026-06-30 21:15:45     :: Found mesa-amber in pacman repos. Installing...
+
+[i] 2026-06-30 21:15:45 ==> [PACMAN] Redirecting to KUBOS pacman..
+
+[i] 2026-06-30 21:15:45     :: Setting up closed environment (sandbox)..
+
+[i] 2026-06-30 21:15:45 ==> [SANDBOX] Setting up sandbox mesa-amber...
+
+[i] 2026-06-30 21:15:45     :: Checking sandbox path status: sandboxes/mesa-amber
+
+[i] 2026-06-30 21:15:45     :: >> Directory does not exist. Creating path: sandboxes/mesa-amber
+
+[V] 2026-06-30 21:15:45     :: Created directory on path: sandboxes/mesa-amber
+
+[i] 2026-06-30 21:15:45     :: Trying to create subdirectories in: sandboxes/mesa-amber
+
+[i] 2026-06-30 21:15:45     :: Mounting overlay filesystem on path: sandboxes/mesa-amber/merged
+
+[V] 2026-06-30 21:15:45 Successfully mounted overlay filesystem on path: sandboxes/mesa-amber/merged
+[!] 2026-06-30 21:19:27     :: Conflicting package found during sandbox installation.
+
+[i] 2026-06-30 21:19:27     :: Running test for package mesa-amber
+
+[X] 2026-06-30 21:19:29 Cannot read sandboxes/mesa-amber/upper/var/cache/ldconfig: permission error
+[i] 2026-06-30 21:27:30 ==> [KUBOS] Installing package mesa-amber to the real machine.
+
