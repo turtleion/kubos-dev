@@ -1,0 +1,24 @@
+1. Ada flag --dev?
+    Ya
+        → Jalankan Development Mode
+            - Ada path? → gunakan path itu
+            - Tidak ada?
+                - .kubos-dev ada? → gunakan
+                - Tidak ada? → setup .kubos-dev
+        Selesai
+
+2. Ada flag --user?
+    Ya
+        → Validasi User Layout
+            - Valid → gunakan
+            - Tidak valid → kubos repair --user
+        Selesai
+
+3. Validasi System Layout
+    Valid → gunakan
+
+4. Validasi User Layout
+    Valid → gunakan
+
+5. Tidak ada yang valid
+    → kubos repair

@@ -19,6 +19,9 @@ func LoggedPrint(Status LogStatusCode, Message string, WriteToFile bool) {
 	fmt.Printf("    %s %s\n", cyan("::"), Message)
 	Print(Status, fmt.Sprintf("    :: %s\n", Message), true, WriteToFile)
 }
+func Print2(Message string) {
+	fmt.Printf("    %s %s\n", cyan("::"), Message)
+}
 
 func LoggedPrintNoNewline(Status LogStatusCode, Message string, WriteToFile bool) {
 	fmt.Printf("    %s %s", cyan("::"), Message)
@@ -77,24 +80,50 @@ func ShellOutputPrint(Message string) {
 }
 
 // ErrorPanelPrint mencetak laporan error dalam bentuk box/panel yang sangat rapi.
-func ErrorPanelPrint(exitCode string, reason string, context string) {
+func ErrorPanelPrint(
+	exitCode string,
+	reason string,
+	context string,
+	hint *HintBanner,
+) {
 	red := color.New(color.FgRed, color.Bold).SprintFunc()
+	blue := color.New(color.FgBlue, color.Bold).SprintFunc()
 	whiteBold := color.New(color.FgWhite, color.Bold).SprintFunc()
 
-	// Karakter garis horizontal lurus tanpa putus (Unicode U+2514, U+2500, dll)
 	lineLong := strings.Repeat("─", 55)
 
-	// 1. Cetak Header Atas Kotak
+	// Header
 	fmt.Printf("    %s %s\n", red("┌──"), red("🚨 ERROR REPORT "+lineLong[:40]))
 
-	// 2. Cetak Isi Detail di Dalam Kotak (Gunakan indentasi spasi agar sejajar)
-	fmt.Printf("    %s  %-10s : %s\n", red("│"), whiteBold("Exit Code"), fmt.Sprintf("%s", exitCode))
+	// Content
+	fmt.Printf("    %s  %-10s : %s\n", red("│"), whiteBold("Exit Code"), exitCode)
 	fmt.Printf("    %s  %-10s : %s\n", red("│"), whiteBold("Reason"), reason)
 	fmt.Printf("    %s  %-10s : %s\n", red("│"), whiteBold("Context"), context)
 	fmt.Printf("    %s  %-10s : %s\n", red("│"), whiteBold("Time"), time.Now().Format("15:04:05"))
 
-	// 3. Cetak Garis Penutup Bawah Kotak
-	fmt.Printf("    %s%s\n", red("└"), red(lineLong[:58]))
+	if hint == nil {
+		fmt.Printf("    %s%s\n", red("└"), red(lineLong[:58]))
+		return
+	}
+
+	fmt.Printf("    %s\n", red("│"))
+
+	fmt.Printf("    %s %s\n", blue("├──"), blue("💡 HOW TO FIX "+lineLong[:42]))
+	fmt.Printf("    %s %s\n", blue("│"), hint.Message)
+	fmt.Printf("    %s\n", blue("│"))
+	fmt.Printf("    %s %s:\n", blue("│"), whiteBold(hint.Title))
+	if len(hint.Command) > 1 {
+		for _, val := range hint.Command {
+			fmt.Printf("    %s     %s\n", blue("│"), val)
+		}
+	} else {
+		fmt.Printf("    %s     %s\n", blue("│"), hint.Command[0])
+	}
+	fmt.Printf("    %s\n", blue("│"))
+	fmt.Printf("    %s %s\n", blue("│"), hint.Footer)
+
+	fmt.Printf("    %s%s\n", blue("└"), blue(lineLong[:58]))
+
 }
 
 func ParseAndPrintError(res exectypes.ExecutionResult) {
@@ -102,5 +131,5 @@ func ParseAndPrintError(res exectypes.ExecutionResult) {
 	if message == "" {
 		message = "No message provided. This means there is no error detected, but certainly exited."
 	}
-	ErrorPanelPrint(exectypes.EXECUTION_RESULT_STRING[res.Code], fmt.Sprintf("%+v", message), res.Context)
+	ErrorPanelPrint(exectypes.EXECUTION_RESULT_STRING[res.Code], fmt.Sprintf("%+v", message), res.Context, nil)
 }

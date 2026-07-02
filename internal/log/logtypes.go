@@ -21,3 +21,10 @@ var STATUS_STRING = map[LogStatusCode]string{
 	UNKNOWN:  "UNKNOWN",
 	CRITICAL: "CRITICAL",
 }
+
+type HintBanner struct {
+	Message string
+	Title   string
+	Command []string
+	Footer  string
+}

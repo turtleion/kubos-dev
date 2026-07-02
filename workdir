@@ -1,0 +1,17 @@
+/var/lib/kubos/
+└── sandboxes/
+    ├── mesa-amber/
+    │   └── merged/      ← mount point OverlayFS
+    └── neovim/
+        └── merged/
+
+/var/log/kubos/
+└── kubos.log
+
+/etc/kubos/
+└── config.toml          ← (nanti kalau butuh)
+
+/tmp/kubos/              ← dibuat saat install, dihapus setelah selesai
+└── mesa-amber/
+    ├── upper/           ← perubahan OverlayFS
+    └── work/            ← OverlayFS workdir

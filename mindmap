@@ -1,0 +1,45 @@
+## Rangkuman Diskusi: Desain Flag Parser Kubos
+
+### Latar Belakang Masalah
+- `main.go` awal pakai `args[0]` sebagai command fixed-position → gak bisa terima flag di posisi bebas (depan/belakang).
+- Perlu parser yang misahin: **flags**, **command**, dan **remaining args** dari `[]string` tanpa peduli urutan.
+
+### Evolusi Pemilihan Karakter Flag
+| Opsi | Masalah |
+|---|---|
+| `--xxx` (long option biasa) | Tabrakan namespace — pacman juga punya long-option asli (`--sync` = `-S`), jadi ambigu antara flag kubos vs passthrough pacman |
+| `--kubos-xxx` (prefix khusus) | Aman, tapi verbose/ribet diketik |
+| `#`, `>>` | **Bahaya nyata** — `#` bisa dianggap comment oleh shell, `>>` adalah operator redirect append. Bisa merusak command, bukan cuma salah parsing |
+| `k:` | Aman tapi redundant secara UX |
+| **`+xxx`** ✅ | **Dipilih final** — netral di semua shell POSIX, gak pernah dipakai pacman, zero collision by design |
+
+### Bug yang Ditemukan (`kubos derm`)
+Dua lapis masalah:
+1. `Parse()` men-treat token non-flag & non-`knownCommands` sebagai `Remaining`, bukan `Command` → command typo "hilang" tanpa jejak.
+2. `main.go` pakai `parsed.Command` (yang emang sengaja kosong) buat pesan error, bukan token asli → pesan error `unknown command ''` gak informatif.
+
+**Fix arah**: token non-flag pertama **selalu** jadi `Command` apa pun isinya (termasuk typo); validasi "apakah command ini valid" dipindah ke `main.go` (`switch...default`), bukan tanggung jawab `Parse()`.
+
+### Semantik Flag `+dev` dan `+user`
+- **`+dev`** (tanpa value): cari path dari config `DEV_PATH`, fallback ke `~/.kubos/dev` kalau gak ada.
+- **`+dev:PATH`**: override eksplisit, pakai `PATH` yang dikirim user.
+- **`+user`**: scope operasi dibatasi **hanya** ke home direktori user yang menjalankan kubos.
+  - Kalau digabung `+dev:PATH` yang path-nya di luar user scope (misal `/root/kubos`) → **harus error**.
+  - `+user` juga mengubah base path layout jadi user layout, tapi `+dev` (kalau nyala) tetap diprioritaskan sebagai target akhir — `+user` di sini berfungsi sebagai **validator/pembatas**, bukan penentu path utama.
+- **Kubos didesain non-sudo** (mirip `yay`) — tapi detail resolusi `$HOME` saat ada elevasi (sudo internal) masih **on hold**, belum difinalkan.
+
+### Definisi "User Scope" & Jebakan Keamanannya
+- Scope = **hanya** home direktori milik user yang sedang menjalankan proses — **bukan** pattern `/home/*` secara umum (`/home/userB` dari sudut pandang user A tetap dianggap **system scope**, bukan user scope).
+- **Jebakan yang harus dihindari**:
+  1. Jangan percaya `$HOME` env var mentah (bisa di-spoof) — ambil home dir dari sistem (`os/user.Current()` / UID lookup).
+  2. Path target (`+dev:PATH`) harus **di-canonicalize** dulu (resolve symlink + hilangkan `..`) sebelum dibandingkan ke home dir — kalau enggak, path traversal (`/home/userA/../userB/kubos`) atau symlink jebakan bisa lolos validasi string-prefix naif.
+  3. Perbandingan prefix harus boundary-aware (`/home/userAxyz` gak boleh keanggep valid cuma karena "diawali" `/home/userA` secara string).
+
+### Keputusan Arsitektur yang Disepakati
+- **`+flag:value`** digeneralisir — bukan cuma khusus `+dev`, parser harus support pola ini untuk flag lain ke depannya.
+- **Pemisahan tahap**: `Parse()` tetap pure/syntactic (cuma misah token, gak ada I/O), sedangkan resolve path + validasi scope jadi tahap terpisah setelah parsing (butuh syscall: `filepath.EvalSymlinks`, dst).
+
+### Belum Difinalkan (Open Items)
+1. Detail resolusi `$HOME` kalau kubos suatu saat manggil `sudo` secara internal untuk sebagian command.
+2. Struktur konkret `Flags`/`ParsedArgs` setelah generalisasi `flag:value` (field tambahan seperti `DevPath string` di luar `DevMode bool`).
+3. Implementasi kode belum ditulis — semua di atas masih tahap desain/diskusi.

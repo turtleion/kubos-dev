@@ -3,12 +3,12 @@ package main
 import (
 	"fmt"
 	"kubos/internal/app"
-	"kubos/internal/exec"
 	"kubos/internal/exec/exectypes"
+	"kubos/internal/layout"
 	"kubos/internal/log"
+	"kubos/internal/parser"
 
 	"os"
-	"strings"
 )
 
 // Help prints kubos usage.
@@ -34,43 +34,47 @@ PACMAN PASSTHROUGH:
 }
 
 func main() {
-	verbose := true
-	args := os.Args[1:]
 
-	if len(args) == 0 {
+	if len(os.Args[1:]) == 0 {
 		Help()
 		os.Exit(0)
 	}
 
-	first := args[0]
-	rest := args[1:]
+	// first := args[0]
+	// rest := args[1:]
 
-	// If the first arg starts with '-', it's a pacman flag → passthrough.
-	if strings.HasPrefix(first, "-") {
-		if err := exec.SpawnPassthroughPacman(args, verbose); err.Code != exectypes.EXECUTION_TASK_SUCCESS {
-			os.Exit(1)
-		}
-		return
-	}
+	// // If the first arg starts with '-', it's a pacman flag → passthrough.
+	// if strings.HasPrefix(first, "-") {
+	// 	if err := exec.SpawnPassthroughPacman(args, verbose); err.Code != exectypes.EXECUTION_TASK_SUCCESS {
+	// 		os.Exit(1)
+	// 	}
+	// 	return
+	// }
+
+	parsed := parser.Parse(os.Args[1:])
+	// spew.Dump(parsed)
+	layout.Setup(parsed.Flags.Verbose, parsed.Flags.UserOperation)
 
 	// Otherwise, route to kubos custom commands.
 	var res exectypes.ExecutionResult
-	switch first {
+	switch parsed.Command {
 	case "install":
-		res = app.Install(rest, verbose)
+		res = app.Install(parsed.Remaining, parsed.Flags.Verbose)
 		if res.Code != exectypes.EXECUTION_TASK_SUCCESS {
 			log.ParseAndPrintError(res)
 		}
 	case "sandbox-cleanup":
-		res = app.CleanUp(rest, verbose)
+		res = app.CleanUp(parsed.Remaining, parsed.Flags.Verbose)
+	case "show-path":
+		app.PrintPath()
 	// case "remove":
 	// 	err = Remove(rest)
 	// case "update":
 	// 	err = Update(rest)
-	case "help", "--help", "-h":
+	case "help", "--help", "-h", "+h", "+help":
 		Help()
 	default:
-		fmt.Fprintf(os.Stderr, "kubos: unknown command '%s'\nRun 'kubos help' for usage.\n", first)
+		fmt.Fprintf(os.Stderr, "kubos: unknown command '%s'\nRun 'kubos help' for usage.\n", parsed.Command)
 		os.Exit(1)
 	}
 
